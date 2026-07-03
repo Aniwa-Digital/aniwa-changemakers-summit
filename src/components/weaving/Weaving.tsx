@@ -30,7 +30,7 @@ export function Weaving() {
       >
         <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
           <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
-            § 01 — The Weaving
+            § 01 — Convergence
           </div>
           <h2 className="disp" style={{ color: '#F4F1EB', fontSize: '2.91rem', margin: '18px 0 0' }}>
             Protectors of our past.&nbsp; Forgers of our future.&nbsp;

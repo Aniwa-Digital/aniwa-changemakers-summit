@@ -17,7 +17,7 @@ export function Room() {
         >
           <div>
             <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
-              § 02 — The Room
+              § 02 — Contributors
             </div>
             <h2 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: 'clamp(2.6rem, 5vw, 4.2rem)', margin: '16px 0 0' }}>
               Confirmed Contributors.

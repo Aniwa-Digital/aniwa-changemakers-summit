@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { steps } from '../../lib/content';
 
-/* §06 Invitation — purple section. "Entry is the first ceremony." + the
+/* §05 Invitation — purple section. "Entry is the first ceremony." + the
    6-step numbered process and the invite-code card (code → registered state). */
 export function Invitation() {
   const [code, setCode] = useState('');
@@ -17,7 +17,7 @@ export function Invitation() {
       <div id="invitation" style={{ position: 'relative', zIndex: 2, maxWidth: 1400, margin: '0 auto' }}>
         <div data-reveal="">
           <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
-            § 06 — Invitation
+            § 05 — Invitation
           </div>
           <h2 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2.8rem, 6vw, 5rem)', margin: '20px 0 0' }}>
             Entry is the first ceremony.

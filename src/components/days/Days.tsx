@@ -4,7 +4,7 @@ import { days, elements } from '../../lib/content';
 /* §03 The Days — dark gradient section. Land header band, four element
    GlowCards, three day cards, the outcome box, and the ember connector
    stroke that runs from the outcome box down across the section seam to the
-   compass tip in §07 (positioned every frame from live rects). z-index 3
+   compass tip in §04 (positioned every frame from live rects). z-index 3
    lifts the overflowing line above the light section below. */
 export function Days() {
   return (
@@ -46,7 +46,7 @@ export function Days() {
         />
         <div style={{ position: 'relative', zIndex: 2, padding: '32px 56px 42px', maxWidth: 902 }}>
           <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
-            § 03 — THE CONVERGENCE
+            § 03 — The Work
           </div>
           <h2 className="disp" style={{ color: '#fff', fontSize: '3.8rem', margin: '18px 0 0' }}>
             The Work.

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { founders } from '../../lib/content';
 import { NominationModal } from './NominationModal';
 
-/* §07 The Founders Circle — bone section. 7 members + 1 dashed open seat on a
+/* §04 The Founders Circle — bone section. 7 members + 1 dashed open seat on a
    polar ring; a terracotta spark ✦ at the exact ring center. The dark compass
    (opacity 0.15, brightness 0) is centered with NEGATIVE MARGINS so its
    ring-center (57% of its height) sits exactly on the spark, and its
@@ -39,7 +39,7 @@ export function FoundersCircle() {
 
       <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 820, margin: '0 auto' }}>
         <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
-          § 07 — Step in
+          § 04 — Founders Circle
         </div>
         <h2 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '3.9rem', margin: '18px 0 0' }}>
           The Founders Circle
