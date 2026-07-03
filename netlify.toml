@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Single served page — send any unknown path back to the entry document.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
