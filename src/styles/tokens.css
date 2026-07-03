@@ -1,0 +1,92 @@
+/* ============================================================
+   ANIWA SUMMIT — DESIGN TOKENS
+   Ported verbatim from the design-system handoff bundle.
+   Cinematic · sacred · restrained. 70% dark purple · 25% warm
+   light · 5% terracotta fire.
+   ============================================================ */
+
+:root {
+  /* ---- Base palette ---- */
+  --aniwa-purple: oklch(0.27 0.05 290); /* #2D2A47 deep council purple */
+  --aniwa-midnight: oklch(0.22 0.05 290); /* #1A1830 cards, footer, night */
+  --aniwa-twilight: oklch(0.32 0.05 290); /* #3A3658 raised purple */
+  --aniwa-white: oklch(1 0 0);
+
+  --aniwa-cream: oklch(0.955 0.012 80); /* #F4F1EB warm cream */
+  --aniwa-bone: oklch(0.965 0.018 85); /* #FAF6EC bone */
+  --aniwa-sand: oklch(0.83 0.04 80); /* #D4C8B0 sand */
+
+  --aniwa-terracotta: oklch(0.52 0.13 40); /* #A04A2A THE accent / fire */
+  --aniwa-ember: oklch(0.39 0.13 30); /* #7C2A2A deep fire, hover/press */
+  --aniwa-gold: oklch(0.72 0.09 75); /* #B8945C sacred highlight */
+
+  --aniwa-charcoal: oklch(0.18 0.005 280); /* near-black text on light */
+  --aniwa-moss: oklch(0.45 0.07 145);
+  --aniwa-sage: oklch(0.93 0.018 140);
+
+  --weave-green: #9dbe8f; /* BUILDER badge ground */
+
+  /* ---- Semantic aliases (dark-first) ---- */
+  --background: var(--aniwa-purple);
+  --background-deep: var(--aniwa-midnight);
+  --surface-card: var(--aniwa-midnight);
+  --surface-raised: var(--aniwa-twilight);
+
+  --foreground: var(--aniwa-white);
+  --text-body: color-mix(in oklab, var(--aniwa-white) 80%, transparent);
+  --text-muted: color-mix(in oklab, var(--aniwa-white) 55%, transparent);
+  --text-faint: color-mix(in oklab, var(--aniwa-white) 35%, transparent);
+
+  --accent: var(--aniwa-terracotta);
+  --accent-foreground: var(--aniwa-white);
+  --accent-deep: var(--aniwa-ember);
+  --highlight: var(--aniwa-gold);
+
+  --border: color-mix(in oklab, var(--aniwa-white) 12%, transparent);
+  --border-strong: color-mix(in oklab, var(--aniwa-white) 28%, transparent);
+  --input: color-mix(in oklab, var(--aniwa-white) 15%, transparent);
+  --ring: var(--aniwa-terracotta);
+
+  /* ---- Light-context aliases (cream/bone sections) ---- */
+  --on-light-fg: var(--aniwa-charcoal);
+  --on-light-body: color-mix(in oklab, var(--aniwa-charcoal) 75%, transparent);
+  --on-light-muted: color-mix(in oklab, var(--aniwa-charcoal) 55%, transparent);
+  --on-light-border: color-mix(in oklab, var(--aniwa-charcoal) 15%, transparent);
+
+  /* ---- Section grounds ---- */
+  --ground-night: #15132a; /* page base + section-03 gradient ends */
+  --ground-days: linear-gradient(180deg, #15132a 0%, #1a1734 60%, #15132a 100%);
+  --ink-on-light: #221f38; /* charcoal text on light sections */
+  --card-inner-dark: #17152b; /* day-card inner ground */
+
+  /* ---- Families ---- */
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* ---- Display scale (Cormorant) ---- */
+  --display-2xl: clamp(3.5rem, 8vw, 7rem);
+  --display-xl: clamp(2.75rem, 6vw, 4.5rem);
+  --display-lg: clamp(2rem, 4vw, 3rem);
+  --display-md: 1.75rem;
+  --display-sm: 1.375rem;
+
+  /* ---- Label-caps: the brand's signature eyebrow ---- */
+  --label-size: 0.72rem;
+  --label-tracking: 0.18em;
+  --label-weight: 500;
+
+  /* ---- Line heights / tracking ---- */
+  --leading-display: 1.05;
+  --leading-myth: 1.35;
+  --leading-body: 1.65;
+  --tracking-display: -0.02em;
+  --tracking-glyph: 0.18em;
+  --tracking-wide: 0.3em;
+
+  /* ---- Geometry & motion ---- */
+  --radius-house: 2px; /* buttons / tiles / chips */
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-cinematic: 1.15s;
+  --shadow-ember: 0 8px 30px rgba(160, 74, 42, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  --shadow-ember-lift: 0 14px 40px rgba(160, 74, 42, 0.45);
+}

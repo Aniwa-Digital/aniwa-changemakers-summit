@@ -1,0 +1,246 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+html {
+  scroll-behavior: smooth;
+}
+html,
+body {
+  margin: 0;
+  max-width: 100%;
+  /* clip (not hidden): ancestors of position:sticky sections must not scroll-trap */
+  overflow-x: clip;
+}
+body {
+  background: var(--ground-night);
+  font-family: var(--font-sans);
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ---- Brand voice helper classes (prototype-faithful) ---- */
+.eye {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+}
+.myth {
+  font-family: var(--font-display);
+  font-style: italic;
+  line-height: 1.3;
+}
+.disp {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.03;
+}
+.bd {
+  font-family: var(--font-sans);
+  line-height: 1.7;
+}
+.tag {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ---- Scroll reveal: hide-by-class so content can never be stuck hidden ---- */
+[data-reveal] {
+  transition:
+    opacity var(--duration-cinematic) var(--ease-cinematic),
+    transform var(--duration-cinematic) var(--ease-cinematic);
+}
+[data-reveal].reveal-armed {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+/* ---- Keyframes ---- */
+@keyframes cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+.cue {
+  animation: cue 2.4s ease-in-out infinite;
+}
+
+/* ---- Interactive states ---- */
+.ember {
+  transition:
+    background 0.4s var(--ease-cinematic),
+    transform 0.4s var(--ease-cinematic),
+    box-shadow 0.4s;
+}
+.ember:hover {
+  background: #b6552f !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-ember-lift) !important;
+}
+.ghost {
+  transition:
+    border-color 0.4s,
+    color 0.4s;
+}
+.ghost:hover {
+  border-color: var(--aniwa-terracotta) !important;
+  color: var(--aniwa-terracotta) !important;
+}
+.ghost-l {
+  transition:
+    border-color 0.4s,
+    color 0.4s;
+}
+.ghost-l:hover {
+  border-color: var(--aniwa-terracotta) !important;
+  color: var(--aniwa-terracotta) !important;
+}
+.social-btn {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+.social-btn:hover {
+  border-color: var(--aniwa-terracotta) !important;
+  box-shadow: 0 8px 22px rgba(160, 74, 42, 0.14);
+  transform: translateY(-1px);
+}
+.field:focus,
+.field-l:focus {
+  outline: none;
+  border-color: var(--aniwa-terracotta) !important;
+}
+.open-seat {
+  transition:
+    border-color 0.3s,
+    background 0.3s,
+    transform 0.3s;
+}
+.open-seat:hover {
+  border-color: var(--aniwa-terracotta) !important;
+  background: rgba(160, 74, 42, 0.1);
+  transform: scale(1.07);
+}
+
+/* ---- Element boxes (§03): terracotta border + inner ember glow on hover ---- */
+.grid-4e > div {
+  transition:
+    box-shadow 0.5s var(--ease-cinematic),
+    border-color 0.5s var(--ease-cinematic);
+}
+.grid-4e > div:hover {
+  border-color: var(--aniwa-terracotta) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(160, 74, 42, 0.85),
+    inset 0 0 34px rgba(160, 74, 42, 0.14),
+    0 0 26px rgba(160, 74, 42, 0.2);
+}
+
+/* ---- Day-card imagery scales gently on hover ---- */
+.day-img img {
+  transition: transform 0.7s var(--ease-cinematic);
+}
+.day-img:hover img {
+  transform: scale(1.05);
+}
+
+/* ---- Responsive (ported from the prototype; !important beats inline styles) ---- */
+@media (max-width: 880px) {
+  section {
+    padding-left: 26px !important;
+    padding-right: 26px !important;
+  }
+  nav {
+    padding-left: 26px !important;
+    padding-right: 26px !important;
+  }
+  .navlink {
+    display: none !important;
+  }
+  .hero-title {
+    white-space: normal !important;
+  }
+  h2.disp {
+    font-size: 2.7rem !important;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+  .grid-logos {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .grid-4e {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .grid-4e > div {
+    border-bottom: 1px solid var(--on-light-border);
+  }
+}
+@media (max-width: 560px) {
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  nav {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  h2.disp {
+    font-size: 2.2rem !important;
+  }
+  .closing-title {
+    font-size: 2.8rem !important;
+  }
+  #weaving .tag {
+    display: none !important;
+  }
+  #weaving .bd {
+    font-size: 0.52rem !important;
+  }
+  /* Founders ring: the prototype has no mobile treatment; shrink the seats so
+     the 335px-wide ring doesn't collide */
+  .founder-seat {
+    width: 86px !important;
+  }
+  .founder-portrait {
+    width: 52px !important;
+    height: 52px !important;
+  }
+  .founder-seat .disp {
+    font-size: 0.74rem !important;
+  }
+  .founder-seat .bd {
+    font-size: 0.58rem !important;
+  }
+  .open-seat {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}
+
+/* ---- Reduced motion: gate every decorative animation ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .cue {
+    animation: none !important;
+  }
+}
