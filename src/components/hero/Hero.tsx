@@ -128,7 +128,7 @@ export function Hero({ onLoginOpen }: HeroProps) {
           style={{ height: 31, width: 151, margin: '0 auto 14px' }}
         />
         <div style={{ display: 'block', width: 'min(864px, 74vw)', height: 120, margin: '4px auto' }}>
-          <HeroStrokeText text="CONVERGENCE" />
+          <HeroStrokeText text="CHANGEMAKERS" />
         </div>
         <h1
           className="disp hero-title"

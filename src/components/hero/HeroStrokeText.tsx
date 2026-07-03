@@ -1,4 +1,4 @@
-// CONVERGENCE headline: white fill, stroke draw-in on load, cursor-following
+// CHANGEMAKERS headline: white fill, stroke draw-in on load, cursor-following
 // rainbow OUTER glow on hover (radial mask). The raw rainbow hexes are
 // intentional per the handoff. Web Animations API for the draw; direct
 // attribute writes for the cursor mask (no re-render). Respects reduced motion.
