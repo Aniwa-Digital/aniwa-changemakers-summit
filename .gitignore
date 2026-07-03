@@ -2,3 +2,9 @@ node_modules
 dist
 *.local
 .DS_Store
+
+# Local Netlify CLI state (per-machine, not for the repo)
+.netlify
+
+# TypeScript incremental build cache
+*.tsbuildinfo
