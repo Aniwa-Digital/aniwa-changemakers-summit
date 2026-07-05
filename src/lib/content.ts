@@ -1,5 +1,5 @@
-/* All page content is static — ported verbatim from the prototype's
-   component state (`Aniwa Summit.dc.html` data-dc-script). */
+/* All page content is static — ported from the prototype's component state,
+   revised per team feedback (Fellowship of Changemakers helix). */
 
 export type Badge = 'Keeper' | 'Builder';
 
@@ -9,18 +9,6 @@ export interface Person {
   img: string;
   badge: Badge;
 }
-
-export interface RosterSlot extends Person {
-  op: number; // crossfade opacity, transitioned 0.55s
-}
-
-const TERRACOTTA = '#A04A2A';
-const GREEN = '#9DBE8F';
-
-export const badgeColors: Record<Badge, { bg: string; fg: string }> = {
-  Keeper: { bg: TERRACOTTA, fg: '#fff' },
-  Builder: { bg: GREEN, fg: '#20291A' },
-};
 
 const keeper = (name: string, role: string, img: string): Person => ({
   name,
@@ -57,53 +45,60 @@ export const builders: Person[] = [
   builder('Tenzin Seldon', 'Founder & Managing Partner, Pulse Fund', 'tenzin-seldon.png'),
 ];
 
-/* Keepers hold these roster indexes so the Builder–Keeper–Builder rhythm
-   holds; only builder slots ever swap. */
-export const KEEPER_SLOTS = [1, 3, 8, 10] as const;
-export const BUILDER_SLOTS = [0, 2, 4, 5, 6, 7, 9, 11] as const;
-export const ROSTER_SIZE = 12;
-export const ROSTER_SWAP_INTERVAL_MS = 2200;
-export const ROSTER_FADE_MS = 540;
-
-export function buildRosterSlots(): RosterSlot[] {
-  const slots = new Array<RosterSlot>(ROSTER_SIZE);
-  KEEPER_SLOTS.forEach((si, k) => {
-    slots[si] = { op: 1, ...keepers[k] };
-  });
-  BUILDER_SLOTS.forEach((si, k) => {
-    slots[si] = { op: 1, ...builders[k] };
-  });
-  return slots;
-}
-
-export function buildReserve(): Person[] {
-  return builders.slice(BUILDER_SLOTS.length);
-}
-
-/* ---- §01 The Weaving: 8 nodes along the strands, perfect alternation ---- */
-export interface WeaveNode {
-  name: string;
-  img: string;
-  badge: Badge;
-  left: number; // % within the band
-  top: number; // %
+/* ---- The Fellowship of Changemakers: everyone on one vertical helix.
+   Keepers are spread evenly among the builders (every 4th seat) so the
+   two lineages interleave down the strand. ---- */
+export interface FellowshipMember extends Person {
   objectPosition: string;
 }
 
-export const weaveNodes: WeaveNode[] = [
-  { name: 'Jane Woodward', img: '/assets/people/jane-woodward.png', badge: 'Builder', left: 3.231, top: 23.75, objectPosition: '50% 16%' },
-  { name: 'Mona Polacca', img: '/assets/people/mona-polacca.png', badge: 'Keeper', left: 15.538, top: 55, objectPosition: '50% 16%' },
-  { name: 'Deven Raut', img: '/assets/people/deven-raut.png', badge: 'Builder', left: 27.846, top: 23.75, objectPosition: '50% 14%' },
-  { name: 'Kumu Ramsay Taum', img: '/assets/people/kumu-ramsay-taum.png', badge: 'Keeper', left: 40.154, top: 55, objectPosition: '50% 14%' },
-  { name: 'Will Cady', img: '/assets/people/will-cady.png', badge: 'Builder', left: 52.462, top: 23.75, objectPosition: '50% 14%' },
-  { name: 'Matzuwa Oscar', img: '/assets/people/matzuwa-oscar.png', badge: 'Keeper', left: 64.769, top: 55, objectPosition: '50% 14%' },
-  { name: 'De Kai', img: '/assets/people/de-kai.png', badge: 'Builder', left: 77.077, top: 23.75, objectPosition: '50% 16%' },
-  { name: 'Nana Amalia', img: '/assets/people/nana-amalia.png', badge: 'Keeper', left: 89.385, top: 55, objectPosition: '50% 16%' },
-];
+const FACE: Record<string, string> = {
+  'Jane Woodward': '50% 16%',
+  'Mona Polacca': '50% 16%',
+  'Deven Raut': '50% 14%',
+  'Kumu Ramsay Taum': '50% 14%',
+  'Will Cady': '50% 14%',
+  'Matzuwa Oscar': '50% 14%',
+  'De Kai': '50% 16%',
+  'Nana Amalia Tum Xinico': '50% 16%',
+};
 
-/* Weave strand paths (viewBox 0 0 1300 600) — [d, stroke, width, opacity, delay, glow] */
-export interface WeaveStrand {
-  d: string;
+export function buildFellowship(ks: Person[] = keepers, bs: Person[] = builders): FellowshipMember[] {
+  /* Interleave: one keeper after every 3 builders (B K B B B K …), so 4
+     keepers space evenly through 12 builders → 16 seats. */
+  const out: Person[] = [];
+  let ki = 0;
+  let bi = 0;
+  for (let seat = 0; seat < ks.length + bs.length; seat++) {
+    const wantKeeper = seat % 4 === 1 && ki < ks.length;
+    if (wantKeeper) out.push(ks[ki++]);
+    else if (bi < bs.length) out.push(bs[bi++]);
+    else out.push(ks[ki++]);
+  }
+  return out.map((p) => ({ ...p, objectPosition: FACE[p.name] ?? '50% 18%' }));
+}
+
+export const fellowship: FellowshipMember[] = buildFellowship();
+
+/* ---- Helix strand geometry (vertical, one half-turn per seat) ----
+   viewBox is 600 wide × HELIX_UNIT·N tall; strands cross the 300-center
+   between seats and bulge to alternating sides at each seat row. */
+export const HELIX_UNIT = 160;
+export const HELIX_WIDTH = 600;
+export const HELIX_AMP = 180;
+
+export function helixPath(count: number, startDir: 1 | -1, amp: number = HELIX_AMP): string {
+  let d = 'M300,0';
+  for (let i = 0; i < count; i++) {
+    const dir = i % 2 === 0 ? startDir : -startDir;
+    d += ` Q${300 + amp * dir},${i * HELIX_UNIT + HELIX_UNIT / 2} 300,${(i + 1) * HELIX_UNIT}`;
+  }
+  return d;
+}
+
+export interface HelixStrand {
+  startDir: 1 | -1;
+  amp: number;
   stroke: string;
   width: number;
   opacity: number;
@@ -111,30 +106,13 @@ export interface WeaveStrand {
   glow?: boolean;
 }
 
-const STRAND_A =
-  'M10,300 Q90,120 170,300 Q250,480 330,300 Q410,120 490,300 Q570,480 650,300 Q730,120 810,300 Q890,480 970,300 Q1050,120 1130,300 Q1210,480 1290,300';
-const STRAND_B =
-  'M10,300 Q90,480 170,300 Q250,120 330,300 Q410,480 490,300 Q570,120 650,300 Q730,480 810,300 Q890,120 970,300 Q1050,480 1130,300 Q1210,120 1290,300';
-
-export const weaveStrands: WeaveStrand[] = [
-  {
-    d: 'M10,300 Q90,70 170,300 Q250,530 330,300 Q410,70 490,300 Q570,530 650,300 Q730,70 810,300 Q890,530 970,300 Q1050,70 1130,300 Q1210,530 1290,300',
-    stroke: '#F4F1EB',
-    width: 1.4,
-    opacity: 0.13,
-    delay: 0,
-  },
-  {
-    d: 'M10,300 Q90,530 170,300 Q250,70 330,300 Q410,530 490,300 Q570,70 650,300 Q730,530 810,300 Q890,70 970,300 Q1050,530 1130,300 Q1210,70 1290,300',
-    stroke: '#8E7BC0',
-    width: 1.4,
-    opacity: 0.16,
-    delay: 0.06,
-  },
-  { d: STRAND_A, stroke: '#A04A2A', width: 6, opacity: 0.5, delay: 0.12, glow: true },
-  { d: STRAND_B, stroke: '#B8945C', width: 6, opacity: 0.42, delay: 0.24, glow: true },
-  { d: STRAND_A, stroke: '#A04A2A', width: 2.6, opacity: 0.95, delay: 0.12 },
-  { d: STRAND_B, stroke: '#B8945C', width: 2.6, opacity: 0.78, delay: 0.24 },
+export const helixStrands: HelixStrand[] = [
+  { startDir: -1, amp: 230, stroke: '#F4F1EB', width: 1.4, opacity: 0.13, delay: 0 },
+  { startDir: 1, amp: 230, stroke: '#8E7BC0', width: 1.4, opacity: 0.16, delay: 0.06 },
+  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 6, opacity: 0.5, delay: 0.12, glow: true },
+  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 6, opacity: 0.42, delay: 0.24, glow: true },
+  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 2.6, opacity: 0.95, delay: 0.12 },
+  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 2.6, opacity: 0.78, delay: 0.24 },
 ];
 
 /* ---- §02 The Room: left-rail stats + partner logos ---- */
@@ -173,7 +151,7 @@ export const partnerLogos: PartnerLogo[] = [
   { name: 'Stanford', src: '/assets/logos/stanford.webp', large: true },
 ];
 
-/* ---- §03 The Days: elements + day cards + outcome ---- */
+/* ---- Four Elements — One Mission ---- */
 export interface ElementBox {
   glyph: string;
   name: string;
@@ -187,43 +165,12 @@ export const elements: ElementBox[] = [
   { glyph: '▽', name: 'Water', description: 'Indigenous spirituality and the planetary polycrisis.' },
 ];
 
-export interface Day {
-  number: string;
-  date: string;
-  title: string;
-  copy: string;
-  img: string;
-}
-
-export const days: Day[] = [
-  {
-    number: '01',
-    date: 'October 23',
-    title: 'Listening',
-    copy: 'Roles unwound, phones surrendered. Each guest introduces themselves not by what they do, but by one story they carry. The elders speak; the builders receive.',
-    img: '/assets/img/day1-dawn.jpg',
-  },
-  {
-    number: '02',
-    date: 'October 24',
-    title: 'Dialogue',
-    copy: 'The exchange begins. What does Western science owe the medicine traditions of the South? What do the elders see in our future that we have missed?',
-    img: '/assets/img/day2-golden.jpg',
-  },
-  {
-    number: '03',
-    date: 'October 25',
-    title: 'Commitment',
-    copy: 'The fire convenes. Each participant writes one commitment — witnessed, signed. The Aniwa Declaration is drafted. You leave not with photos, but with covenant.',
-    img: '/assets/img/day4-fire.jpg',
-  },
-];
-
 /* ---- §07 Founders Circle: 7 members + 1 open seat on a polar ring ---- */
 export interface FounderSeat {
   name?: string;
   role?: string;
   img?: string;
+  linkedin?: string;
   open?: boolean;
   left: number; // % within the ring square
   top: number; // %
@@ -231,14 +178,14 @@ export interface FounderSeat {
 
 const RING_RADIUS = 40;
 
-const ringMembers: Array<{ name?: string; role?: string; img?: string; open?: boolean }> = [
-  { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.png' },
-  { name: 'Deven Raut', role: 'AI for human flourishing', img: '/assets/people/deven-raut.png' },
-  { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.png' },
+const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; open?: boolean }> = [
+  { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.png', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
+  { name: 'Deven Raut', role: 'AI for human flourishing', img: '/assets/people/deven-raut.png', linkedin: 'https://www.linkedin.com/in/devenraut/' },
+  { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.png', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
   { name: 'Angela Katragadda', role: 'Stewardship of the sacred', img: '/assets/people/angela-katragadda.png' },
-  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.png' },
-  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.png' },
-  { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.png' },
+  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.png', linkedin: 'https://www.linkedin.com/in/malikone/' },
+  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.png', linkedin: 'https://www.linkedin.com/in/mitchkirsch/' },
+  { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.png', linkedin: 'https://www.linkedin.com/in/renmenon/' },
   { open: true },
 ];
 

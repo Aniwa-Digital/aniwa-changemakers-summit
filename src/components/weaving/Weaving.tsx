@@ -1,274 +1,148 @@
-import { weaveNodes, weaveStrands } from '../../lib/content';
+import { fellowship, helixPath, helixStrands, HELIX_UNIT, HELIX_WIDTH, HELIX_AMP } from '../../lib/content';
 
-/* §01 The Weaving — 200vh pinned. Six SVG strands draw with scroll
-   (stroke-dash, driven by drawWeave); the faint compass behind the band spins
-   exactly one full clockwise turn by the time the weave completes at 85% of
-   the pin. Eight portrait nodes alternate Builder / Keeper along the band. */
+/* The Fellowship of Changemakers — a unifying mission, then every
+   contributor listed down one vertical double helix. Strands draw with
+   scroll (drawWeave animates [data-weave] inside [data-weave-band]);
+   seats alternate left / right at each bulge of the helix. */
 export function Weaving() {
+  const N = fellowship.length;
+  const viewH = N * HELIX_UNIT;
+
   return (
     <section
       id="weaving"
       style={{
         position: 'relative',
-        height: '200vh',
         background: 'linear-gradient(125deg, #15132A 0%, #1C1834 48%, #2A2138 100%)',
         overflow: 'clip',
+        padding: '110px 40px 96px',
       }}
     >
-      <div
-        data-weave-pin=""
-        style={{
-          position: 'sticky',
-          top: 0,
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '80px 40px',
-          overflow: 'clip',
-        }}
-      >
-        <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
-          <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
-            § 01 — Convergence
-          </div>
-          <h2 className="disp" style={{ color: '#F4F1EB', fontSize: '2.91rem', margin: '18px 0 0' }}>
-            Protectors of our past.&nbsp; Forgers of our future.&nbsp;
-          </h2>
-          <p
-            className="bd"
-            style={{
-              color: 'rgba(255,255,255,0.74)',
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.5rem',
-              lineHeight: 1.42,
-              margin: '20px auto 0',
-              maxWidth: 620,
-            }}
-          >
-            The sharpest builders of the future and the deepest keepers of ancestral wisdom, woven into one line. Not two
-            camps. One fire.
-          </p>
+      <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
+        <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
+          A Unifying Mission
         </div>
-
-        <div
-          className="weave-band-desktop"
-          data-reveal=""
-          data-weave-band=""
+        <h2 className="disp" style={{ color: '#F4F1EB', fontSize: '2.91rem', margin: '18px 0 0' }}>
+          Today&rsquo;s leaders don&rsquo;t need another event.
+          <br />
+          We need the truths that will guide us.
+        </h2>
+        <p
+          className="bd"
           style={{
-            position: 'relative',
-            zIndex: 2,
-            width: 'min(1300px, 100%)',
-            aspectRatio: '1300 / 640',
-            margin: '-23px auto 0',
+            color: 'rgba(255,255,255,0.74)',
+            fontFamily: 'var(--font-display)',
+            fontSize: '1.5rem',
+            lineHeight: 1.42,
+            margin: '20px auto 0',
+            maxWidth: 680,
           }}
         >
-          <div
-            data-compass-wrap=""
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '50%',
-              width: 721,
-              height: 1013,
-              transform: 'translate(-50%, -57%)',
-              pointerEvents: 'none',
-            }}
-          >
-            <img
-              data-weave-compass=""
-              src="/assets/compass/compass.svg"
-              alt=""
-              width={721}
-              height={1013}
-              style={{ width: '100%', height: '100%', opacity: 0.08, transformOrigin: '50% 57%' }}
+          Calling forth 100 Planetary Leaders. Charting the map from an extractive paradigm of destruction to a
+          regenerative destiny of mutual benefit. Weaving the Way forward together.
+        </p>
+      </div>
+
+      <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', margin: '86px auto 0' }}>
+        <h3 className="disp" style={{ color: '#F4F1EB', fontSize: '2.2rem', margin: 0 }}>
+          The Fellowship of Changemakers
+        </h3>
+      </div>
+
+      <div
+        className="helix-band"
+        data-weave-band=""
+        data-reveal=""
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          width: 'min(760px, 94vw)',
+          aspectRatio: `${HELIX_WIDTH} / ${viewH}`,
+          margin: '54px auto 0',
+        }}
+      >
+        <svg
+          viewBox={`0 0 ${HELIX_WIDTH} ${viewH}`}
+          preserveAspectRatio="none"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}
+          aria-hidden="true"
+        >
+          <defs>
+            <filter id="helixGlow" x="-40%" y="-8%" width="180%" height="116%">
+              <feGaussianBlur stdDeviation="7" />
+            </filter>
+          </defs>
+          {helixStrands.map((s, i) => (
+            <path
+              key={i}
+              data-weave=""
+              data-delay={s.delay}
+              d={helixPath(N, s.startDir, s.amp)}
+              fill="none"
+              stroke={s.stroke}
+              strokeWidth={s.width}
+              strokeOpacity={s.opacity}
+              pathLength={1}
+              filter={s.glow ? 'url(#helixGlow)' : undefined}
+              style={{ strokeDasharray: 1, strokeDashoffset: 0 }}
             />
-          </div>
-
-          <svg
-            viewBox="0 0 1300 600"
-            preserveAspectRatio="none"
-            style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '93.75%', pointerEvents: 'none', overflow: 'visible' }}
-            aria-hidden="true"
-          >
-            <defs>
-              <filter id="weaveGlow" x="-15%" y="-40%" width="130%" height="180%">
-                <feGaussianBlur stdDeviation="7" />
-              </filter>
-            </defs>
-            {weaveStrands.map((s, i) => (
-              <path
-                key={i}
-                data-weave=""
-                data-delay={s.delay}
-                d={s.d}
-                fill="none"
-                stroke={s.stroke}
-                strokeWidth={s.width}
-                strokeOpacity={s.opacity}
-                pathLength={1}
-                filter={s.glow ? 'url(#weaveGlow)' : undefined}
-                style={{ strokeDasharray: 1, strokeDashoffset: 0 }}
-              />
-            ))}
-          </svg>
-
-          <div
-            className="eye"
-            style={{
-              position: 'absolute',
-              left: -2,
-              top: '44.7%',
-              fontSize: '0.58rem',
-              color: 'rgba(255,255,255,0.4)',
-              transform: 'rotate(-90deg)',
-              transformOrigin: 'left center',
-            }}
-          >
-            Extraction
-          </div>
-          <div
-            className="eye"
-            style={{
-              position: 'absolute',
-              right: -6,
-              top: '50%',
-              fontSize: '0.58rem',
-              color: 'var(--aniwa-terracotta)',
-              transform: 'rotate(90deg)',
-              transformOrigin: 'right center',
-            }}
-          >
-            Regeneration
-          </div>
-
-          {weaveNodes.map((n) => (
-            <div key={n.name} style={{ position: 'absolute', left: `${n.left}%`, top: `${n.top}%`, width: '7.385%', textAlign: 'center' }}>
-              <div
-                style={{
-                  width: '100%',
-                  aspectRatio: '1',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: '1px solid rgba(255,255,255,0.22)',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                }}
-              >
-                <img
-                  src={n.img}
-                  alt={n.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: n.objectPosition }}
-                />
-              </div>
-              <div className="bd" style={{ color: '#F4F1EB', fontSize: '0.7rem', fontWeight: 600, marginTop: 8, whiteSpace: 'nowrap' }}>
-                {n.name}
-              </div>
-              <div className="tag" style={{ color: n.badge === 'Builder' ? '#C77A52' : '#9DBE8F', marginTop: 3 }}>
-                {n.badge}
-              </div>
-            </div>
           ))}
-        </div>
+        </svg>
 
-        {/* Mobile-only vertical weave: the same six strands transposed to run
-            down the page — builders hold the left rail, keepers the right.
-            Hidden ≥701px; drawWeave animates whichever band is on stage. */}
-        <div className="weave-vertical" data-weave-band="" data-reveal="" style={{ position: 'relative', zIndex: 2 }}>
-          <div
-            className="eye"
-            style={{ position: 'absolute', top: -44, left: '24%', transform: 'translateX(-50%)', color: '#C77A52', fontSize: '0.6rem' }}
-          >
-            Builders
-          </div>
-          <div
-            className="eye"
-            style={{ position: 'absolute', top: -44, left: '76%', transform: 'translateX(-50%)', color: '#9DBE8F', fontSize: '0.6rem' }}
-          >
-            Keepers
-          </div>
-          <svg
-            viewBox="0 0 600 1300"
-            preserveAspectRatio="none"
-            style={{ position: 'absolute', left: '3.125%', top: 0, width: '93.75%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}
-            aria-hidden="true"
-          >
-            <defs>
-              <filter id="weaveGlowV" x="-40%" y="-15%" width="180%" height="130%">
-                <feGaussianBlur stdDeviation="7" />
-              </filter>
-            </defs>
-            {/* matrix(0,1,1,0,0,0) transposes (x,y) → (y,x): the horizontal
-                1300×600 strand paths render vertically in a 600×1300 box */}
-            <g transform="matrix(0, 1, 1, 0, 0, 0)">
-              {weaveStrands.map((s, i) => (
-                <path
-                  key={i}
-                  data-weave=""
-                  data-delay={s.delay}
-                  d={s.d}
-                  fill="none"
-                  stroke={s.stroke}
-                  strokeWidth={s.width}
-                  strokeOpacity={s.opacity}
-                  pathLength={1}
-                  filter={s.glow ? 'url(#weaveGlowV)' : undefined}
-                  style={{ strokeDasharray: 1, strokeDashoffset: 0 }}
-                />
-              ))}
-            </g>
-          </svg>
-          {weaveNodes.map((n) => (
+        {fellowship.map((p, i) => {
+          const left = i % 2 === 0 ? ((300 - HELIX_AMP) / HELIX_WIDTH) * 100 : ((300 + HELIX_AMP) / HELIX_WIDTH) * 100;
+          const top = ((i + 0.5) / N) * 100;
+          return (
             <div
-              key={n.name}
+              key={p.name}
+              className="helix-seat"
               style={{
                 position: 'absolute',
-                left: n.badge === 'Builder' ? '24%' : '76%',
-                top: `${n.left}%`,
+                left: `${left}%`,
+                top: `${top}%`,
                 transform: 'translate(-50%, -50%)',
-                width: 104,
+                width: 'clamp(120px, 24vw, 190px)',
                 textAlign: 'center',
               }}
             >
               <div
+                className="helix-portrait"
                 style={{
-                  width: 54,
-                  height: 54,
+                  width: 'clamp(96px, 19vw, 156px)',
+                  aspectRatio: '1',
                   margin: '0 auto',
                   borderRadius: '50%',
                   overflow: 'hidden',
-                  border: '1px solid rgba(255,255,255,0.22)',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                  border: '2px solid rgba(184,148,92,0.45)',
+                  boxShadow: '0 14px 40px rgba(0,0,0,0.55), 0 0 34px rgba(160,74,42,0.22)',
                 }}
               >
                 <img
-                  src={n.img}
-                  alt={n.name}
+                  src={p.img}
+                  alt={p.name}
                   loading="lazy"
-                  width={54}
-                  height={54}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: n.objectPosition }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: p.objectPosition }}
                 />
               </div>
-              <div className="bd" style={{ color: '#F4F1EB', fontSize: '0.64rem', fontWeight: 600, marginTop: 6, lineHeight: 1.25 }}>
-                {n.name}
+              <div className="disp" style={{ color: '#F4F1EB', fontSize: '1.05rem', fontWeight: 600, marginTop: 12, lineHeight: 1.2 }}>
+                {p.name}
               </div>
-              <div className="tag" style={{ color: n.badge === 'Builder' ? '#C77A52' : '#9DBE8F', marginTop: 3 }}>
-                {n.badge}
+              <div className="bd" style={{ color: 'rgba(244,241,235,0.62)', fontSize: '0.78rem', marginTop: 4, lineHeight: 1.3 }}>
+                {p.role}
               </div>
             </div>
-          ))}
-        </div>
-
-        <p
-          data-reveal=""
-          className="myth"
-          style={{ position: 'relative', zIndex: 2, textAlign: 'center', fontSize: '1.9rem', color: '#F4F1EB', margin: '30px auto 0', maxWidth: 760 }}
-        >
-          A gathering of the best of both.
-          <br />
-          Two paradigms weaving one path towards <span style={{ color: 'var(--aniwa-terracotta)' }}>a regenerative future.</span>
-        </p>
+          );
+        })}
       </div>
+
+      <p
+        data-reveal=""
+        className="myth"
+        style={{ position: 'relative', zIndex: 2, textAlign: 'center', fontSize: '1.9rem', color: '#F4F1EB', margin: '84px auto 0', maxWidth: 760 }}
+      >
+        Two paradigms weaving a shared path towards{' '}
+        <span style={{ color: 'var(--aniwa-terracotta)' }}>a regenerative future for all life.</span>
+      </p>
     </section>
   );
 }

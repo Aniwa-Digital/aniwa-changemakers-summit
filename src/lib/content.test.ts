@@ -1,46 +1,59 @@
 import { describe, expect, test } from 'vitest';
 import {
-  BUILDER_SLOTS,
-  KEEPER_SLOTS,
-  ROSTER_SIZE,
-  buildReserve,
-  buildRosterSlots,
+  HELIX_UNIT,
+  buildFellowship,
   builders,
+  fellowship,
   founders,
+  helixPath,
   keepers,
   placeFounders,
 } from './content';
 
-describe('roster construction', () => {
-  test('fills all 12 slots exactly once', () => {
-    const slots = buildRosterSlots();
-    expect(slots).toHaveLength(ROSTER_SIZE);
-    expect(slots.every((s) => s !== undefined)).toBe(true);
-    expect([...KEEPER_SLOTS, ...BUILDER_SLOTS].sort((a, b) => a - b)).toEqual(
-      Array.from({ length: ROSTER_SIZE }, (_, i) => i),
-    );
-  });
-
-  test('keeper slots hold keepers, builder slots hold builders', () => {
-    const slots = buildRosterSlots();
-    KEEPER_SLOTS.forEach((i) => expect(slots[i].badge).toBe('Keeper'));
-    BUILDER_SLOTS.forEach((i) => expect(slots[i].badge).toBe('Builder'));
-  });
-
-  test('all slots start fully opaque', () => {
-    expect(buildRosterSlots().every((s) => s.op === 1)).toBe(true);
-  });
-
-  test('reserve pool holds the builders that did not get a slot', () => {
-    const reserve = buildReserve();
-    expect(reserve).toHaveLength(builders.length - BUILDER_SLOTS.length);
-    const onGrid = new Set(buildRosterSlots().map((s) => s.name));
-    reserve.forEach((p) => expect(onGrid.has(p.name)).toBe(false));
-  });
-
+describe('fellowship construction', () => {
   test('pools have the expected sizes', () => {
     expect(keepers).toHaveLength(4);
     expect(builders).toHaveLength(12);
+  });
+
+  test('seats everyone exactly once', () => {
+    expect(fellowship).toHaveLength(keepers.length + builders.length);
+    const names = new Set(fellowship.map((p) => p.name));
+    expect(names.size).toBe(fellowship.length);
+    [...keepers, ...builders].forEach((p) => expect(names.has(p.name)).toBe(true));
+  });
+
+  test('spreads keepers evenly — one keeper in every group of four seats', () => {
+    for (let g = 0; g < 4; g++) {
+      const group = fellowship.slice(g * 4, g * 4 + 4);
+      expect(group.filter((p) => p.badge === 'Keeper')).toHaveLength(1);
+    }
+  });
+
+  test('every member carries a portrait crop position', () => {
+    fellowship.forEach((p) => expect(p.objectPosition).toMatch(/^\d+% \d+%$/));
+  });
+
+  test('is a pure function of its pools', () => {
+    expect(buildFellowship(keepers, builders)).toEqual(fellowship);
+  });
+});
+
+describe('helix path geometry', () => {
+  test('spans one half-turn per seat', () => {
+    const n = 5;
+    const d = helixPath(n, -1);
+    // one M plus n quadratic segments
+    expect(d.match(/Q/g)).toHaveLength(n);
+    expect(d.startsWith('M300,0')).toBe(true);
+    expect(d.endsWith(` 300,${n * HELIX_UNIT}`)).toBe(true);
+  });
+
+  test('mirrored strands bulge to opposite sides', () => {
+    const a = helixPath(2, -1, 100);
+    const b = helixPath(2, 1, 100);
+    expect(a).toContain('Q200,'); // first bulge left of center (300 - 100)
+    expect(b).toContain('Q400,'); // first bulge right of center (300 + 100)
   });
 });
 
