@@ -19,6 +19,7 @@ export function Days() {
     >
       <div
         data-reveal=""
+        className="land-band"
         style={{ position: 'relative', margin: '0 -40px 78px', minHeight: '35vh', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}
       >
         <img
@@ -44,7 +45,7 @@ export function Days() {
             mixBlendMode: 'overlay',
           }}
         />
-        <div style={{ position: 'relative', zIndex: 2, padding: '32px 56px 42px', maxWidth: 902 }}>
+        <div className="land-copy" style={{ position: 'relative', zIndex: 2, padding: '32px 56px 42px', maxWidth: 902 }}>
           <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
             § 03 — The Work
           </div>

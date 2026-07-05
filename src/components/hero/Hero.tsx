@@ -59,9 +59,11 @@ export function Hero({ onLoginOpen }: HeroProps) {
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <button
             aria-label="Menu"
+            className="nav-burger"
             style={{
               display: 'flex',
               flexDirection: 'column',
+              alignItems: 'flex-start',
               justifyContent: 'center',
               gap: 6,
               width: 28,
@@ -89,7 +91,7 @@ export function Hero({ onLoginOpen }: HeroProps) {
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           <button
             onClick={onLoginOpen}
-            className="eye ember"
+            className="eye ember nav-login"
             style={{
               color: '#fff',
               border: 'none',
@@ -127,7 +129,7 @@ export function Hero({ onLoginOpen }: HeroProps) {
           height={31}
           style={{ height: 31, width: 151, margin: '0 auto 14px' }}
         />
-        <div style={{ display: 'block', width: 'min(864px, 74vw)', height: 120, margin: '4px auto' }}>
+        <div className="hero-stroke-wrap" style={{ display: 'block', width: 'min(864px, 74vw)', height: 120, margin: '4px auto' }}>
           <HeroStrokeText text="CHANGEMAKERS" />
         </div>
         <h1
@@ -176,7 +178,15 @@ export function Hero({ onLoginOpen }: HeroProps) {
         </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)', zIndex: 4 }}>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 'calc(14px + env(safe-area-inset-bottom))',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 4,
+        }}
+      >
         <div
           className="cue"
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, color: 'rgba(255,255,255,0.5)' }}

@@ -12,7 +12,13 @@ export function Prophecy() {
       <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden' }}>
         <img
           data-cine-bg=""
-          src="/assets/img/hero-patagonia-clean.png"
+          src="/assets/img/hero-patagonia-clean.jpg"
+          srcSet="/assets/img/hero-patagonia-clean-760.jpg 760w, /assets/img/hero-patagonia-clean.jpg 1264w"
+          sizes="100vw"
+          width={1264}
+          height={848}
+          loading="lazy"
+          decoding="async"
           alt=""
           style={{
             position: 'absolute',

@@ -2,6 +2,7 @@
 // Rendered opaque and composited via mix-blend-mode:screen on the wrapper.
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { dprCap, observeVisibility } from '../../lib/render-budget';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -104,7 +105,7 @@ export default function FireSphere({
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, dprCap()));
     renderer.setSize(width, height);
     renderer.setClearColor(0x000000, 0);
     mount.appendChild(renderer.domElement);
@@ -146,7 +147,16 @@ export default function FireSphere({
       typeof window.matchMedia === 'function' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // The closing section is the last fold; don't render until it approaches.
+    let visible = true;
+    const stopVisibility = observeVisibility(mount, (v) => {
+      if (v === visible) return;
+      visible = v;
+      if (v) raf = requestAnimationFrame(tick);
+    });
+
     const tick = () => {
+      if (!visible) return;
       raf = requestAnimationFrame(tick);
       if (!reduce) uniforms.time.value = clock.getElapsedTime() * 1000.0;
       composer.render();
@@ -154,7 +164,9 @@ export default function FireSphere({
     tick();
 
     return () => {
+      visible = false;
       cancelAnimationFrame(raf);
+      stopVisibility();
       window.removeEventListener('resize', onResize);
       geometry.dispose();
       material.dispose();

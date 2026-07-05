@@ -52,6 +52,7 @@ export function Invitation() {
           </div>
 
           <div
+            className="invite-card"
             style={{
               minWidth: 0,
               background: 'rgba(20,18,40,0.55)',
@@ -69,7 +70,7 @@ export function Invitation() {
             </p>
 
             {!registered ? (
-              <form onSubmit={register} style={{ display: 'flex', gap: 12, marginTop: 28 }}>
+              <form onSubmit={register} className="invite-form" style={{ display: 'flex', gap: 12, marginTop: 28 }}>
                 <input
                   className="field"
                   type="text"

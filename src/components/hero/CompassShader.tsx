@@ -3,6 +3,7 @@
 // scroll (window.scrollY on purpose — upright at page top). Ported from the
 // handoff's CompassShader.jsx.
 import { useEffect, useRef } from 'react';
+import { dprCap, observeVisibility } from '../../lib/render-budget';
 
 const SHADER_SRC = `#version 300 es
 precision highp float;
@@ -183,7 +184,7 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
     };
     img.src = compassSrc;
 
-    const getDpr = () => Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    const getDpr = () => Math.max(1, Math.min(dprCap(), window.devicePixelRatio || 1));
 
     let resizeScheduled = false;
     const applySize = () => {
@@ -209,8 +210,16 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
 
     const start = performance.now();
 
+    // Pause the render loop while the hero is scrolled out of view.
+    let visible = true;
+    const stopVisibility = observeVisibility(canvas, (v) => {
+      if (v === visible) return;
+      visible = v;
+      if (v && !disposed) raf = requestAnimationFrame(tick);
+    });
+
     const tick = (now: number) => {
-      if (disposed) return;
+      if (disposed || !visible) return;
       if (gl.isContextLost()) {
         raf = requestAnimationFrame(tick);
         return;
@@ -239,6 +248,7 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      stopVisibility();
       ro.disconnect();
       gl.deleteBuffer(vbo);
       gl.deleteVertexArray(vao);

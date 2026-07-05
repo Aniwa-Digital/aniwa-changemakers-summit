@@ -8,3 +8,6 @@ dist
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Local Claude session settings
+.claude/

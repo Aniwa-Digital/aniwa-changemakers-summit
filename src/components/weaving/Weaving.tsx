@@ -52,6 +52,7 @@ export function Weaving() {
         </div>
 
         <div
+          className="weave-band-desktop"
           data-reveal=""
           data-weave-band=""
           style={{
@@ -160,6 +161,95 @@ export function Weaving() {
                 />
               </div>
               <div className="bd" style={{ color: '#F4F1EB', fontSize: '0.7rem', fontWeight: 600, marginTop: 8, whiteSpace: 'nowrap' }}>
+                {n.name}
+              </div>
+              <div className="tag" style={{ color: n.badge === 'Builder' ? '#C77A52' : '#9DBE8F', marginTop: 3 }}>
+                {n.badge}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile-only vertical weave: the same six strands transposed to run
+            down the page — builders hold the left rail, keepers the right.
+            Hidden ≥701px; drawWeave animates whichever band is on stage. */}
+        <div className="weave-vertical" data-weave-band="" data-reveal="" style={{ position: 'relative', zIndex: 2 }}>
+          <div
+            className="eye"
+            style={{ position: 'absolute', top: -44, left: '24%', transform: 'translateX(-50%)', color: '#C77A52', fontSize: '0.6rem' }}
+          >
+            Builders
+          </div>
+          <div
+            className="eye"
+            style={{ position: 'absolute', top: -44, left: '76%', transform: 'translateX(-50%)', color: '#9DBE8F', fontSize: '0.6rem' }}
+          >
+            Keepers
+          </div>
+          <svg
+            viewBox="0 0 600 1300"
+            preserveAspectRatio="none"
+            style={{ position: 'absolute', left: '3.125%', top: 0, width: '93.75%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}
+            aria-hidden="true"
+          >
+            <defs>
+              <filter id="weaveGlowV" x="-40%" y="-15%" width="180%" height="130%">
+                <feGaussianBlur stdDeviation="7" />
+              </filter>
+            </defs>
+            {/* matrix(0,1,1,0,0,0) transposes (x,y) → (y,x): the horizontal
+                1300×600 strand paths render vertically in a 600×1300 box */}
+            <g transform="matrix(0, 1, 1, 0, 0, 0)">
+              {weaveStrands.map((s, i) => (
+                <path
+                  key={i}
+                  data-weave=""
+                  data-delay={s.delay}
+                  d={s.d}
+                  fill="none"
+                  stroke={s.stroke}
+                  strokeWidth={s.width}
+                  strokeOpacity={s.opacity}
+                  pathLength={1}
+                  filter={s.glow ? 'url(#weaveGlowV)' : undefined}
+                  style={{ strokeDasharray: 1, strokeDashoffset: 0 }}
+                />
+              ))}
+            </g>
+          </svg>
+          {weaveNodes.map((n) => (
+            <div
+              key={n.name}
+              style={{
+                position: 'absolute',
+                left: n.badge === 'Builder' ? '24%' : '76%',
+                top: `${n.left}%`,
+                transform: 'translate(-50%, -50%)',
+                width: 104,
+                textAlign: 'center',
+              }}
+            >
+              <div
+                style={{
+                  width: 54,
+                  height: 54,
+                  margin: '0 auto',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  border: '1px solid rgba(255,255,255,0.22)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                }}
+              >
+                <img
+                  src={n.img}
+                  alt={n.name}
+                  loading="lazy"
+                  width={54}
+                  height={54}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: n.objectPosition }}
+                />
+              </div>
+              <div className="bd" style={{ color: '#F4F1EB', fontSize: '0.64rem', fontWeight: 600, marginTop: 6, lineHeight: 1.25 }}>
                 {n.name}
               </div>
               <div className="tag" style={{ color: n.badge === 'Builder' ? '#C77A52' : '#9DBE8F', marginTop: 3 }}>

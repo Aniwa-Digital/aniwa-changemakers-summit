@@ -63,30 +63,43 @@ function cineProgression(reduce: boolean): void {
   }
 }
 
-/* ---- §01 The Weaving: strands draw with scroll through the pin ---- */
+/* ---- §01 The Weaving: strands draw with scroll through the pin. Two bands
+   exist (horizontal desktop, vertical mobile) — only one is displayed at a
+   time, but both animate so a viewport resize never strands a blank weave. ---- */
 function drawWeave(reduce: boolean): void {
-  const band = document.querySelector<HTMLElement>('[data-weave-band]');
-  if (!band) return;
-  const strands = band.querySelectorAll<SVGPathElement>('[data-weave]');
-  if (!strands.length) return;
+  const bands = document.querySelectorAll<HTMLElement>('[data-weave-band]');
+  if (!bands.length) return;
   const sec = document.getElementById('weaving');
+  const pin = document.querySelector<HTMLElement>('[data-weave-pin]');
   const h = viewportHeight();
-  let p: number;
-  if (sec && sec.offsetHeight > h * 1.2) {
+
+  // Pin math only applies while the stage is actually sticky (mobile unpins
+  // it via CSS); otherwise each band draws as it rises through the viewport.
+  const pinned = !!(pin && getComputedStyle(pin).position === 'sticky');
+  let pinP: number | null = null;
+  if (pinned && sec && sec.offsetHeight > h * 1.2) {
     const total = sec.offsetHeight - h;
     const passed = -sec.getBoundingClientRect().top;
-    p = clamp01(passed / Math.max(total, 1));
     // Finish the full draw within the first 85% of the pin, holding briefly on
     // the completed weave before the section releases.
-    p = clamp01(p / WEAVE_DONE_AT);
-  } else {
-    const top = band.getBoundingClientRect().top;
-    p = clamp01((h * 0.7 - top) / (h * 0.85));
+    pinP = clamp01(clamp01(passed / Math.max(total, 1)) / WEAVE_DONE_AT);
   }
-  strands.forEach((s) => {
-    const d = parseFloat(s.getAttribute('data-delay') || '0') || 0;
-    const local = clamp01((p - d) / (1 - MAX_DELAY));
-    s.style.strokeDashoffset = reduce ? '0' : String(1 - easeOutCubic(local));
+
+  bands.forEach((band) => {
+    const strands = band.querySelectorAll<SVGPathElement>('[data-weave]');
+    if (!strands.length) return;
+    let p: number;
+    if (pinP !== null) {
+      p = pinP;
+    } else {
+      const top = band.getBoundingClientRect().top;
+      p = clamp01((h * 0.7 - top) / (h * 0.85));
+    }
+    strands.forEach((s) => {
+      const d = parseFloat(s.getAttribute('data-delay') || '0') || 0;
+      const local = clamp01((p - d) / (1 - MAX_DELAY));
+      s.style.strokeDashoffset = reduce ? '0' : String(1 - easeOutCubic(local));
+    });
   });
 }
 

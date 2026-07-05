@@ -159,6 +159,12 @@ img {
 }
 
 /* ---- Responsive (ported from the prototype; !important beats inline styles) ---- */
+
+/* The weave band's vertical mobile variant only exists below 700px */
+.weave-vertical {
+  display: none;
+}
+
 @media (max-width: 880px) {
   section {
     padding-left: 26px !important;
@@ -180,8 +186,19 @@ img {
   .grid-3 {
     grid-template-columns: 1fr !important;
   }
+  /* The §02 roster keeps two columns — one column makes 12 portraits ~6000px
+     of scrolling */
+  #room .grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 24px 14px !important;
+  }
+  /* …and it leads the section: profiles first, stats + logos after */
+  #room .grid-2 > div:first-child {
+    order: 2;
+  }
   .grid-2 {
     grid-template-columns: 1fr !important;
+    gap: 44px !important;
   }
   .grid-logos {
     grid-template-columns: repeat(3, 1fr) !important;
@@ -192,15 +209,69 @@ img {
   .grid-4e > div {
     border-bottom: 1px solid var(--on-light-border);
   }
+  .land-band {
+    margin-left: -26px !important;
+    margin-right: -26px !important;
+  }
+  .land-copy {
+    padding: 30px 26px 38px !important;
+  }
 }
+
+@media (max-width: 700px) {
+  /* §01 The Weaving: the pinned 100vh stage clips its content on short
+     phones, so the section unpins and flows normally (the strand draw's
+     scroll progress handles both modes) */
+  #weaving {
+    height: auto !important;
+  }
+  #weaving [data-weave-pin] {
+    position: static !important;
+    min-height: 0 !important;
+    padding-top: 90px !important;
+    padding-bottom: 90px !important;
+  }
+
+  /* The horizontal band's nodes collide below ~700px: swap it for the
+     vertical weave — builders down the left rail, keepers down the right */
+  .weave-band-desktop {
+    display: none !important;
+  }
+  .weave-vertical {
+    display: block;
+    width: min(340px, 86vw);
+    aspect-ratio: 640 / 1300;
+    margin: 64px auto 0;
+  }
+
+  /* §00 The Prophecy: cover crops the landscape photo to a narrow slice on
+     portrait screens — contain shows the full vista as a cinematic band */
+  #prophecy [data-cine-bg] {
+    object-fit: contain !important;
+  }
+  #weaving [data-weave-pin] {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+  #weaving h2.disp {
+    font-size: 2.1rem !important;
+  }
+  #weaving p.bd {
+    font-size: 1.1rem !important;
+  }
+  #weaving .myth {
+    font-size: 1.35rem !important;
+  }
+}
+
 @media (max-width: 560px) {
   section {
     padding-left: 20px !important;
     padding-right: 20px !important;
   }
   nav {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
   h2.disp {
     font-size: 2.2rem !important;
@@ -208,12 +279,49 @@ img {
   .closing-title {
     font-size: 2.8rem !important;
   }
-  #weaving .tag {
-    display: none !important;
+
+  /* Hero: viewport-scaled title, compact nav, ≥44px tap targets */
+  h1.hero-title {
+    font-size: clamp(2.4rem, 14vw, 70px) !important;
+    letter-spacing: 0.11em !important;
+    margin-top: -12px !important;
   }
-  #weaving .bd {
-    font-size: 0.52rem !important;
+  .hero-stroke-wrap {
+    height: clamp(56px, 17vw, 120px) !important;
+    width: 82vw !important;
   }
+  .nav-burger {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .nav-login {
+    padding: 12px 14px !important;
+    font-size: 0.58rem !important;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+
+  /* §03 land header: the band bleeds -40px against a 20px section gutter;
+     rein the copy back to the 20px column */
+  .land-band {
+    margin-left: -20px !important;
+    margin-right: -20px !important;
+  }
+  .land-copy {
+    padding: 28px 20px 36px !important;
+  }
+
+  /* §05 invite card: stack the code form, full-width submit */
+  .invite-card {
+    padding: 26px 22px !important;
+  }
+  .invite-form {
+    flex-direction: column;
+  }
+  .invite-form button {
+    width: 100%;
+  }
+
   /* Founders ring: the prototype has no mobile treatment; shrink the seats so
      the 335px-wide ring doesn't collide */
   .founder-seat {
@@ -232,6 +340,24 @@ img {
   .open-seat {
     width: 52px !important;
     height: 52px !important;
+  }
+
+  /* Closing: shrink the fire orb and drop the contact block below its glow
+     so the email/nonprofit lines never sit on the bright fire arc */
+  .fire-orb {
+    width: 70vw !important;
+    top: 42% !important;
+  }
+  .closing-contact {
+    margin-top: 260px !important;
+  }
+
+  /* §02 roster type scales down with the 2-col cards */
+  #room .grid-3 .disp {
+    font-size: 0.95rem !important;
+  }
+  #room .grid-3 .bd {
+    font-size: 0.74rem !important;
   }
 }
 

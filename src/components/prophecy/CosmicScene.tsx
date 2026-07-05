@@ -5,6 +5,7 @@
 // camera fly + nebula spin run while visible, eases out ~240px later.
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { dprCap, observeVisibility, starBudget } from '../../lib/render-budget';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -30,7 +31,7 @@ export default function CosmicScene() {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
     renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, dprCap()));
     renderer.setClearColor(0x000000, 1); // opaque black; screen-blended by the wrapper
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.7;
@@ -60,7 +61,7 @@ export default function CosmicScene() {
         float o = 1.0 - smoothstep(0.0, 0.5, d);
         gl_FragColor = vec4(vColor, o); }`;
     for (let i = 0; i < 3; i++) {
-      const n = 5000;
+      const n = starBudget();
       const geo = new THREE.BufferGeometry();
       const pos = new Float32Array(n * 3);
       const col = new Float32Array(n * 3);
@@ -148,7 +149,16 @@ export default function CosmicScene() {
     const section = mount.closest('section');
     const smooth = { z: 100, y: 20 };
 
+    // The prophecy pin is 300vh; once it has scrolled past, stop rendering.
+    let visible = true;
+    const stopVisibility = observeVisibility(mount, (v) => {
+      if (v === visible) return;
+      visible = v;
+      if (v) raf = requestAnimationFrame(animate);
+    });
+
     function animate() {
+      if (!visible) return;
       raf = requestAnimationFrame(animate);
       const t = Date.now() * 0.001;
       stars.forEach((s) => {
@@ -195,7 +205,9 @@ export default function CosmicScene() {
     window.addEventListener('resize', onResize);
 
     return () => {
+      visible = false;
       cancelAnimationFrame(raf);
+      stopVisibility();
       window.removeEventListener('resize', onResize);
       stars.forEach((s) => {
         s.geometry.dispose();

@@ -65,6 +65,18 @@ function ensureGlowStyles(): void {
       border: none;
     }
     [data-glow] > [data-glow]::before { inset: -10px; border-width: 10px; }
+    /* Touch devices never fire pointermove, which would leave the spotlight
+       stuck as a bright blob at its last/default position — hide it there. */
+    @media (hover: none) {
+      [data-glow]::before,
+      [data-glow]::after,
+      [data-glow] [data-glow] {
+        display: none;
+      }
+      [data-glow] {
+        background-image: none !important;
+      }
+    }
   `;
   const el = document.createElement('style');
   el.id = GLOW_STYLE_ID;
@@ -132,7 +144,6 @@ export function GlowCard({ children, glowColor = 'ember', radius = 14, border = 
     backdropFilter: 'blur(5px)',
     WebkitBackdropFilter: 'blur(5px)',
     boxShadow: '0 1rem 2.4rem -1.2rem #000',
-    touchAction: 'none',
     ...cssVars,
     ...style,
   };

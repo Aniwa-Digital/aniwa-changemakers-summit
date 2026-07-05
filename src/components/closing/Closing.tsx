@@ -32,13 +32,14 @@ export function Closing() {
         />
       </div>
       <div
+        className="fire-orb"
         style={{
           position: 'absolute',
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 560,
-          height: 560,
+          width: 'min(560px, 92vw)',
+          aspectRatio: '1',
           zIndex: 1,
           pointerEvents: 'none',
           mixBlendMode: 'screen',
@@ -54,7 +55,7 @@ export function Closing() {
           <br />
           at the fire.
         </h2>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 13, marginTop: 46 }}>
+        <div className="closing-contact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 13, marginTop: 46 }}>
           <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={34} height={26} style={{ height: 26, width: 'auto', filter: 'brightness(2.2)' }} />
           <span className="eye" style={{ color: 'rgba(255,255,255,0.5)', letterSpacing: 'var(--tracking-wide)', fontSize: '0.64rem' }}>
             ANIWĀ · summit@huyaaniwa.org
