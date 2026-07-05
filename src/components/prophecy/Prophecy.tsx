@@ -142,7 +142,7 @@ export function Prophecy() {
             <br />
             <span style={{ color: 'rgba(255,255,255,0.72)' }}>— of mind, of structure, of technology —</span>
             <br />
-            would sit at the same fire as the people of the South&nbsp;
+            would meet around the same fire as the people of the South&nbsp;
             <br />
             <span style={{ color: 'rgba(255,255,255,0.72)' }}>— of heart, of spirit, of land —</span>
           </p>
@@ -155,49 +155,70 @@ export function Prophecy() {
             inset: 0,
             zIndex: 2,
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: 34,
             padding: '0 24px',
             textAlign: 'center',
+            opacity: 0,
           }}
         >
           <p
-            data-cine-2a=""
             className="myth"
             style={{
-              opacity: 0,
               color: '#F4F1EB',
               fontWeight: 500,
               fontSize: 'clamp(1.5rem, 2.9vw, 2.31rem)',
               lineHeight: 1.5,
               maxWidth: 780,
               textShadow: '0 0 40px rgba(255,255,255,0.32)',
-              marginBottom: -30,
             }}
           >
             Converging the strengths of opposing paradigms
             <br />
-            to ensure the survival of both.
+            to weave a shared path forward together.
           </p>
-          <div data-cine-2b="" style={{ opacity: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 13 }}>
-            <span style={{ display: 'block', height: 1, width: 64, background: 'rgba(160,74,42,0.65)' }} />
-            <h2
-              className="disp"
-              style={{
-                color: '#F4F1EB',
-                fontWeight: 400,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.04,
-                fontSize: 'clamp(1.75rem, 3.1vw, 2.5rem)',
-                textShadow: '0 0 30px rgba(184,148,92,0.55), 0 0 60px rgba(184,148,92,0.28)',
-                margin: 0,
-              }}
-            >
-              This time has arrived.
-            </h2>
-          </div>
+        </div>
+
+        <div
+          data-cine-act="3"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 26,
+            padding: '0 24px',
+            textAlign: 'center',
+            opacity: 0,
+          }}
+        >
+          <svg
+            width="44"
+            height="66"
+            viewBox="0 0 44 66"
+            fill="none"
+            aria-hidden="true"
+            style={{ filter: 'drop-shadow(0 0 18px rgba(184,148,92,0.85)) drop-shadow(0 0 44px rgba(184,148,92,0.4))' }}
+          >
+            <path d="M27 2 L7 38 L19 38 L14 64 L37 26 L24 26 Z" fill="var(--aniwa-gold)" />
+          </svg>
+          <h2
+            className="disp"
+            style={{
+              color: '#F4F1EB',
+              fontWeight: 400,
+              letterSpacing: '0.06em',
+              lineHeight: 1.04,
+              fontSize: 'clamp(1.9rem, 3.6vw, 3rem)',
+              textShadow: '0 0 30px rgba(184,148,92,0.55), 0 0 60px rgba(184,148,92,0.28)',
+              margin: 0,
+            }}
+          >
+            THIS TIME HAS ARRIVED
+          </h2>
         </div>
 
         <div
@@ -214,6 +235,7 @@ export function Prophecy() {
           }}
         >
           <span style={{ display: 'block', height: 1, width: 40, background: 'rgba(160,74,42,0.8)', transition: 'width .6s, background .6s' }} />
+          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(255,255,255,0.2)', transition: 'width .6s, background .6s' }} />
           <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(255,255,255,0.2)', transition: 'width .6s, background .6s' }} />
           <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(255,255,255,0.2)', transition: 'width .6s, background .6s' }} />
         </div>

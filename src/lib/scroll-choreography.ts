@@ -30,31 +30,31 @@ function viewportHeight(): number {
   return window.innerHeight || document.documentElement.clientHeight;
 }
 
-/* ---- §00 The Prophecy: three acts cross-fade through the 300vh pin ---- */
+/* ---- §00 The Prophecy: four acts cross-fade through the 300vh pin ---- */
 function cineProgression(reduce: boolean): void {
   const cine = document.getElementById('prophecy');
   if (!cine) return;
   const a0 = cine.querySelector<HTMLElement>('[data-cine-act="0"]');
   const a1 = cine.querySelector<HTMLElement>('[data-cine-act="1"]');
-  const a2a = cine.querySelector<HTMLElement>('[data-cine-2a]');
-  const a2b = cine.querySelector<HTMLElement>('[data-cine-2b]');
+  const a2 = cine.querySelector<HTMLElement>('[data-cine-act="2"]');
+  const a3 = cine.querySelector<HTMLElement>('[data-cine-act="3"]');
   const ember = cine.querySelector<HTMLElement>('[data-cine-ember]');
   const bg = cine.querySelector<HTMLElement>('[data-cine-bg]');
   const marker = cine.querySelector<HTMLElement>('[data-cine-marker]');
   const total = cine.offsetHeight - viewportHeight();
   const passed = -cine.getBoundingClientRect().top;
   const p = clamp01(passed / Math.max(total, 1));
-  if (a0) a0.style.opacity = String(vis(p, -0.1, 0, 0.26, 0.34));
-  if (a1) a1.style.opacity = String(vis(p, 0.34, 0.42, 0.6, 0.68));
-  if (a2a) a2a.style.opacity = String(lerp(p, 0.66, 0.73));
-  if (a2b) a2b.style.opacity = String(lerp(p, 0.8, 0.88));
+  if (a0) a0.style.opacity = String(vis(p, -0.1, 0, 0.2, 0.28));
+  if (a1) a1.style.opacity = String(vis(p, 0.28, 0.36, 0.46, 0.54));
+  if (a2) a2.style.opacity = String(vis(p, 0.54, 0.62, 0.7, 0.78));
+  if (a3) a3.style.opacity = String(lerp(p, 0.8, 0.88));
   if (ember) ember.style.opacity = (lerp(p, 0.55, 0.95) * 0.55).toFixed(3);
   if (bg && !reduce) {
     bg.style.transform = `scale(${(1.05 + p * 0.1).toFixed(3)}) translateY(${(-p * 3).toFixed(2)}%)`;
   }
   if (marker) {
     const segs = marker.children as HTMLCollectionOf<HTMLElement>;
-    const cur = Math.min(2, Math.floor(p / 0.34));
+    const cur = Math.min(3, Math.floor(p / 0.26));
     for (let i = 0; i < segs.length; i++) {
       const on = i <= cur;
       segs[i].style.width = on ? '40px' : '24px';
@@ -103,19 +103,6 @@ function drawWeave(reduce: boolean): void {
   });
 }
 
-/* Weave compass: exactly one full clockwise 2π turn by the time the weave
-   finishes drawing, continuing past it. */
-function spinWeaveCompass(reduce: boolean): void {
-  const img = document.querySelector<HTMLElement>('[data-weave-compass]');
-  const sec = document.getElementById('weaving');
-  if (!img || !sec) return;
-  const h = viewportHeight();
-  const passed = Math.max(0, -sec.getBoundingClientRect().top);
-  const weaveDone = WEAVE_DONE_AT * Math.max(sec.offsetHeight - h, 1);
-  const rot = reduce ? 0 : (passed / weaveDone) * Math.PI * 2;
-  img.style.transform = `rotate(${rot.toFixed(4)}rad)`;
-}
-
 /* §07 compass spins as the apply section scrolls up. Centered by negative
    margins (never translate) because this write clobbers `transform`. */
 function spinApplyCompass(reduce: boolean): void {
@@ -161,62 +148,6 @@ function positionConnector(): void {
   line.style.height = `${len}px`;
 }
 
-/* §02 The Room: on desktop the roster grid spans exactly the left rail's
-   height (equal 1fr rows, portraits flexing). Width-dependent, so re-measured
-   each frame; the flex-mode styles are applied only on mode change. */
-let lastRoomMode: boolean | null = null;
-
-function matchRoomHeights(): void {
-  const room = document.getElementById('room');
-  if (!room) return;
-  const g2 = room.querySelector<HTMLElement>('.grid-2');
-  const roster = room.querySelector<HTMLElement>('.grid-3');
-  if (!g2 || !roster) return;
-  const left = g2.children[0] as HTMLElement | undefined;
-  if (!left) return;
-  const cards = roster.children as HTMLCollectionOf<HTMLElement>;
-  const desktop = (window.innerWidth || document.documentElement.clientWidth) > 880;
-  if (desktop) {
-    const rows = Math.max(1, Math.ceil(cards.length / 3));
-    roster.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-    roster.style.height = `${Math.round(left.getBoundingClientRect().height)}px`;
-  } else {
-    roster.style.gridTemplateRows = '';
-    roster.style.height = '';
-  }
-  if (lastRoomMode !== desktop) {
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      const wrap = card.querySelector<HTMLElement>('div'); // crossfade wrapper
-      if (!wrap) continue;
-      const portrait = wrap.querySelector<HTMLElement>('div'); // holds the img
-      if (!portrait) continue;
-      if (desktop) {
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        wrap.style.display = 'flex';
-        wrap.style.flexDirection = 'column';
-        wrap.style.flex = '1 1 0';
-        wrap.style.minHeight = '0';
-        portrait.style.aspectRatio = '';
-        portrait.style.flex = '1 1 0';
-        portrait.style.minHeight = '0';
-      } else {
-        card.style.display = '';
-        card.style.flexDirection = '';
-        wrap.style.display = '';
-        wrap.style.flexDirection = '';
-        wrap.style.flex = '';
-        wrap.style.minHeight = '';
-        portrait.style.aspectRatio = '4/5';
-        portrait.style.flex = '';
-        portrait.style.minHeight = '';
-      }
-    }
-    lastRoomMode = desktop;
-  }
-}
-
 /** Start the choreography loop. Returns a stop function. */
 export function startScrollChoreography(): () => void {
   const reduce =
@@ -229,11 +160,9 @@ export function startScrollChoreography(): () => void {
     if (!running) return;
     cineProgression(reduce);
     compassParallax(reduce);
-    spinWeaveCompass(reduce);
     spinApplyCompass(reduce);
     positionConnector();
     drawWeave(reduce);
-    matchRoomHeights();
     raf = requestAnimationFrame(tick);
   };
   raf = requestAnimationFrame(tick);
@@ -241,6 +170,5 @@ export function startScrollChoreography(): () => void {
   return () => {
     running = false;
     cancelAnimationFrame(raf);
-    lastRoomMode = null;
   };
 }
