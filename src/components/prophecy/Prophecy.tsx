@@ -195,16 +195,6 @@ export function Prophecy() {
             opacity: 0,
           }}
         >
-          <svg
-            width="44"
-            height="66"
-            viewBox="0 0 44 66"
-            fill="none"
-            aria-hidden="true"
-            style={{ filter: 'drop-shadow(0 0 18px rgba(184,148,92,0.85)) drop-shadow(0 0 44px rgba(184,148,92,0.4))' }}
-          >
-            <path d="M27 2 L7 38 L19 38 L14 64 L37 26 L24 26 Z" fill="var(--aniwa-gold)" />
-          </svg>
           <h2
             className="disp"
             style={{
