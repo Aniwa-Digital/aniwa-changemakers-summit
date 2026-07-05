@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { clamp01, easeOutCubic, lerp, vis, SPIN_RATE, WEAVE_DONE_AT } from './scroll-choreography';
+import { clamp01, easeOutCubic, lerp, raceWobble, vis, SPIN_RATE, WEAVE_DONE_AT } from './scroll-choreography';
 
 describe('clamp01', () => {
   test('clamps below zero to 0', () => {
@@ -48,6 +48,36 @@ describe('vis (fade in / fade out window)', () => {
   });
   test('no fade-out when oa/ob omitted', () => {
     expect(vis(0.99, 0.8, 0.88)).toBe(1);
+  });
+});
+
+describe('raceWobble (organic helix acceleration)', () => {
+  test('is zero at both ends so growth starts and completes cleanly', () => {
+    expect(raceWobble(0, 0)).toBe(0);
+    expect(raceWobble(1, 0)).toBeCloseTo(0, 10);
+    expect(raceWobble(1, 1)).toBeCloseTo(0, 10);
+  });
+
+  test('stays subtle — bounded well inside the tracking window', () => {
+    for (let p = 0; p <= 1; p += 0.01) {
+      expect(Math.abs(raceWobble(p, 0))).toBeLessThan(0.05);
+      expect(Math.abs(raceWobble(p, 1))).toBeLessThan(0.05);
+    }
+  });
+
+  test('the two lanes trade the lead (strands pass each other)', () => {
+    // Effective gap between lanes: base delay gap (0.08 vs 0.1) + wobble diff.
+    const gap = (p: number) => 0.02 + raceWobble(p, 0) - raceWobble(p, 1);
+    let signChanges = 0;
+    let prev = Math.sign(gap(0.02));
+    for (let p = 0.02; p <= 0.98; p += 0.005) {
+      const s = Math.sign(gap(p));
+      if (s !== prev && s !== 0) {
+        signChanges++;
+        prev = s;
+      }
+    }
+    expect(signChanges).toBeGreaterThanOrEqual(2);
   });
 });
 

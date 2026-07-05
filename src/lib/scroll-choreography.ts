@@ -65,9 +65,20 @@ function cineProgression(reduce: boolean): void {
 
 /* ---- The Fellowship helix: tip-tracked growth. The strands' draw progress
    is tied to how far the band has scrolled past 55% of the viewport, so the
-   growing tip of the helix always sits near mid-frame — the page appears to
-   be tracking the strand as it grows. Seats fade in as the tip reaches
+   growing tips always sit near mid-frame — the page appears to be tracking
+   the strands as they grow. Each race lane ([data-race]) carries its own
+   organic acceleration wobble so the two strands surge, slow, and pass each
+   other while staying in frame. Seats fade in as the leading tip reaches
    their row ([data-helix-seat] carries each seat's fraction of the path). ---- */
+
+/** Zero-mean, scroll-deterministic acceleration wobble for a race lane.
+    Tapered to 0 at both ends so growth starts and completes cleanly. */
+export function raceWobble(p: number, lane: number): number {
+  const taper = clamp01(p * (1 - p) * 6);
+  const w = Math.sin(p * 9.4 + lane * 2.6) + 0.6 * Math.sin(p * 17.3 + lane * 5.1);
+  return 0.028 * taper * w;
+}
+
 function drawWeave(reduce: boolean): void {
   const bands = document.querySelectorAll<HTMLElement>('[data-weave-band]');
   if (!bands.length) return;
@@ -78,15 +89,19 @@ function drawWeave(reduce: boolean): void {
     if (!strands.length) return;
     const r = band.getBoundingClientRect();
     const p = reduce ? 1 : clamp01((h * 0.55 - r.top) / Math.max(r.height, 1));
+    let leadTip = 0; // furthest raced-core progress, drives seat reveals
     strands.forEach((s) => {
       const d = parseFloat(s.getAttribute('data-delay') || '0') || 0;
-      // Linear (no easing) so the tip stays locked to the 55%-viewport line.
-      const local = clamp01((p - d) / (1 - MAX_DELAY));
+      const raceAttr = s.getAttribute('data-race');
+      const wob = raceAttr !== null && !reduce ? raceWobble(p, Number(raceAttr)) : 0;
+      // Linear (no easing) so the tips stay near the 55%-viewport line.
+      const local = clamp01((p - d) / (1 - MAX_DELAY) + wob);
+      if (s.hasAttribute('data-tip-source')) leadTip = Math.max(leadTip, local);
       s.style.strokeDashoffset = reduce ? '0' : String(1 - local);
     });
     band.querySelectorAll<HTMLElement>('[data-helix-seat]').forEach((seat) => {
       const frac = parseFloat(seat.getAttribute('data-helix-seat') || '0') || 0;
-      const on = reduce || p >= frac - 0.015;
+      const on = reduce || leadTip >= frac - 0.005;
       seat.style.opacity = on ? '1' : '0';
       seat.style.transform = on ? 'translate(-50%, -50%)' : 'translate(-50%, -46%)';
     });
@@ -100,7 +115,9 @@ function drawWeave(reduce: boolean): void {
       const path = band.querySelector<SVGPathElement>(`[data-tip-source="${idx}"]`);
       if (!path || !path.ownerSVGElement) return;
       const d = parseFloat(path.getAttribute('data-delay') || '0') || 0;
-      const local = clamp01((p - d) / (1 - MAX_DELAY));
+      const raceAttr = path.getAttribute('data-race');
+      const wob = raceAttr !== null && !reduce ? raceWobble(p, Number(raceAttr)) : 0;
+      const local = clamp01((p - d) / (1 - MAX_DELAY) + wob);
       if (reduce || local <= 0.002 || local >= 0.998) {
         tip.style.opacity = '0';
         return;

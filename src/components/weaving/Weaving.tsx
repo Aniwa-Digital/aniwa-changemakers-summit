@@ -77,6 +77,7 @@ export function Weaving() {
               key={i}
               data-weave=""
               data-delay={s.delay}
+              data-race={s.race}
               data-tip-source={s.tipIndex}
               d={helixPath(N, s.startDir, s.amp)}
               fill="none"
@@ -101,9 +102,9 @@ export function Weaving() {
               position: 'absolute',
               left: '50%',
               top: 0,
-              width: 110,
-              height: 110,
-              margin: '-55px 0 0 -55px',
+              width: 62,
+              height: 62,
+              margin: '-31px 0 0 -31px',
               pointerEvents: 'none',
               zIndex: 3,
               opacity: 0,

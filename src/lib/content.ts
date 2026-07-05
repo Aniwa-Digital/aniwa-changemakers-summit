@@ -106,16 +106,19 @@ export interface HelixStrand {
   glow?: boolean;
   /** Marks a core strand whose growing tip carries a comet glow (0 | 1). */
   tipIndex?: number;
+  /** Race lane: strands sharing a lane grow together with that lane's
+      organic acceleration wobble (so a core and its glow stay in sync). */
+  race?: number;
 }
 
 /* Tuned for the light (bone) Fellowship section. */
 export const helixStrands: HelixStrand[] = [
   { startDir: -1, amp: 230, stroke: '#2E2820', width: 1.4, opacity: 0.12, delay: 0 },
   { startDir: 1, amp: 230, stroke: '#6F8A5E', width: 1.4, opacity: 0.28, delay: 0.04 },
-  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 6, opacity: 0.3, delay: 0.08, glow: true },
-  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 6, opacity: 0.28, delay: 0.12, glow: true },
-  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 2.6, opacity: 0.9, delay: 0.08, tipIndex: 0 },
-  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 2.6, opacity: 0.85, delay: 0.12, tipIndex: 1 },
+  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 6, opacity: 0.3, delay: 0.08, glow: true, race: 0 },
+  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 6, opacity: 0.28, delay: 0.1, glow: true, race: 1 },
+  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 2.6, opacity: 0.9, delay: 0.08, tipIndex: 0, race: 0 },
+  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 2.6, opacity: 0.85, delay: 0.1, tipIndex: 1, race: 1 },
 ];
 
 /* ---- §02 The Room: left-rail stats + partner logos ---- */
