@@ -20,6 +20,19 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Hidden static form so Netlify Forms detects "registrations" and can
+         email the team on each submission (forwarded server-side by the
+         register function). Not rendered — display:none. -->
+    <form name="registrations" data-netlify="true" netlify-honeypot="bot-field" hidden style="display: none">
+      <input type="hidden" name="form-name" value="registrations" />
+      <input name="bot-field" />
+      <input name="invite-code" /><input name="assigned-by" />
+      <input name="fullName" /><input name="email" /><input name="phone" />
+      <input name="organization" /><input name="role" /><input name="location" />
+      <input name="industry" /><textarea name="expertise"></textarea>
+      <input name="linkedin" /><input name="instagram" /><input name="x" /><input name="website" />
+      <input name="publicDirectory" /><input name="submittedAt" /><input name="id" /><input name="code" />
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

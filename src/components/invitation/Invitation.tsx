@@ -1,15 +1,36 @@
 import { useState, type FormEvent } from 'react';
 import { steps } from '../../lib/content';
 
-/* §05 Invitation — purple section. "Entry is the first ceremony." + the
-   6-step numbered process and the invite-code card (code → registered state). */
+/* Invitation — purple section. "Entry is the first ceremony." + the 6-step
+   process and the invite-code card. The code is validated server-side; a
+   valid one opens the gated registration page. */
 export function Invitation() {
   const [code, setCode] = useState('');
-  const [registered, setRegistered] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [error, setError] = useState('');
 
-  const register = (e: FormEvent) => {
+  const register = async (e: FormEvent) => {
     e.preventDefault();
-    if (code.trim()) setRegistered(true);
+    const c = code.trim();
+    if (!c || checking) return;
+    setChecking(true);
+    setError('');
+    try {
+      const r = await fetch('/.netlify/functions/validate-code', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: c }),
+      });
+      const d = (await r.json()) as { valid: boolean; redeemed: boolean };
+      if (d.valid) {
+        window.location.hash = `#/register?code=${encodeURIComponent(c.toUpperCase())}`;
+      } else {
+        setError(d.redeemed ? 'That invite code has already been used.' : 'That invite code isn’t valid. Check it and try again.');
+      }
+    } catch {
+      setError('We couldn’t verify your code just now. Please try again.');
+    }
+    setChecking(false);
   };
 
   return (
@@ -68,8 +89,7 @@ export function Invitation() {
               essentials can be found in your participant portal.
             </p>
 
-            {!registered ? (
-              <form onSubmit={register} className="invite-form" style={{ display: 'flex', gap: 12, marginTop: 28 }}>
+            <form onSubmit={(e) => void register(e)} className="invite-form" style={{ display: 'flex', gap: 12, marginTop: 28 }}>
                 <input
                   className="field"
                   type="text"
@@ -94,6 +114,7 @@ export function Invitation() {
                 />
                 <button
                   type="submit"
+                  disabled={checking}
                   className="eye ember"
                   style={{
                     padding: '15px 22px',
@@ -106,27 +127,13 @@ export function Invitation() {
                     boxShadow: '0 12px 40px rgba(160,74,42,0.45), inset 0 1px 0 rgba(255,255,255,0.18)',
                   }}
                 >
-                  Register →
+                  {checking ? 'Checking…' : 'Register →'}
                 </button>
               </form>
-            ) : (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: 14,
-                  marginTop: 28,
-                  padding: '20px 22px',
-                  background: 'rgba(184,148,92,0.1)',
-                  border: '1px solid rgba(184,148,92,0.4)',
-                  borderRadius: 'var(--radius-house)',
-                }}
-              >
-                <span style={{ color: 'var(--aniwa-gold)', fontSize: '1.1rem', lineHeight: 1 }}>✦</span>
-                <p className="bd" style={{ color: 'rgba(255,255,255,0.82)', fontSize: '0.94rem', margin: 0 }}>
-                  Code received. We'll email your registration link within a day. We will see you at the fire.
-                </p>
-              </div>
+            {error && (
+              <p className="bd" style={{ color: '#E2A184', fontSize: '0.9rem', margin: '14px 0 0' }}>
+                {error}
+              </p>
             )}
 
             <p className="bd" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.94rem', margin: '26px 0 0' }}>

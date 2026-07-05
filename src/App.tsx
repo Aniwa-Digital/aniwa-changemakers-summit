@@ -8,16 +8,44 @@ import { FoundersCircle } from './components/founders/FoundersCircle';
 import { LoginModal, type LoginProvider } from './components/founders/LoginModal';
 import { Invitation } from './components/invitation/Invitation';
 import { Closing } from './components/closing/Closing';
+import { RegisterPage } from './components/register/RegisterPage';
+import { AdminCodesPage } from './components/register/AdminCodesPage';
 import { useReveal } from './hooks/useReveal';
 import { startScrollChoreography } from './lib/scroll-choreography';
 
+/* Tiny hash router: '#/register' (invite-gated registration) and
+   '#/codes' (team invite-code generator) render as standalone pages;
+   anything else renders the main scroll page. */
+function currentRoute(): 'register' | 'codes' | 'home' {
+  const h = window.location.hash;
+  if (h.startsWith('#/register')) return 'register';
+  if (h.startsWith('#/codes')) return 'codes';
+  return 'home';
+}
+
 export default function App() {
+  const [route, setRoute] = useState(currentRoute);
   const [loginOpen, setLoginOpen] = useState(false);
   const [loginProvider, setLoginProvider] = useState<LoginProvider | null>(null);
 
-  useReveal();
+  useEffect(() => {
+    const onHash = () => {
+      setRoute(currentRoute());
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
 
-  useEffect(() => startScrollChoreography(), []);
+  useReveal(route);
+
+  useEffect(() => {
+    if (route !== 'home') return;
+    return startScrollChoreography();
+  }, [route]);
+
+  if (route === 'register') return <RegisterPage />;
+  if (route === 'codes') return <AdminCodesPage />;
 
   return (
     <div style={{ position: 'relative', background: 'var(--ground-night)', overflowX: 'clip' }}>

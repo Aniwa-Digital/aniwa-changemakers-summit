@@ -194,6 +194,10 @@ img {
     gap: 12px !important;
     padding: 38px 4px !important;
   }
+  /* Invite-code generator: stack the form fields */
+  .codes-gen-form {
+    grid-template-columns: 1fr !important;
+  }
   .land-band {
     margin-left: -26px !important;
     margin-right: -26px !important;

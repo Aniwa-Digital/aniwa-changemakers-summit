@@ -7,7 +7,7 @@ const FAILSAFE_MS = 3000;
    mount are armed (translated 28px down, opacity 0); an IntersectionObserver
    releases them, and a 3s failsafe reveals everything regardless — content
    can never be stuck hidden. */
-export function useReveal(): void {
+export function useReveal(dep?: unknown): void {
   useEffect(() => {
     const reduce =
       typeof window.matchMedia === 'function' &&
@@ -44,5 +44,6 @@ export function useReveal(): void {
       io.disconnect();
       els.forEach((e) => e.classList.remove('reveal-armed'));
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dep]);
 }
