@@ -122,13 +122,15 @@ export function Hero({ onLoginOpen }: HeroProps) {
           color: '#F4F1EB',
         }}
       >
-        <img
-          src="/assets/aniwa-wordmark.svg"
-          alt="Aniwā"
-          width={151}
-          height={31}
-          style={{ height: 31, width: 151, margin: '0 auto 14px' }}
-        />
+        <div className="eye" style={{ color: '#F4F1EB', letterSpacing: '0.3em', fontSize: '0.82rem' }}>
+          HUYA ANIWA FOUNDATION
+        </div>
+        <div
+          className="myth"
+          style={{ color: 'rgba(244,241,235,0.66)', fontSize: '1.05rem', margin: '10px auto 18px', letterSpacing: '0.08em' }}
+        >
+          presents
+        </div>
         <div className="hero-stroke-wrap" style={{ display: 'block', width: 'min(864px, 74vw)', height: 120, margin: '4px auto' }}>
           <HeroStrokeText text="CHANGEMAKERS" />
         </div>
@@ -156,10 +158,13 @@ export function Hero({ onLoginOpen }: HeroProps) {
             fontFamily: "'Times New Roman', serif",
           }}
         >
-          OCTOBER 23–25
+          OCTOBER 23–25, 2026
+        </div>
+        <div className="eye" style={{ color: 'rgba(244,241,235,0.78)', letterSpacing: '0.24em', fontSize: '0.78rem', marginTop: 12 }}>
+          SONOMA COUNTY, CALIFORNIA
         </div>
         <div className="eye" style={{ letterSpacing: '0.24em', fontSize: 13, marginTop: 18 }}>
-          <b style={{ color: 'var(--aniwa-terracotta)', fontSize: 13 }}>An invite only event</b>
+          <b style={{ color: 'var(--aniwa-terracotta)', fontSize: 13 }}>An invite-only convergence</b>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16, marginTop: 14 }}>
           <a
@@ -178,27 +183,6 @@ export function Hero({ onLoginOpen }: HeroProps) {
         </div>
       </div>
 
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 'calc(14px + env(safe-area-inset-bottom))',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 4,
-        }}
-      >
-        <div
-          className="cue"
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, color: 'rgba(255,255,255,0.5)' }}
-        >
-          <span className="eye" style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.5)' }}>
-            SCROLL FOR MORE INFO
-          </span>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </div>
-      </div>
     </section>
   );
 }
