@@ -83,14 +83,16 @@ folder under `src/components/`:
 
 | # | Section | Primary file | Notes |
 |---|---|---|---|
-| — | Hero | `hero/Hero.tsx` | Nav (ATTENDEE LOGIN → login modal), "CHANGEMAKERS / SUMMIT" headline, date, invite-code link. WebGL compass: `hero/CompassShader.tsx`. Animated headline: `hero/HeroStrokeText.tsx`. |
-| — | Prophecy | `prophecy/Prophecy.tsx` | 300vh pinned; 3 acts of copy cross-fade on scroll. three.js starfield/beam: `prophecy/CosmicScene.tsx`. |
-| 01 | Weaving | `weaving/Weaving.tsx` | Eyebrow **§ 01 — Convergence**. Strand-draw SVG + spinning compass + 8 portrait nodes. |
-| 02 | Room | `room/Room.tsx` | Eyebrow **§ 02 — Contributors**. Stats rail + partner-logo grid + live-swapping roster of 12. |
-| 03 | Days | `days/Days.tsx` | Eyebrow **§ 03 — The Work**. Land header, 4 element cards, 3 day cards, outcome box, ember connector line into §04. |
-| 04 | Founders | `founders/FoundersCircle.tsx` | Eyebrow **§ 04 — Founders Circle**. Polar ring of 7 + open seat. Modals: `founders/NominationModal.tsx`, `founders/LoginModal.tsx`. |
-| 05 | Invitation | `invitation/Invitation.tsx` | Eyebrow **§ 05 — Invitation**. 6-step process + invite-code card. |
-| — | Closing | `closing/Closing.tsx` | "We will see you at the fire." three.js fire orb: `closing/FireSphere.tsx`. |
+| — | Hero | `hero/Hero.tsx` | Nav (ATTENDEE LOGIN → login modal); "HUYA ANIWA FOUNDATION / presents / CHANGEMAKERS SUMMIT / Oct 23–25, 2026 / Sonoma County / An invite-only convergence". No scroll cue. WebGL compass: `hero/CompassShader.tsx`. |
+| — | Prophecy | `prophecy/Prophecy.tsx` | 300vh pinned; **4 acts** cross-fade on scroll (act 2 = "Converging the strengths…", act 3 = "THIS TIME HAS ARRIVED" + lightning bolt). three.js: `prophecy/CosmicScene.tsx`. |
+| — | Weaving | `weaving/Weaving.tsx` | "A Unifying Mission" copy + **Fellowship of Changemakers vertical double helix** — all 16 people on one strand, large round headshots, no Builder/Keeper badges. Geometry: `helixPath()` in `content.ts`. |
+| — | Room | `room/Room.tsx` | Standalone skills band: stats grid ("WITH SKILLSETS SPANNING") + partner-logo grid. No roster (people live on the helix). |
+| — | Days | `days/Days.tsx` | "Four Elements — One Mission." land header, epic element quartet (topics huge, element words small), Mind + Body + Planet overview, outcome box, ember connector into Founders. Day cards removed. |
+| — | Founders | `founders/FoundersCircle.tsx` | Polar ring of 7 + open seat; blurb; headshots link to LinkedIn (Angela Katragadda has no URL yet). Modals: `founders/NominationModal.tsx`, `founders/LoginModal.tsx`. |
+| — | Invitation | `invitation/Invitation.tsx` | "Entry is the first ceremony." + participation copy, 6-step process, invite-code card. |
+| — | Closing | `closing/Closing.tsx` | "We will see you at the fire." + "Where the Earth and the future meet." over the fire orb; contact + nonprofit + compass-credit footnote in a separate footer strip below. |
+
+**Note:** all "§ 0N —" eyebrow labels were removed from the UI (Oct-2026-feedback round). |
 
 Shared UI: `components/ui/GlowCard.tsx` (cursor-following spotlight card),
 `components/ui/Modal.tsx` (scrim + card shell for both modals).
@@ -134,6 +136,13 @@ used here: `feat:`, `fix:`, `chore:`, `docs:`.
 
 Most recent first:
 
+0. **July 2026 team-feedback round** (this session): hero title stack; prophecy
+   split into 4 acts w/ lightning bolt; Weaving + Contributors merged into the
+   **Fellowship of Changemakers vertical helix** (roster/swap machinery deleted);
+   skills/logos now standalone; Days → "Four Elements — One Mission" quartet
+   (day cards removed); § labels removed everywhere; founders blurb + LinkedIn
+   links (Angela Katragadda still missing a URL); participation copy; closing
+   footer strip w/ tagline + compass credit; portraits converted to webp.
 1. **Renamed repo + Netlify site** to `aniwa-changemakers-summit`. Old URL
    `aniwa-convergence-summit.netlify.app` now **404s** (Netlify releases the old
    subdomain). GitHub redirects the old repo URL to the new one.
