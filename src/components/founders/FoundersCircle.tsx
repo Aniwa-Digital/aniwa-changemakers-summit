@@ -38,10 +38,7 @@ export function FoundersCircle() {
       </div>
 
       <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 820, margin: '0 auto' }}>
-        <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
-          § 04 — Founders Circle
-        </div>
-        <h2 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '3.9rem', margin: '18px 0 0' }}>
+        <h2 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '3.9rem', margin: 0 }}>
           The Founders Circle
         </h2>
         <p
@@ -52,10 +49,11 @@ export function FoundersCircle() {
             fontSize: '1.5rem',
             lineHeight: 1.42,
             margin: '20px auto 0',
-            maxWidth: 600,
+            maxWidth: 660,
           }}
         >
-          The Founders empowering the summit
+          The circle of collaborators whose stewardship, resources, and vision carry the Summit from calling to
+          reality. The Founders convene the fire; the Fellowship gathers around it. One seat remains open.
         </p>
       </div>
 
@@ -90,19 +88,36 @@ export function FoundersCircle() {
               </button>
             ) : (
               <div className="founder-seat" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: 120 }}>
-                <div
-                  className="founder-portrait"
-                  style={{
-                    width: 82,
-                    height: 82,
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    border: '2px solid rgba(160,74,42,0.55)',
-                    boxShadow: '0 10px 26px -12px rgba(160,74,42,0.55)',
-                  }}
-                >
-                  <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-                </div>
+                {(() => {
+                  const portrait = (
+                    <div
+                      className="founder-portrait"
+                      style={{
+                        width: 82,
+                        height: 82,
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        border: '2px solid rgba(160,74,42,0.55)',
+                        boxShadow: '0 10px 26px -12px rgba(160,74,42,0.55)',
+                      }}
+                    >
+                      <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+                    </div>
+                  );
+                  return f.linkedin ? (
+                    <a
+                      href={f.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${f.name} on LinkedIn`}
+                      style={{ display: 'block', borderRadius: '50%' }}
+                    >
+                      {portrait}
+                    </a>
+                  ) : (
+                    portrait
+                  );
+                })()}
                 <div className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '0.95rem', marginTop: 11, lineHeight: 1.15 }}>
                   {f.name}
                 </div>
