@@ -24,25 +24,25 @@ const builder = (name: string, role: string, img: string): Person => ({
 });
 
 export const keepers: Person[] = [
-  keeper('Mona Polacca', 'Council of 13 Indigenous Grandmothers', 'mona-polacca.png'),
-  keeper('Kumu Ramsay Taum', 'Hoʻoponopono lineage carrier', 'kumu-ramsay-taum.png'),
-  keeper('Matzuwa Oscar', 'Yoreme · Huya Aniwa Foundation', 'matzuwa-oscar.png'),
-  keeper('Nana Amalia Tum Xinico', 'Maya Kaqchikel practitioner', 'nana-amalia.png'),
+  keeper('Mona Polacca', 'Council of 13 Indigenous Grandmothers', 'mona-polacca.webp'),
+  keeper('Kumu Ramsay Taum', 'Hoʻoponopono lineage carrier', 'kumu-ramsay-taum.webp'),
+  keeper('Matzuwa Oscar', 'Yoreme · Huya Aniwa Foundation', 'matzuwa-oscar.webp'),
+  keeper('Nana Amalia Tum Xinico', 'Maya Kaqchikel practitioner', 'nana-amalia.webp'),
 ];
 
 export const builders: Person[] = [
-  builder('Vivien Vilela', 'Founder & CEO, Aniwa', 'vivien-vilela.png'),
-  builder('Deven Raut', 'Kaiteki.AI · ex-Google Stadia', 'deven-raut.png'),
-  builder('Jane Woodward', 'Stanford · WovenEarth Ventures', 'jane-woodward.png'),
-  builder('De Kai', 'AI pioneer · HKUST & Berkeley', 'de-kai.png'),
-  builder('Will Cady', 'Reddit · author, Which Way Is North', 'will-cady.png'),
-  builder('Mitch Kirsch', 'Planet Events · 13 Olympic Games', 'mitch-kirsch.png'),
-  builder('Oona Chaplin', 'Host · actor, Avatar: Fire and Ash', 'oona-chaplin.png'),
-  builder('Ren Menon', 'Co-Founder & CEO, OrthoFX', 'ren-menon.png'),
-  builder('Denise Roberson', 'Chief Purpose Officer, Omnicom', 'denise-roberson.png'),
-  builder('Angela Katragadda', 'Heritage Modern Design · Trustee', 'angela-katragadda.png'),
-  builder('Ruslan Gafarov', 'Founder, Silicon Valley Camp 1440', 'ruslan-gafarov.png'),
-  builder('Tenzin Seldon', 'Founder & Managing Partner, Pulse Fund', 'tenzin-seldon.png'),
+  builder('Vivien Vilela', 'Founder & CEO, Aniwa', 'vivien-vilela.webp'),
+  builder('Deven Raut', 'Kaiteki.AI · ex-Google Stadia', 'deven-raut.webp'),
+  builder('Jane Woodward', 'Stanford · WovenEarth Ventures', 'jane-woodward.webp'),
+  builder('De Kai', 'AI pioneer · HKUST & Berkeley', 'de-kai.webp'),
+  builder('Will Cady', 'Reddit · author, Which Way Is North', 'will-cady.webp'),
+  builder('Mitch Kirsch', 'Planet Events · 13 Olympic Games', 'mitch-kirsch.webp'),
+  builder('Oona Chaplin', 'Host · actor, Avatar: Fire and Ash', 'oona-chaplin.webp'),
+  builder('Ren Menon', 'Co-Founder & CEO, OrthoFX', 'ren-menon.webp'),
+  builder('Denise Roberson', 'Chief Purpose Officer, Omnicom', 'denise-roberson.webp'),
+  builder('Angela Katragadda', 'Heritage Modern Design · Trustee', 'angela-katragadda.webp'),
+  builder('Ruslan Gafarov', 'Founder, Silicon Valley Camp 1440', 'ruslan-gafarov.webp'),
+  builder('Tenzin Seldon', 'Founder & Managing Partner, Pulse Fund', 'tenzin-seldon.webp'),
 ];
 
 /* ---- The Fellowship of Changemakers: everyone on one vertical helix.
@@ -179,13 +179,13 @@ export interface FounderSeat {
 const RING_RADIUS = 40;
 
 const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; open?: boolean }> = [
-  { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.png', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
-  { name: 'Deven Raut', role: 'AI for human flourishing', img: '/assets/people/deven-raut.png', linkedin: 'https://www.linkedin.com/in/devenraut/' },
-  { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.png', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
-  { name: 'Angela Katragadda', role: 'Stewardship of the sacred', img: '/assets/people/angela-katragadda.png' },
-  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.png', linkedin: 'https://www.linkedin.com/in/malikone/' },
-  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.png', linkedin: 'https://www.linkedin.com/in/mitchkirsch/' },
-  { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.png', linkedin: 'https://www.linkedin.com/in/renmenon/' },
+  { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.webp', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
+  { name: 'Deven Raut', role: 'AI for human flourishing', img: '/assets/people/deven-raut.webp', linkedin: 'https://www.linkedin.com/in/devenraut/' },
+  { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.webp', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
+  { name: 'Angela Katragadda', role: 'Stewardship of the sacred', img: '/assets/people/angela-katragadda.webp' },
+  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.webp', linkedin: 'https://www.linkedin.com/in/malikone/' },
+  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.webp', linkedin: 'https://www.linkedin.com/in/mitchkirsch/' },
+  { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.webp', linkedin: 'https://www.linkedin.com/in/renmenon/' },
   { open: true },
 ];
 
