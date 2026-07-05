@@ -321,11 +321,29 @@ img {
 }
 
 /* ---- Reduced motion: gate every decorative animation ---- */
+/* Comet heads on the helix tips: soft breathing pulse */
+@keyframes helix-tip-pulse {
+  from {
+    transform: scale(0.88);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+.helix-tip-pulse {
+  animation: helix-tip-pulse 1.4s ease-in-out infinite alternate;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .cue {
+    animation: none !important;
+  }
+  .helix-tip-pulse {
     animation: none !important;
   }
 }

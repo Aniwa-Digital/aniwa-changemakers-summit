@@ -104,6 +104,8 @@ export interface HelixStrand {
   opacity: number;
   delay: number;
   glow?: boolean;
+  /** Marks a core strand whose growing tip carries a comet glow (0 | 1). */
+  tipIndex?: number;
 }
 
 /* Tuned for the light (bone) Fellowship section. */
@@ -112,8 +114,8 @@ export const helixStrands: HelixStrand[] = [
   { startDir: 1, amp: 230, stroke: '#6F8A5E', width: 1.4, opacity: 0.28, delay: 0.04 },
   { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 6, opacity: 0.3, delay: 0.08, glow: true },
   { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 6, opacity: 0.28, delay: 0.12, glow: true },
-  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 2.6, opacity: 0.9, delay: 0.08 },
-  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 2.6, opacity: 0.85, delay: 0.12 },
+  { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 2.6, opacity: 0.9, delay: 0.08, tipIndex: 0 },
+  { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 2.6, opacity: 0.85, delay: 0.12, tipIndex: 1 },
 ];
 
 /* ---- §02 The Room: left-rail stats + partner logos ---- */

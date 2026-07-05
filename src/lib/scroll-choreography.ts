@@ -90,6 +90,27 @@ function drawWeave(reduce: boolean): void {
       seat.style.opacity = on ? '1' : '0';
       seat.style.transform = on ? 'translate(-50%, -50%)' : 'translate(-50%, -46%)';
     });
+
+    /* Comet heads: park a glow orb on the newest point of each core strand.
+       getPointAtLength gives the tip in viewBox units; convert to % of the
+       band so the orbs scale with it. Hidden before growth starts, after it
+       completes, and under reduced motion. */
+    band.querySelectorAll<HTMLElement>('[data-helix-tip]').forEach((tip) => {
+      const idx = tip.getAttribute('data-helix-tip');
+      const path = band.querySelector<SVGPathElement>(`[data-tip-source="${idx}"]`);
+      if (!path || !path.ownerSVGElement) return;
+      const d = parseFloat(path.getAttribute('data-delay') || '0') || 0;
+      const local = clamp01((p - d) / (1 - MAX_DELAY));
+      if (reduce || local <= 0.002 || local >= 0.998) {
+        tip.style.opacity = '0';
+        return;
+      }
+      const pt = path.getPointAtLength(local * path.getTotalLength());
+      const vb = path.ownerSVGElement.viewBox.baseVal;
+      tip.style.left = `${((pt.x / vb.width) * 100).toFixed(3)}%`;
+      tip.style.top = `${((pt.y / vb.height) * 100).toFixed(3)}%`;
+      tip.style.opacity = '1';
+    });
   });
 }
 

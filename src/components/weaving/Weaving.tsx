@@ -77,6 +77,7 @@ export function Weaving() {
               key={i}
               data-weave=""
               data-delay={s.delay}
+              data-tip-source={s.tipIndex}
               d={helixPath(N, s.startDir, s.amp)}
               fill="none"
               stroke={s.stroke}
@@ -88,6 +89,41 @@ export function Weaving() {
             />
           ))}
         </svg>
+
+        {/* Comet heads: a glowing orb rides the growing tip of each core
+            strand (positioned every frame by drawWeave via getPointAtLength). */}
+        {[0, 1].map((idx) => (
+          <div
+            key={idx}
+            data-helix-tip={idx}
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: 0,
+              width: 110,
+              height: 110,
+              margin: '-55px 0 0 -55px',
+              pointerEvents: 'none',
+              zIndex: 3,
+              opacity: 0,
+              transition: 'opacity 0.4s ease',
+            }}
+          >
+            <div
+              className="helix-tip-pulse"
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                background:
+                  idx === 0
+                    ? 'radial-gradient(circle, rgba(255,243,216,0.95) 0%, rgba(226,161,132,0.62) 16%, rgba(160,74,42,0.32) 40%, rgba(160,74,42,0) 68%)'
+                    : 'radial-gradient(circle, rgba(255,248,226,0.95) 0%, rgba(222,190,138,0.62) 16%, rgba(184,148,92,0.32) 40%, rgba(184,148,92,0) 68%)',
+              }}
+            />
+          </div>
+        ))}
 
         {fellowship.map((p, i) => {
           const left = i % 2 === 0 ? ((300 - HELIX_AMP) / HELIX_WIDTH) * 100 : ((300 + HELIX_AMP) / HELIX_WIDTH) * 100;
