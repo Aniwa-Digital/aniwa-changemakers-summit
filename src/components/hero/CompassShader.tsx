@@ -72,7 +72,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     float compassLit = mix(reveal, 1.0, settle);
 
     float op = 0.25;                             // compass opacity
-    vec3 col = o.rgb * 0.40 * swirlFade;
+    vec3 earth = vec3(0.114, 0.090, 0.071);      // warm umber base (#1D1712)
+    vec3 col = earth + o.rgb * 0.40 * swirlFade;
     col += cream * ca * (0.07 + 0.85 * compassLit) * op;
     col += o.rgb * ca * reveal * 1.35 * op * swirlFade;
 
