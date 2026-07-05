@@ -1,11 +1,11 @@
 import { GlowCard } from '../ui/GlowCard';
-import { days, elements } from '../../lib/content';
+import { elements } from '../../lib/content';
 
-/* §03 The Days — dark gradient section. Land header band, four element
-   GlowCards, three day cards, the outcome box, and the ember connector
-   stroke that runs from the outcome box down across the section seam to the
-   compass tip in §04 (positioned every frame from live rects). z-index 3
-   lifts the overflowing line above the light section below. */
+/* The Work → "Four Elements — One Mission". Land header band, an epic
+   stacked quartet (topic areas huge, element words small), a Mind + Body +
+   Planet overview, the outcome box, and the ember connector stroke that
+   runs from the outcome box down across the section seam to the compass
+   tip in the Founders Circle (positioned every frame from live rects). */
 export function Days() {
   return (
     <section
@@ -45,103 +45,110 @@ export function Days() {
             mixBlendMode: 'overlay',
           }}
         />
-        <div className="land-copy" style={{ position: 'relative', zIndex: 2, padding: '32px 56px 42px', maxWidth: 902 }}>
-          <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
-            § 03 — The Work
-          </div>
-          <h2 className="disp" style={{ color: '#fff', fontSize: '3.8rem', margin: '18px 0 0' }}>
-            The Work.
+        <div className="land-copy" style={{ position: 'relative', zIndex: 2, padding: '32px 56px 42px', maxWidth: 980 }}>
+          <h2 className="disp" style={{ color: '#fff', fontSize: '3.8rem', margin: 0 }}>
+            Four Elements — One Mission.
           </h2>
-          <p
-            className="bd"
-            style={{
-              color: 'rgba(255,255,255,0.82)',
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.5rem',
-              lineHeight: 1.42,
-              margin: '20px 0 0',
-              maxWidth: 804,
-            }}
-          >
-            A private reserve tucked amongst the savannah oak in Northern California will serve as solid ground for
-            workshops, discussion panels, and mind-share in alignment with the four elements they serve to protect.
-          </p>
         </div>
       </div>
 
       <div id="work-flow" style={{ position: 'relative', zIndex: 2 }}>
-        <div data-reveal="" style={{ maxWidth: 1240, margin: '24px auto 0', textAlign: 'center' }}>
-          <div className="grid-4e" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 34 }}>
-            {elements.map((el) => (
-              <GlowCard key={el.name} glowColor="ember" radius={10} border={1} style={{ display: 'block', height: '100%' }}>
-                <div style={{ padding: '28px 20px 30px', textAlign: 'left' }}>
-                  <div className="disp" style={{ fontSize: '2.6rem', color: 'var(--aniwa-terracotta)' }}>
-                    {el.glyph}
-                  </div>
-                  <div className="eye" style={{ color: '#F4F1EB', letterSpacing: 'var(--tracking-glyph)', marginTop: 14 }}>
-                    {el.name}
-                  </div>
-                  <p className="bd" style={{ color: 'rgba(244,241,235,0.62)', fontSize: '0.88rem', margin: '10px 0 0' }}>
-                    {el.description}
-                  </p>
-                </div>
-              </GlowCard>
-            ))}
-          </div>
-        </div>
-
-        <div
-          id="day-cards"
-          className="grid-3"
-          style={{
-            maxWidth: 1240,
-            margin: '25px auto 0',
-            position: 'relative',
-            zIndex: 2,
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 30,
-          }}
-        >
-          {days.map((d) => (
-            <div data-reveal="" key={d.number}>
-              <GlowCard glowColor="ember" radius={14} style={{ display: 'block', height: '100%' }}>
-                <div style={{ position: 'relative', zIndex: 1, borderRadius: 12, overflow: 'hidden', background: 'var(--card-inner-dark)' }}>
-                  <div className="day-img" style={{ height: 230, overflow: 'hidden' }}>
-                    <img src={d.img} alt="" width={400} height={230} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ padding: '28px 28px 32px' }}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-                      <span className="disp" style={{ fontSize: '1.3rem', color: 'var(--aniwa-terracotta)' }}>
-                        {d.number}
-                      </span>
-                      <span className="eye" style={{ color: 'rgba(244,241,235,0.44)', fontSize: '0.64rem' }}>
-                        {d.date}
-                      </span>
-                    </div>
-                    <h3 className="disp" style={{ fontSize: '1.7rem', color: '#F4F1EB', margin: '10px 0 0' }}>
-                      {d.title}
-                    </h3>
-                    <p className="bd" style={{ color: 'rgba(244,241,235,0.72)', fontSize: '0.95rem', margin: '12px 0 0' }}>
-                      {d.copy}
-                    </p>
-                  </div>
-                </div>
-              </GlowCard>
+        {/* The elemental quartet: topic areas carry the size; the element
+            words sit small above them; the glyph burns faint behind. */}
+        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
+          {elements.map((el, i) => (
+            <div
+              key={el.name}
+              data-reveal=""
+              className="element-row"
+              style={{
+                position: 'relative',
+                display: 'grid',
+                gridTemplateColumns: 'minmax(120px, 220px) 1fr',
+                gap: 28,
+                alignItems: 'center',
+                padding: '52px 8px',
+                borderTop: '1px solid rgba(244,241,235,0.14)',
+                borderBottom: i === elements.length - 1 ? '1px solid rgba(244,241,235,0.14)' : 'none',
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                aria-hidden="true"
+                className="disp"
+                style={{
+                  position: 'absolute',
+                  right: 8,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: '11rem',
+                  lineHeight: 1,
+                  color: 'var(--aniwa-terracotta)',
+                  opacity: 0.1,
+                  pointerEvents: 'none',
+                }}
+              >
+                {el.glyph}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
+                <span className="disp" style={{ fontSize: '1.5rem', color: 'var(--aniwa-terracotta)', lineHeight: 1 }}>
+                  {el.glyph}
+                </span>
+                <span className="eye" style={{ color: 'var(--aniwa-gold)', letterSpacing: 'var(--tracking-glyph)' }}>
+                  {el.name}
+                </span>
+              </div>
+              <h3
+                className="disp element-topic"
+                style={{
+                  position: 'relative',
+                  color: '#F4F1EB',
+                  fontSize: 'clamp(1.7rem, 3.4vw, 3rem)',
+                  lineHeight: 1.16,
+                  margin: 0,
+                  fontWeight: 500,
+                }}
+              >
+                {el.description.replace(/\.$/, '')}
+              </h3>
             </div>
           ))}
         </div>
 
-        <div data-outcome-box="" style={{ maxWidth: 640, margin: '54px auto 0' }}>
+        {/* What to expect: Mind + Body + Planet */}
+        <div data-reveal="" style={{ maxWidth: 880, margin: '84px auto 0', textAlign: 'center' }}>
+          <div className="eye" style={{ color: 'var(--aniwa-gold)' }}>
+            What to expect
+          </div>
+          <h3 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2rem, 4vw, 3.2rem)', margin: '18px 0 0' }}>
+            Mind&nbsp;+&nbsp;Body&nbsp;+&nbsp;Planet
+          </h3>
+          <p
+            className="bd"
+            style={{
+              color: 'rgba(255,255,255,0.78)',
+              fontFamily: 'var(--font-display)',
+              fontSize: '1.4rem',
+              lineHeight: 1.46,
+              margin: '20px auto 0',
+              maxWidth: 760,
+            }}
+          >
+            Workshops, discussion panels, and mind-share and heart presence in alignment with the four elements they
+            serve to protect — on a private reserve tucked amongst the savannah oak of Sonoma County, California.
+          </p>
+        </div>
+
+        <div data-outcome-box="" style={{ maxWidth: 640, margin: '64px auto 0' }}>
           <GlowCard glowColor="ember" radius={10} border={1} style={{ display: 'block' }}>
             <div style={{ padding: '32px 40px', textAlign: 'center' }}>
               <div className="eye" style={{ color: 'var(--aniwa-terracotta)', marginBottom: 13 }}>
                 The outcome
               </div>
               <p className="disp" style={{ color: '#F4F1EB', fontSize: '1.7rem', lineHeight: 1.32, margin: 0 }}>
-                You come knowing a few names,
+                You come knowing some names,
                 <br />
-                and leave with marching orders.
+                you leave with a shared mission.
               </p>
             </div>
           </GlowCard>
