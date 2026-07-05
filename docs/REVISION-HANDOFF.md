@@ -94,6 +94,22 @@ folder under `src/components/`:
 
 **Note:** all "§ 0N —" eyebrow labels were removed from the UI (Oct-2026-feedback round). |
 
+### Registration & invite codes (added July 2026)
+
+The site now has a small backend — Netlify Functions + Netlify Blobs:
+
+| Piece | Where | What |
+|---|---|---|
+| `#/register` | `src/components/register/RegisterPage.tsx` | Invite-gated registration: contact info, industry, expertise, social links, public-directory toggle. Submit stores the registration and forwards it to the team. |
+| `#/codes` | `src/components/register/AdminCodesPage.tsx` | Team-only (shared password) invite-code generator. Every code records **who assigned it**, who it's for, and — once used — **who redeemed it and when**. Also lists all received registrations. |
+| Functions | `netlify/functions/` | `codes` (admin generate/list), `validate-code` (public), `register` (redeem + store + forward). Data lives in Netlify Blobs stores `invite-codes` and `registrations`. |
+| Email | Netlify Forms `registrations` | The register function forwards each submission to Netlify Forms. **Email notification is NOT yet configured** — once `summit@huyaaniwa.org` exists, add it under Netlify dashboard → Forms → Form notifications. Until then the team reviews registrations on `#/codes`. |
+| Auth | `ANIWA_ADMIN_KEY` env var (Netlify) | Shared team password for `#/codes`. Rotate in Netlify → Environment variables (requires redeploy). |
+
+Codes are **single-use**, format `ANIWA-XXXX-XXXX`. The invite-code card on the
+main page validates against the real store and routes valid codes to `#/register`.
+Routing is hash-based (`App.tsx`); the main scroll page is untouched otherwise.
+
 Shared UI: `components/ui/GlowCard.tsx` (cursor-following spotlight card),
 `components/ui/Modal.tsx` (scrim + card shell for both modals).
 
