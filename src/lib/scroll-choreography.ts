@@ -63,42 +63,32 @@ function cineProgression(reduce: boolean): void {
   }
 }
 
-/* ---- §01 The Weaving: strands draw with scroll through the pin. Two bands
-   exist (horizontal desktop, vertical mobile) — only one is displayed at a
-   time, but both animate so a viewport resize never strands a blank weave. ---- */
+/* ---- The Fellowship helix: tip-tracked growth. The strands' draw progress
+   is tied to how far the band has scrolled past 55% of the viewport, so the
+   growing tip of the helix always sits near mid-frame — the page appears to
+   be tracking the strand as it grows. Seats fade in as the tip reaches
+   their row ([data-helix-seat] carries each seat's fraction of the path). ---- */
 function drawWeave(reduce: boolean): void {
   const bands = document.querySelectorAll<HTMLElement>('[data-weave-band]');
   if (!bands.length) return;
-  const sec = document.getElementById('weaving');
-  const pin = document.querySelector<HTMLElement>('[data-weave-pin]');
   const h = viewportHeight();
-
-  // Pin math only applies while the stage is actually sticky (mobile unpins
-  // it via CSS); otherwise each band draws as it rises through the viewport.
-  const pinned = !!(pin && getComputedStyle(pin).position === 'sticky');
-  let pinP: number | null = null;
-  if (pinned && sec && sec.offsetHeight > h * 1.2) {
-    const total = sec.offsetHeight - h;
-    const passed = -sec.getBoundingClientRect().top;
-    // Finish the full draw within the first 85% of the pin, holding briefly on
-    // the completed weave before the section releases.
-    pinP = clamp01(clamp01(passed / Math.max(total, 1)) / WEAVE_DONE_AT);
-  }
 
   bands.forEach((band) => {
     const strands = band.querySelectorAll<SVGPathElement>('[data-weave]');
     if (!strands.length) return;
-    let p: number;
-    if (pinP !== null) {
-      p = pinP;
-    } else {
-      const top = band.getBoundingClientRect().top;
-      p = clamp01((h * 0.7 - top) / (h * 0.85));
-    }
+    const r = band.getBoundingClientRect();
+    const p = reduce ? 1 : clamp01((h * 0.55 - r.top) / Math.max(r.height, 1));
     strands.forEach((s) => {
       const d = parseFloat(s.getAttribute('data-delay') || '0') || 0;
+      // Linear (no easing) so the tip stays locked to the 55%-viewport line.
       const local = clamp01((p - d) / (1 - MAX_DELAY));
-      s.style.strokeDashoffset = reduce ? '0' : String(1 - easeOutCubic(local));
+      s.style.strokeDashoffset = reduce ? '0' : String(1 - local);
+    });
+    band.querySelectorAll<HTMLElement>('[data-helix-seat]').forEach((seat) => {
+      const frac = parseFloat(seat.getAttribute('data-helix-seat') || '0') || 0;
+      const on = reduce || p >= frac - 0.015;
+      seat.style.opacity = on ? '1' : '0';
+      seat.style.transform = on ? 'translate(-50%, -50%)' : 'translate(-50%, -46%)';
     });
   });
 }
