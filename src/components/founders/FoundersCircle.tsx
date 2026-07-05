@@ -44,7 +44,7 @@ export function FoundersCircle() {
         <p
           className="bd"
           style={{
-            color: 'rgba(34,31,56,0.72)',
+            color: 'rgba(46,40,32,0.72)',
             fontFamily: 'var(--font-display)',
             fontSize: '1.5rem',
             lineHeight: 1.42,
@@ -75,7 +75,7 @@ export function FoundersCircle() {
                   width: 74,
                   height: 74,
                   borderRadius: '50%',
-                  border: '1.5px dashed rgba(34,31,56,0.32)',
+                  border: '1.5px dashed rgba(46,40,32,0.32)',
                   background: 'transparent',
                   cursor: 'pointer',
                   color: 'var(--aniwa-terracotta)',
@@ -121,7 +121,7 @@ export function FoundersCircle() {
                 <div className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '0.95rem', marginTop: 11, lineHeight: 1.15 }}>
                   {f.name}
                 </div>
-                <div className="bd" style={{ color: 'rgba(34,31,56,0.55)', fontSize: '0.72rem', marginTop: 3, lineHeight: 1.25 }}>
+                <div className="bd" style={{ color: 'rgba(46,40,32,0.55)', fontSize: '0.72rem', marginTop: 3, lineHeight: 1.25 }}>
                   {f.role}
                 </div>
               </div>

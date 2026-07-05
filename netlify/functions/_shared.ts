@@ -44,14 +44,11 @@ export const normalizeCode = (raw: string): string => raw.trim().toUpperCase().r
 const ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
 export function makeCode(): string {
-  const bytes = new Uint8Array(8);
+  const bytes = new Uint8Array(6);
   crypto.getRandomValues(bytes);
   let s = '';
-  for (let i = 0; i < 8; i++) {
-    s += ALPHABET[bytes[i] % ALPHABET.length];
-    if (i === 3) s += '-';
-  }
-  return `ANIWA-${s}`;
+  for (let i = 0; i < 6; i++) s += ALPHABET[bytes[i] % ALPHABET.length];
+  return s;
 }
 
 export function isAdmin(req: Request): boolean {

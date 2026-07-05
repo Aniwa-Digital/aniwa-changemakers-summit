@@ -28,7 +28,7 @@ export function Room() {
                 <div className="eye" style={{ color: 'var(--ink-on-light)', marginTop: 8 }}>
                   {s.label}
                 </div>
-                <p className="bd" style={{ color: 'rgba(34,31,56,0.6)', fontSize: '0.85rem', margin: '6px 0 0' }}>
+                <p className="bd" style={{ color: 'rgba(46,40,32,0.6)', fontSize: '0.85rem', margin: '6px 0 0' }}>
                   {s.detail}
                 </p>
               </div>

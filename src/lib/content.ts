@@ -108,7 +108,7 @@ export interface HelixStrand {
 
 export const helixStrands: HelixStrand[] = [
   { startDir: -1, amp: 230, stroke: '#F4F1EB', width: 1.4, opacity: 0.13, delay: 0 },
-  { startDir: 1, amp: 230, stroke: '#8E7BC0', width: 1.4, opacity: 0.16, delay: 0.06 },
+  { startDir: 1, amp: 230, stroke: '#9DBE8F', width: 1.4, opacity: 0.16, delay: 0.06 },
   { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 6, opacity: 0.5, delay: 0.12, glow: true },
   { startDir: 1, amp: HELIX_AMP, stroke: '#B8945C', width: 6, opacity: 0.42, delay: 0.24, glow: true },
   { startDir: -1, amp: HELIX_AMP, stroke: '#A04A2A', width: 2.6, opacity: 0.95, delay: 0.12 },

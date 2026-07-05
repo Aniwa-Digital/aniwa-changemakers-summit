@@ -1,15 +1,16 @@
 /* ============================================================
    ANIWA SUMMIT — DESIGN TOKENS
    Ported verbatim from the design-system handoff bundle.
-   Cinematic · sacred · restrained. 70% dark purple · 25% warm
-   light · 5% terracotta fire.
+   Cinematic · sacred · restrained. 70% warm earth · 25% warm
+   light · 5% terracotta fire. (Earthy re-grade, July 2026 —
+   cold night-purples warmed into umber/soil tones per team.)
    ============================================================ */
 
 :root {
   /* ---- Base palette ---- */
-  --aniwa-purple: oklch(0.27 0.05 290); /* #2D2A47 deep council purple */
-  --aniwa-midnight: oklch(0.22 0.05 290); /* #1A1830 cards, footer, night */
-  --aniwa-twilight: oklch(0.32 0.05 290); /* #3A3658 raised purple */
+  --aniwa-purple: oklch(0.31 0.025 60); /* #3A3128 deep council umber */
+  --aniwa-midnight: oklch(0.27 0.02 55); /* #2A231C cards, footer, night */
+  --aniwa-twilight: oklch(0.36 0.025 60); /* #4A4034 raised earth */
   --aniwa-white: oklch(1 0 0);
 
   --aniwa-cream: oklch(0.955 0.012 80); /* #F4F1EB warm cream */
@@ -20,7 +21,7 @@
   --aniwa-ember: oklch(0.39 0.13 30); /* #7C2A2A deep fire, hover/press */
   --aniwa-gold: oklch(0.72 0.09 75); /* #B8945C sacred highlight */
 
-  --aniwa-charcoal: oklch(0.18 0.005 280); /* near-black text on light */
+  --aniwa-charcoal: oklch(0.22 0.012 60); /* warm near-black text on light */
   --aniwa-moss: oklch(0.45 0.07 145);
   --aniwa-sage: oklch(0.93 0.018 140);
 
@@ -54,10 +55,10 @@
   --on-light-border: color-mix(in oklab, var(--aniwa-charcoal) 15%, transparent);
 
   /* ---- Section grounds ---- */
-  --ground-night: #15132a; /* page base + section-03 gradient ends */
-  --ground-days: linear-gradient(180deg, #15132a 0%, #1a1734 60%, #15132a 100%);
-  --ink-on-light: #221f38; /* charcoal text on light sections */
-  --card-inner-dark: #17152b; /* day-card inner ground */
+  --ground-night: #26201a; /* page base + section-03 gradient ends */
+  --ground-days: linear-gradient(180deg, #26201a 0%, #2C251D 60%, #26201a 100%);
+  --ink-on-light: #2E2820; /* charcoal text on light sections */
+  --card-inner-dark: #2A231C; /* day-card inner ground */
 
   /* ---- Families ---- */
   --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;

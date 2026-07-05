@@ -35,7 +35,7 @@ const field: CSSProperties = {
   width: '100%',
   boxSizing: 'border-box',
   padding: '12px 14px',
-  background: 'rgba(20,18,40,0.55)',
+  background: 'rgba(35,29,23,0.55)',
   border: '1px solid rgba(255,255,255,0.24)',
   borderRadius: 'var(--radius-house)',
   color: '#fff',
@@ -145,7 +145,7 @@ export function AdminCodesPage() {
   const fmt = (iso: string) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
 
   return (
-    <section style={{ minHeight: '100vh', background: '#15132A', padding: '60px 24px 120px' }}>
+    <section style={{ minHeight: '100vh', background: '#26201A', padding: '60px 24px 120px' }}>
       <div style={{ maxWidth: 980, margin: '0 auto' }}>
         <a href="#" onClick={() => (window.location.hash = '')} style={{ textDecoration: 'none' }}>
           <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={40} height={30} style={{ height: 30, width: 'auto', filter: 'brightness(2.2)' }} />
@@ -193,9 +193,9 @@ export function AdminCodesPage() {
               </div>
               <div>
                 <div className="eye" style={{ color: 'var(--aniwa-gold)', fontSize: '0.6rem', marginBottom: 8 }}>
-                  For (guest / note)
+                  For — optional
                 </div>
-                <input name="assignedTo" style={field} placeholder="Who this code is for" />
+                <input name="assignedTo" style={field} placeholder="Who this code is for (optional)" />
               </div>
               <div>
                 <div className="eye" style={{ color: 'var(--aniwa-gold)', fontSize: '0.6rem', marginBottom: 8 }}>
@@ -228,7 +228,7 @@ export function AdminCodesPage() {
                       onClick={() => copy(c.code)}
                       style={{
                         ...btn,
-                        background: copied === c.code ? 'var(--aniwa-gold)' : 'rgba(20,18,40,0.7)',
+                        background: copied === c.code ? 'var(--aniwa-gold)' : 'rgba(35,29,23,0.7)',
                         border: '1px solid rgba(184,148,92,0.5)',
                         fontFamily: 'var(--font-sans)',
                         letterSpacing: '0.1em',

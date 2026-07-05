@@ -6,7 +6,7 @@ interface NominationModalProps {
   onClose: () => void;
 }
 
-const labelStyle: CSSProperties = { color: 'rgba(34,31,56,0.5)', fontSize: '0.6rem' };
+const labelStyle: CSSProperties = { color: 'rgba(46,40,32,0.5)', fontSize: '0.6rem' };
 
 const fieldStyle: CSSProperties = {
   width: '100%',
@@ -14,7 +14,7 @@ const fieldStyle: CSSProperties = {
   marginTop: 8,
   padding: '12px 14px',
   background: '#fff',
-  border: '1px solid rgba(34,31,56,0.2)',
+  border: '1px solid rgba(46,40,32,0.2)',
   borderRadius: 'var(--radius-house)',
   color: 'var(--ink-on-light)',
   fontFamily: 'var(--font-sans)',
@@ -39,7 +39,7 @@ export function NominationModal({ open, onClose }: NominationModalProps) {
           <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '2rem', margin: '12px 0 0' }}>
             Nominate a changemaker.
           </h3>
-          <p className="bd" style={{ color: 'rgba(34,31,56,0.7)', fontSize: '0.95rem', margin: '12px 0 22px' }}>
+          <p className="bd" style={{ color: 'rgba(46,40,32,0.7)', fontSize: '0.95rem', margin: '12px 0 22px' }}>
             Yourself, or someone whose presence this circle needs. We read every one.
           </p>
           <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
@@ -85,7 +85,7 @@ export function NominationModal({ open, onClose }: NominationModalProps) {
           >
             Send nomination →
           </button>
-          <p className="bd" style={{ color: 'rgba(34,31,56,0.5)', fontSize: '0.78rem', margin: '14px 0 0', textAlign: 'center' }}>
+          <p className="bd" style={{ color: 'rgba(46,40,32,0.5)', fontSize: '0.78rem', margin: '14px 0 0', textAlign: 'center' }}>
             Reviewed within two weeks · summit@huyaaniwa.org
           </p>
         </form>
@@ -95,7 +95,7 @@ export function NominationModal({ open, onClose }: NominationModalProps) {
           <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '2rem', margin: '14px 0 0' }}>
             Your nomination is received.
           </h3>
-          <p className="myth" style={{ color: 'rgba(34,31,56,0.72)', fontSize: '1.2rem', margin: '14px auto 0', maxWidth: 380 }}>
+          <p className="myth" style={{ color: 'rgba(46,40,32,0.72)', fontSize: '1.2rem', margin: '14px auto 0', maxWidth: 380 }}>
             We read every one. If the fire calls them, they will hear from us.
           </p>
           <button
@@ -104,7 +104,7 @@ export function NominationModal({ open, onClose }: NominationModalProps) {
             style={{
               marginTop: 26,
               padding: '12px 30px',
-              border: '1px solid rgba(34,31,56,0.3)',
+              border: '1px solid rgba(46,40,32,0.3)',
               background: 'transparent',
               color: 'var(--ink-on-light)',
               borderRadius: 'var(--radius-house)',

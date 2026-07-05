@@ -64,7 +64,7 @@ export function Modal({ open, onClose, zIndex = 80, maxWidth = 540, padding = '4
             background: 'transparent',
             border: 'none',
             cursor: 'pointer',
-            color: 'rgba(34,31,56,0.5)',
+            color: 'rgba(46,40,32,0.5)',
             fontSize: '1.6rem',
             lineHeight: 1,
           }}

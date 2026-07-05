@@ -31,7 +31,7 @@ export function Days() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(180deg, rgba(21,19,42,0.34) 0%, rgba(21,19,42,0.2) 45%, rgba(21,19,42,0.88) 100%)',
+            background: 'linear-gradient(180deg, rgba(38,32,26,0.34) 0%, rgba(38,32,26,0.2) 45%, rgba(38,32,26,0.88) 100%)',
           }}
         />
         <div

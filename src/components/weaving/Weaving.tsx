@@ -13,7 +13,7 @@ export function Weaving() {
       id="weaving"
       style={{
         position: 'relative',
-        background: 'linear-gradient(125deg, #15132A 0%, #1C1834 48%, #2A2138 100%)',
+        background: 'linear-gradient(125deg, #26201A 0%, #2C241D 48%, #362C22 100%)',
         overflow: 'clip',
         padding: '110px 40px 96px',
       }}

@@ -25,7 +25,7 @@ export function Closing() {
           alt=""
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #131125 0%, #000000EB)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #251F19 0%, #17110CEB)' }} />
         <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -57%)', zIndex: 1, pointerEvents: 'none' }}>
           <img
             src="/assets/compass/compass.svg"
@@ -71,7 +71,7 @@ export function Closing() {
         style={{
           position: 'relative',
           zIndex: 2,
-          background: '#000',
+          background: '#1B1611',
           textAlign: 'center',
           padding: '44px 24px calc(36px + env(safe-area-inset-bottom))',
           borderTop: '1px solid rgba(255,255,255,0.08)',

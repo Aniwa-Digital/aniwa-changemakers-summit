@@ -23,7 +23,7 @@ export function Hero({ onLoginOpen }: HeroProps) {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        background: '#000',
+        background: '#1D1712',
         overflow: 'hidden',
       }}
     >
@@ -39,7 +39,7 @@ export function Hero({ onLoginOpen }: HeroProps) {
           inset: 0,
           zIndex: 2,
           background:
-            'linear-gradient(180deg, rgba(21,19,42,0.45) 0%, rgba(21,19,42,0.18) 40%, rgba(21,19,42,0.72) 80%, #15132A 100%)',
+            'linear-gradient(180deg, rgba(38,32,26,0.45) 0%, rgba(38,32,26,0.18) 40%, rgba(38,32,26,0.72) 80%, #26201A 100%)',
           opacity: 0.445,
         }}
       />

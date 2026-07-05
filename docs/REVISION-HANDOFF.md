@@ -106,7 +106,8 @@ The site now has a small backend — Netlify Functions + Netlify Blobs:
 | Email | Netlify Forms `registrations` | The register function forwards each submission to Netlify Forms. **Email notification is NOT yet configured** — once `summit@huyaaniwa.org` exists, add it under Netlify dashboard → Forms → Form notifications. Until then the team reviews registrations on `#/codes`. |
 | Auth | `ANIWA_ADMIN_KEY` env var (Netlify) | Shared team password for `#/codes`. Rotate in Netlify → Environment variables (requires redeploy). |
 
-Codes are **single-use**, format `ANIWA-XXXX-XXXX`. The invite-code card on the
+Codes are **single-use**, 6 characters (unambiguous letters + numbers, e.g.
+`K7M2QX`); the "For" field is optional. The invite-code card on the
 main page validates against the real store and routes valid codes to `#/register`.
 Routing is hash-based (`App.tsx`); the main scroll page is untouched otherwise.
 

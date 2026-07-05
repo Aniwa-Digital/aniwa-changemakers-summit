@@ -21,7 +21,7 @@ const field: CSSProperties = {
   width: '100%',
   boxSizing: 'border-box',
   padding: '14px 16px',
-  background: 'rgba(20,18,40,0.55)',
+  background: 'rgba(35,29,23,0.55)',
   border: '1px solid rgba(255,255,255,0.24)',
   borderRadius: 'var(--radius-house)',
   color: '#fff',
@@ -105,7 +105,7 @@ export function RegisterPage() {
   };
 
   return (
-    <section style={{ minHeight: '100vh', background: '#2D2A47', padding: '60px 24px 120px' }}>
+    <section style={{ minHeight: '100vh', background: '#3A3128', padding: '60px 24px 120px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <a href="#" onClick={() => (window.location.hash = '')} style={{ textDecoration: 'none' }}>
           <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={40} height={30} style={{ height: 30, width: 'auto', filter: 'brightness(2.2)' }} />
@@ -148,7 +148,7 @@ export function RegisterPage() {
                 style={{ ...field, letterSpacing: '0.14em', textTransform: 'uppercase' }}
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="e.g. ANIWA-XXXX-XXXX"
+                placeholder="Your 6-character code"
                 aria-label="Invite code"
               />
               <button
@@ -259,7 +259,7 @@ export function RegisterPage() {
                 padding: '18px 20px',
                 width: '100%',
                 textAlign: 'left',
-                background: 'rgba(20,18,40,0.55)',
+                background: 'rgba(35,29,23,0.55)',
                 border: `1px solid ${publicDirectory ? 'rgba(184,148,92,0.55)' : 'rgba(255,255,255,0.18)'}`,
                 borderRadius: 'var(--radius-house)',
                 cursor: 'pointer',

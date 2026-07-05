@@ -34,7 +34,7 @@ export function Invitation() {
   };
 
   return (
-    <section id="reciprocity" style={{ position: 'relative', background: '#2D2A47', padding: '55px 40px 118px', overflow: 'hidden' }}>
+    <section id="reciprocity" style={{ position: 'relative', background: '#3A3128', padding: '55px 40px 118px', overflow: 'hidden' }}>
       <div id="invitation" style={{ position: 'relative', zIndex: 2, maxWidth: 1400, margin: '0 auto' }}>
         <div data-reveal="">
           <h2 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2.8rem, 6vw, 5rem)', margin: 0 }}>
@@ -75,7 +75,7 @@ export function Invitation() {
             className="invite-card"
             style={{
               minWidth: 0,
-              background: 'rgba(20,18,40,0.55)',
+              background: 'rgba(35,29,23,0.55)',
               border: '1px solid rgba(255,255,255,0.13)',
               borderRadius: 'var(--radius-house)',
               padding: 40,
@@ -95,7 +95,7 @@ export function Invitation() {
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  placeholder="e.g. ANIWA-2026"
+                  placeholder="Your 6-character code"
                   aria-label="Invite code"
                   style={{
                     flex: 1,

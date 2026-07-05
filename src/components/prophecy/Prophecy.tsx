@@ -8,7 +8,7 @@ const CosmicScene = lazy(() => import('./CosmicScene'));
    mix-blend-mode:screen wrapper so only light adds over the photo. */
 export function Prophecy() {
   return (
-    <section id="prophecy" style={{ position: 'relative', height: '300vh', background: '#1A1830' }}>
+    <section id="prophecy" style={{ position: 'relative', height: '300vh', background: '#2A231C' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden' }}>
         <img
           data-cine-bg=""
@@ -45,7 +45,7 @@ export function Prophecy() {
             right: 0,
             bottom: 0,
             height: '66%',
-            background: 'linear-gradient(to top, rgba(26,24,48,0.9) 0%, rgba(26,24,48,0.2) 50%, transparent 100%)',
+            background: 'linear-gradient(to top, rgba(42,35,28,0.9) 0%, rgba(42,35,28,0.2) 50%, transparent 100%)',
           }}
         />
         <div

@@ -19,7 +19,7 @@ const socialBtnStyle: CSSProperties = {
   boxSizing: 'border-box',
   padding: '13px 16px',
   background: '#fff',
-  border: '1px solid rgba(34,31,56,0.18)',
+  border: '1px solid rgba(46,40,32,0.18)',
   borderRadius: 'var(--radius-house)',
   color: 'var(--ink-on-light)',
   fontSize: '0.9rem',
@@ -68,7 +68,7 @@ export function LoginModal({ open, provider, onClose, onProvider }: LoginModalPr
             <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '2rem', margin: '12px 0 0' }}>
               Return to the fire.
             </h3>
-            <p className="bd" style={{ color: 'rgba(34,31,56,0.7)', fontSize: '0.95rem', margin: '11px 0 0' }}>
+            <p className="bd" style={{ color: 'rgba(46,40,32,0.7)', fontSize: '0.95rem', margin: '11px 0 0' }}>
               Sign in to your attendee portal.
             </p>
           </div>
@@ -86,7 +86,7 @@ export function LoginModal({ open, provider, onClose, onProvider }: LoginModalPr
               Continue with Apple
             </button>
           </div>
-          <p className="bd" style={{ color: 'rgba(34,31,56,0.5)', fontSize: '0.78rem', margin: '24px 0 0', textAlign: 'center' }}>
+          <p className="bd" style={{ color: 'rgba(46,40,32,0.5)', fontSize: '0.78rem', margin: '24px 0 0', textAlign: 'center' }}>
             Access by invitation only · summit@huyaaniwa.org
           </p>
         </>
@@ -96,7 +96,7 @@ export function LoginModal({ open, provider, onClose, onProvider }: LoginModalPr
           <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '2rem', margin: '14px 0 0' }}>
             Welcome back.
           </h3>
-          <p className="myth" style={{ color: 'rgba(34,31,56,0.72)', fontSize: '1.2rem', margin: '14px auto 0', maxWidth: 320 }}>
+          <p className="myth" style={{ color: 'rgba(46,40,32,0.72)', fontSize: '1.2rem', margin: '14px auto 0', maxWidth: 320 }}>
             Signing you in with {provider} — one moment at the threshold.
           </p>
           <button
@@ -105,7 +105,7 @@ export function LoginModal({ open, provider, onClose, onProvider }: LoginModalPr
             style={{
               marginTop: 26,
               padding: '12px 30px',
-              border: '1px solid rgba(34,31,56,0.3)',
+              border: '1px solid rgba(46,40,32,0.3)',
               background: 'transparent',
               color: 'var(--ink-on-light)',
               borderRadius: 'var(--radius-house)',
