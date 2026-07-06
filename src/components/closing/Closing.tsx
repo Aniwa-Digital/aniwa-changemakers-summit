@@ -57,12 +57,6 @@ export function Closing() {
             <br />
             A new story.
           </h2>
-          <p
-            className="myth"
-            style={{ color: 'rgba(244,241,235,0.72)', fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', margin: '22px 0 0' }}
-          >
-            Where the Earth and the future meet.
-          </p>
         </div>
       </div>
 
@@ -77,6 +71,12 @@ export function Closing() {
           borderTop: '1px solid rgba(255,255,255,0.08)',
         }}
       >
+        <p
+          className="myth"
+          style={{ color: 'rgba(244,241,235,0.75)', fontSize: 'clamp(1.15rem, 2.2vw, 1.5rem)', margin: '0 0 30px' }}
+        >
+          Where the Earth and the future meet.
+        </p>
         <div className="closing-contact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 13 }}>
           <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={34} height={26} style={{ height: 26, width: 'auto', filter: 'brightness(2.2)' }} />
           <span className="eye" style={{ color: 'rgba(255,255,255,0.5)', letterSpacing: 'var(--tracking-wide)', fontSize: '0.64rem' }}>
