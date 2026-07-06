@@ -53,7 +53,7 @@ export const fellowshipLeft: FellowshipMember[] = [
     'Vedanta teacher · Padma Shri',
     'jonas-masetti.webp',
     'Jonas Masetti — known to his students as Vishvanatha — is a Brazilian teacher of Vedanta and Sanskrit and the founder of Instituto Vishva Vidya near Rio de Janeiro. A mechanical engineer who left financial markets for the traditional study of the Vedas in the lineage of Swami Dayananda Saraswati, he has brought Vedic knowledge to hundreds of thousands across Brazil and the West. In 2025 the Government of India conferred on him the Padma Shri, one of its highest civilian honors.',
-    '42% 22%',
+    '50% 20%',
   ),
   member(
     'Will Cady',
@@ -110,7 +110,7 @@ export const fellowshipRight: FellowshipMember[] = [
     'Chief of Mutum Village · Yawanawá',
     'matsini-yawanawa.webp',
     'Matsini Yawanawá, chief and spiritual leader of Mutum village in Acre, Brazil, descends from an unbroken lineage of Pajés (master shamans) and trained under the legendary Pajé Tata, who helped restore Yawanawá traditions after years of suppression. He welcomes students to his village year-round and shares his wisdom abroad alongside his wife Manxyvake and their children — carrying the ancestral prayers and songs of his people to help guide the world through these times of transformation.',
-    '50% 35%',
+    '50% 42%',
   ),
   member(
     'Chenoa Egawa',
@@ -124,7 +124,7 @@ export const fellowshipRight: FellowshipMember[] = [
     'Kogi Mamo · Sierra Nevada de Santa Marta',
     'mamo-cencio.webp',
     'Mamo Cencio is a Kogi Mamo — doctor of ancestral medicine, botanist, and teacher of medicinal plants with extensive knowledge of the native species of the Sierra Nevada de Santa Marta. He travels constantly to distant villages across Kogi territory, serving as doctor, priest, counselor, and spiritual leader to his people. A musician of the Tayrona instruments and keeper of the Kogi Nation’s ancestral songs, he is authorized in the Jatuquá, a sacred method of divination by water.',
-    '50% 12%',
+    '50% 22%',
   ),
   member(
     'Nana Amalia Tum Xinico',
@@ -145,7 +145,7 @@ export const fellowshipRight: FellowshipMember[] = [
     'Cheyenne · Keeper of the Blue Sky Bundle',
     'joseph-david-osage.webp',
     'Born in western Oklahoma and raised in the Red Moon community, Joseph David is full-blood Tsitsistsas (Cheyenne) and has lived the traditional Cheyenne life from birth. Seated as ceremonial chief and one of sixteen sacred arrow priests, he was appointed holder of the Blue Sky Bundle — the second-highest position in the Cheyenne tribe — making him the keeper of blue skies, in charge of the weather and rain prayers.',
-    '50% 40%',
+    '50% 28%',
   ),
   member(
     'Vivien Vilela',
