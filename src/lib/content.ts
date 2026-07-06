@@ -256,10 +256,9 @@ export const elements: ElementBox[] = [
   { glyph: '▽', name: 'Water', description: 'Indigenous spirituality and the planetary polycrisis.' },
 ];
 
-/* ---- §07 Founders Circle: 14 members + 1 open seat on a polar ring.
-   Seats alternate between an outer and inner radius (a gentle stagger)
-   so fifteen seats breathe without colliding. Headshots link out —
-   LinkedIn where one exists, else the member's public profile. ---- */
+/* ---- §07 Founders Circle: 14 members + 1 open seat on a single polar
+   ring, sized so fifteen seats fit without colliding. Headshots link
+   out — LinkedIn where one exists, else the member's public profile. ---- */
 export interface FounderSeat {
   name?: string;
   role?: string;
@@ -271,7 +270,6 @@ export interface FounderSeat {
 }
 
 const RING_RADIUS = 42;
-const RING_STAGGER = 9;
 
 const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; open?: boolean }> = [
   { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.webp', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
@@ -291,14 +289,13 @@ const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?
   { open: true },
 ];
 
-export function placeFounders(radius: number = RING_RADIUS, stagger: number = RING_STAGGER): FounderSeat[] {
+export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
   return ringMembers.map((m, i) => {
     const ang = (i / ringMembers.length) * Math.PI * 2 - Math.PI / 2;
-    const r = radius - (i % 2) * stagger;
     return {
       ...m,
-      left: Number((50 + r * Math.cos(ang)).toFixed(2)),
-      top: Number((50 + r * Math.sin(ang)).toFixed(2)),
+      left: Number((50 + radius * Math.cos(ang)).toFixed(2)),
+      top: Number((50 + radius * Math.sin(ang)).toFixed(2)),
     };
   });
 }

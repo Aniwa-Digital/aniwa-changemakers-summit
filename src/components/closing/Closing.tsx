@@ -86,8 +86,17 @@ export function Closing() {
         <div className="eye" style={{ color: 'rgba(255,255,255,0.32)', fontSize: '0.6rem', marginTop: 16 }}>
           A nonprofit initiative of Aniwa &amp; the Huya Aniwa Foundation
         </div>
-        <div className="bd" style={{ color: 'rgba(255,255,255,0.28)', fontSize: '0.68rem', marginTop: 22, fontStyle: 'italic' }}>
-          Compass design by Dante Orpilla from the book, <span style={{ whiteSpace: 'nowrap' }}>Which Way Is North</span> by Will Cady
+        <div className="bd" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.92rem', marginTop: 24, fontStyle: 'italic' }}>
+          Compass design by Dante Orpilla from the book,{' '}
+          <a
+            href="https://www.amazon.com/Which-Way-North-Creative-Marketers/dp/1637744064"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--aniwa-terracotta)', textDecoration: 'none', whiteSpace: 'nowrap', borderBottom: '1px solid rgba(160,74,42,0.45)' }}
+          >
+            Which Way Is North
+          </a>{' '}
+          by Will Cady
         </div>
       </footer>
     </section>

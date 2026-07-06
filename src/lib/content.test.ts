@@ -62,15 +62,15 @@ describe('founders ring placement', () => {
     expect(founders.filter((f) => f.open)).toHaveLength(1);
   });
 
-  test('alternates seats between the outer and inner radius', () => {
-    placeFounders(40, 8).forEach((f, i) => {
+  test('places every seat on a circle of the given radius', () => {
+    placeFounders(40).forEach((f) => {
       const d = Math.hypot(f.left - 50, f.top - 50);
-      expect(d).toBeCloseTo(i % 2 === 0 ? 40 : 32, 1);
+      expect(d).toBeCloseTo(40, 1);
     });
   });
 
   test('first seat sits at the top of the ring (12 o’clock)', () => {
-    const [first] = placeFounders(40, 8);
+    const [first] = placeFounders(40);
     expect(first.left).toBeCloseTo(50, 1);
     expect(first.top).toBeCloseTo(10, 1);
   });

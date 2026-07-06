@@ -59,7 +59,7 @@ export function FoundersCircle() {
         </p>
       </div>
 
-      <div data-reveal="" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 790, aspectRatio: '1', margin: '40px auto 0' }}>
+      <div data-reveal="" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 830, aspectRatio: '1', margin: '40px auto 0' }}>
         {founders.map((f, i) => (
           <div
             key={f.name ?? `open-${i}`}
