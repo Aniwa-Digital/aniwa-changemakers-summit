@@ -9,16 +9,18 @@ import { LoginModal, type LoginProvider } from './components/founders/LoginModal
 import { Invitation } from './components/invitation/Invitation';
 import { Closing } from './components/closing/Closing';
 import { RegisterPage } from './components/register/RegisterPage';
+import { ApplyPage } from './components/register/ApplyPage';
 import { AdminCodesPage } from './components/register/AdminCodesPage';
 import { useReveal } from './hooks/useReveal';
 import { startScrollChoreography } from './lib/scroll-choreography';
 
-/* Tiny hash router: '#/register' (invite-gated registration) and
-   '#/codes' (team invite-code generator) render as standalone pages;
-   anything else renders the main scroll page. */
-function currentRoute(): 'register' | 'codes' | 'home' {
+/* Tiny hash router: '#/register' (invite-gated registration), '#/apply'
+   (open application) and '#/codes' (team invite-code generator) render as
+   standalone pages; anything else renders the main scroll page. */
+function currentRoute(): 'register' | 'apply' | 'codes' | 'home' {
   const h = window.location.hash;
   if (h.startsWith('#/register')) return 'register';
+  if (h.startsWith('#/apply')) return 'apply';
   if (h.startsWith('#/codes')) return 'codes';
   return 'home';
 }
@@ -45,6 +47,7 @@ export default function App() {
   }, [route]);
 
   if (route === 'register') return <RegisterPage />;
+  if (route === 'apply') return <ApplyPage />;
   if (route === 'codes') return <AdminCodesPage />;
 
   return (

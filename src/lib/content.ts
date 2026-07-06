@@ -1,89 +1,174 @@
 /* All page content is static — ported from the prototype's component state,
-   revised per team feedback (Fellowship of Changemakers helix). */
+   revised per team feedback (Fellowship of Changemakers double helix:
+   changemakers down the left strand, wisdom keepers down the right). */
 
-export type Badge = 'Keeper' | 'Builder';
-
-export interface Person {
+export interface FellowshipMember {
   name: string;
   role: string;
   img: string;
-  badge: Badge;
-}
-
-const keeper = (name: string, role: string, img: string): Person => ({
-  name,
-  role,
-  img: `/assets/people/${img}`,
-  badge: 'Keeper',
-});
-const builder = (name: string, role: string, img: string): Person => ({
-  name,
-  role,
-  img: `/assets/people/${img}`,
-  badge: 'Builder',
-});
-
-export const keepers: Person[] = [
-  keeper('Mona Polacca', 'Council of 13 Indigenous Grandmothers', 'mona-polacca.webp'),
-  keeper('Kumu Ramsay Taum', 'Hoʻoponopono lineage carrier', 'kumu-ramsay-taum.webp'),
-  keeper('Matzuwa Oscar', 'Yoreme · Huya Aniwa Foundation', 'matzuwa-oscar.webp'),
-  keeper('Nana Amalia Tum Xinico', 'Maya Kaqchikel practitioner', 'nana-amalia.webp'),
-];
-
-export const builders: Person[] = [
-  builder('Vivien Vilela', 'Founder & CEO, Aniwa', 'vivien-vilela.webp'),
-  builder('Deven Raut', 'Kaiteki.AI · ex-Google Stadia', 'deven-raut.webp'),
-  builder('Jane Woodward', 'Stanford · WovenEarth Ventures', 'jane-woodward.webp'),
-  builder('De Kai', 'AI pioneer · HKUST & Berkeley', 'de-kai.webp'),
-  builder('Will Cady', 'Reddit · author, Which Way Is North', 'will-cady.webp'),
-  builder('Mitch Kirsch', 'Planet Events · 13 Olympic Games', 'mitch-kirsch.webp'),
-  builder('Oona Chaplin', 'Host · actor, Avatar: Fire and Ash', 'oona-chaplin.webp'),
-  builder('Ren Menon', 'Co-Founder & CEO, OrthoFX', 'ren-menon.webp'),
-  builder('Denise Roberson', 'Chief Purpose Officer, Omnicom', 'denise-roberson.webp'),
-  builder('Angela Katragadda', 'Heritage Modern Design · Trustee', 'angela-katragadda.webp'),
-  builder('Ruslan Gafarov', 'Founder, Silicon Valley Camp 1440', 'ruslan-gafarov.webp'),
-  builder('Tenzin Seldon', 'Founder & Managing Partner, Pulse Fund', 'tenzin-seldon.webp'),
-];
-
-/* ---- The Fellowship of Changemakers: everyone on one vertical helix.
-   Keepers are spread evenly among the builders (every 4th seat) so the
-   two lineages interleave down the strand. ---- */
-export interface FellowshipMember extends Person {
+  /** object-position for the circular crop, e.g. '50% 18%'. */
   objectPosition: string;
+  /** Short bio shown in the click-to-open popup. */
+  bio: string;
 }
 
-const FACE: Record<string, string> = {
-  'Jane Woodward': '50% 16%',
-  'Mona Polacca': '50% 16%',
-  'Deven Raut': '50% 14%',
-  'Kumu Ramsay Taum': '50% 14%',
-  'Will Cady': '50% 14%',
-  'Matzuwa Oscar': '50% 14%',
-  'De Kai': '50% 16%',
-  'Nana Amalia Tum Xinico': '50% 16%',
-};
+const member = (name: string, role: string, img: string, bio: string, objectPosition = '50% 18%'): FellowshipMember => ({
+  name,
+  role,
+  img: `/assets/people/${img}`,
+  objectPosition,
+  bio,
+});
 
-export function buildFellowship(ks: Person[] = keepers, bs: Person[] = builders): FellowshipMember[] {
-  /* Interleave: one keeper after every 3 builders (B K B B B K …), so 4
-     keepers space evenly through 12 builders → 16 seats. */
-  const out: Person[] = [];
-  let ki = 0;
-  let bi = 0;
-  for (let seat = 0; seat < ks.length + bs.length; seat++) {
-    const wantKeeper = seat % 4 === 1 && ki < ks.length;
-    if (wantKeeper) out.push(ks[ki++]);
-    else if (bi < bs.length) out.push(bs[bi++]);
-    else out.push(ks[ki++]);
-  }
-  return out.map((p) => ({ ...p, objectPosition: FACE[p.name] ?? '50% 18%' }));
-}
+/* Left strand — the changemakers, in leadership's order. */
+export const fellowshipLeft: FellowshipMember[] = [
+  member(
+    'Tenzin Seldon',
+    'Founder & Managing Partner, Pulse Fund',
+    'tenzin-seldon.webp',
+    'Tenzin Seldon is the Founder & Managing Partner of Pulse Fund, a venture capital fund investing in scalable climate companies across energy transition, infrastructure, food and agriculture, and mobility. A Stanford graduate and Rhodes Scholar, she has led investments and holds board seats in companies including Twelve, BlocPower, and Mast Reforestation, and advises Stanford’s Institute for Human-Centered AI. She previously served with the United Nations Environment Programme, overseeing disaster-risk-reduction policy across Asia.',
+  ),
+  member(
+    'De Kai',
+    'AI pioneer · HKUST & Berkeley',
+    'de-kai.webp',
+    'De Kai is Professor of Computer Science and Engineering at HKUST and Distinguished Research Scholar at Berkeley’s International Computer Science Institute. A pioneer of the machine-learning foundations behind systems like Google Translate, he was named among the founding Fellows of the Association for Computational Linguistics and served on Google’s inaugural AI ethics council. His book Raising AI reframes humanity’s relationship with the intelligences we are bringing into the world.',
+    '50% 16%',
+  ),
+  member(
+    'Oona Chaplin',
+    'Host · actor, Avatar: Fire and Ash',
+    'oona-chaplin.webp',
+    'Oona Chaplin, granddaughter of the legendary Charlie Chaplin, is an acclaimed actress whose career spans Game of Thrones, Black Mirror, and, most recently, the Avatar franchise — where, as Varang, she inhabits a story that powerfully explores the struggle between Indigenous peoples and colonial, extractive forces. Beyond the screen, Oona is an artist, cultural bridge-builder, land steward, and mother, and a longtime ally of the Huya Aniwa Foundation in the protection of Indigenous wisdom and the living Earth.',
+  ),
+  member(
+    'Jane Woodward',
+    'Stanford · WovenEarth Ventures',
+    'jane-woodward.webp',
+    'Jane Woodward is the founder of MAP Energy, whose energy initiatives realized $2.5B upon acquisition by Global Infrastructure Partners in 2020, and of WovenEarth Ventures, which accelerates climate solutions by backing early-stage climate venture funds. A longtime adjunct professor at Stanford in Energy Resources Engineering, she has taught energy and sustainability to thousands of students and remains devoted to weaving capital, education, and stewardship into a regenerative energy future.',
+    '50% 16%',
+  ),
+  member(
+    'Jonas Masetti',
+    'Vedanta teacher · Padma Shri',
+    'jonas-masetti.webp',
+    'Jonas Masetti — known to his students as Vishvanatha — is a Brazilian teacher of Vedanta and Sanskrit and the founder of Instituto Vishva Vidya near Rio de Janeiro. A mechanical engineer who left financial markets for the traditional study of the Vedas in the lineage of Swami Dayananda Saraswati, he has brought Vedic knowledge to hundreds of thousands across Brazil and the West. In 2025 the Government of India conferred on him the Padma Shri, one of its highest civilian honors.',
+    '42% 22%',
+  ),
+  member(
+    'Will Cady',
+    'Reddit · author, Which Way Is North',
+    'will-cady.webp',
+    'Will Cady is a multimedia artist, cultural strategist, and founder of HEAL MVMNT, an initiative positioning Healing, Environments, Art, and Language as vital counterparts to STEM. An early leader at Reddit, he helped grow the platform into a billion-dollar business through deep insight into culture and creativity. His book Which Way Is North: A Creative Compass for Makers, Marketers, and Mystics was named a must-read by Inc Magazine and selected for The Next Big Idea Book Club.',
+    '50% 14%',
+  ),
+  member(
+    'Deven Raut',
+    'Kaiteki.AI · ex-Google Stadia',
+    'deven-raut.webp',
+    'Deven Raut is a polymath entrepreneur with deep experience building mission-critical technologies that power the modern internet. He co-founded CiiNOW, which evolved into Google Stadia, led the creation of Prisma SASE at Palo Alto Networks, and headed Network Security at Google. He is currently building Kaiteki.AI, reimagining digital consumption in healthier, more human-centered ways — work that reflects a lifelong devotion to soul, mind, and body wellness for all species.',
+    '50% 14%',
+  ),
+  member(
+    'Denise Roberson',
+    'Chief Purpose Officer, Omnicom',
+    'denise-roberson.webp',
+    'Denise Roberson serves as Chief Purpose Officer at Omnicom’s TBWA\\Chiat\\Day — the first role of its kind at the agency — helping C-suites and boards build the business case for purpose and embed it across their organizations. She is also the founder of Conspiracy of Love, a purpose-led B Corp consultancy, a marketing professor in Pepperdine’s Presidents & Key Executives MBA, and a doctoral researcher studying next-generation purpose and sustainability models.',
+  ),
+  member(
+    'Ren Menon',
+    'Co-Founder & CEO, OrthoFX',
+    'ren-menon.webp',
+    'Ren Menon is the Co-founder and CEO of OrthoFX, an orthodontic technology company advancing clear-aligner treatment through innovations in material science, digital workflows, and patient experience. He previously held senior leadership roles at Align Technology, contributing to global product innovation for Invisalign. The holder of several patents spanning orthodontics and consumer healthtech, Ren combines advanced materials, AI-driven workflows, and scalable care models to make healthcare more accessible.',
+  ),
+  member(
+    'Ruslan Gafarov',
+    'Founder & CEO, SF Innovation Hub',
+    'ruslan-gafarov.webp',
+    'Ruslan Gafarov is the founder and CEO of the San Francisco Innovation Hub. An entrepreneur with more than 15 years of experience and the author of three books on organizational culture, he has been building entrepreneurial communities in Silicon Valley since 2016 — connecting founders across borders and cultures around conscious leadership and long-term community.',
+  ),
+];
 
-export const fellowship: FellowshipMember[] = buildFellowship();
+/* Right strand — the wisdom keepers, in leadership's order. */
+export const fellowshipRight: FellowshipMember[] = [
+  member(
+    'Kumu Ramsay Taum',
+    'Hoʻoponopono lineage carrier',
+    'kumu-ramsay-taum.webp',
+    'Mentored and trained by respected kūpuna (elders), Kumu Ramsay Taum is a practitioner and instructor of Native Hawaiian practices including Hoʻoponopono (stress release and mediation), lomi haha (body alignment), and Kaihewalu Lua (Hawaiian battle art). Honored by the University of Hawaiʻi as a Star of Oceania, he is recognized internationally for transformational leadership integrating Native Hawaiian cultural values and place-based principles into contemporary business.',
+    '50% 14%',
+  ),
+  member(
+    'Mona Polacca',
+    'Council of 13 Indigenous Grandmothers',
+    'mona-polacca.webp',
+    'Mona Polacca — Hopi, Tewa, and Havasupai — is an internationally recognized Indigenous leader, spiritual elder, educator, and water protector from Arizona. A founding member of the International Council of Thirteen Indigenous Grandmothers, she has represented Indigenous communities at the United Nations and global forums on water protection, climate action, and Indigenous sovereignty, elevating traditional ecological knowledge as an answer to the world’s most pressing environmental challenges.',
+    '50% 16%',
+  ),
+  member(
+    'Matsini Yawanawá',
+    'Chief of Mutum Village · Yawanawá',
+    'matsini-yawanawa.webp',
+    'Matsini Yawanawá, chief and spiritual leader of Mutum village in Acre, Brazil, descends from an unbroken lineage of Pajés (master shamans) and trained under the legendary Pajé Tata, who helped restore Yawanawá traditions after years of suppression. He welcomes students to his village year-round and shares his wisdom abroad alongside his wife Manxyvake and their children — carrying the ancestral prayers and songs of his people to help guide the world through these times of transformation.',
+    '50% 35%',
+  ),
+  member(
+    'Chenoa Egawa',
+    'Coast Salish · Lummi & S’Klallam Nations',
+    'chenoa-egawa.webp',
+    'Chenoa Egawa is Coast Salish of the Lummi and S’Klallam Nations of Washington State — a ceremonial leader and healer, singer and composer of traditional medicine songs, storyteller, children’s book author, and environmental activist. Multicultural and multilingual, she bridges understanding across cultures, guiding us back into harmony with Nature, the Seasons, and the Elements that give us life, and carrying Indigenous wisdom to the world at a moment when it is needed most.',
+    '50% 20%',
+  ),
+  member(
+    'Mamo Cencio',
+    'Kogi Mamo · Sierra Nevada de Santa Marta',
+    'mamo-cencio.webp',
+    'Mamo Cencio is a Kogi Mamo — doctor of ancestral medicine, botanist, and teacher of medicinal plants with extensive knowledge of the native species of the Sierra Nevada de Santa Marta. He travels constantly to distant villages across Kogi territory, serving as doctor, priest, counselor, and spiritual leader to his people. A musician of the Tayrona instruments and keeper of the Kogi Nation’s ancestral songs, he is authorized in the Jatuquá, a sacred method of divination by water.',
+    '50% 12%',
+  ),
+  member(
+    'Nana Amalia Tum Xinico',
+    'Maya Kaqchikel practitioner',
+    'nana-amalia.webp',
+    'Nana Amalia is a gifted healer, naturopath, and renowned spiritual leader and teacher — a member of the commission of sacred sites in Guatemala (COLUSAG), founder of the elder council Iq’B’alam, and a voice in the Maya women’s associations MOLOJ and KAKLA. She works alongside her husband Tata Mario on healing, purification, and spiritual balancing ceremonies, Maya astrology readings, and other traditional practices.',
+    '50% 16%',
+  ),
+  member(
+    'Tata Mario Ovalle',
+    'Maya K’iché spiritual guide',
+    'tata-mario.webp',
+    'Tata Mario is a renowned spiritual leader, naturopath, painter, and traditional musician — he plays the marimba, drums, caracol, and flute. Founder of the council of Ajq’ijab’ (spiritual guides) Iq’B’alam and advisor to the Indigenous Townhall of Santa Lucía Utatlán, he teaches on medicinal plants, Maya cosmology, history, and Indigenous rights. He works alongside his wife Nana Amalia on healing, purification, and spiritual balancing ceremonies.',
+    '50% 30%',
+  ),
+  member(
+    'Joseph David Osage',
+    'Cheyenne · Keeper of the Blue Sky Bundle',
+    'joseph-david-osage.webp',
+    'Born in western Oklahoma and raised in the Red Moon community, Joseph David is full-blood Tsitsistsas (Cheyenne) and has lived the traditional Cheyenne life from birth. Seated as ceremonial chief and one of sixteen sacred arrow priests, he was appointed holder of the Blue Sky Bundle — the second-highest position in the Cheyenne tribe — making him the keeper of blue skies, in charge of the weather and rain prayers.',
+    '50% 40%',
+  ),
+  member(
+    'Vivien Vilela',
+    'Founder & CEO, Aniwa',
+    'vivien-vilela.webp',
+    'Vivien Vilela has spent over 14 years pioneering ethical relations with Indigenous peoples across the Americas. Born and raised in Brazil, she founded Aniwa, an international platform that shares Indigenous wisdom and amplifies Indigenous voices, and the Huya Aniwa Foundation and Institute, dedicated to preserving sacred land in alliance with native collectives. She has taken a sacred oath in the Wixárika tradition to serve as a Marakame — one who can heal, sing, and dream.',
+  ),
+  member(
+    'Oscar Matzuwa',
+    'Yoreme · Huya Aniwa Foundation',
+    'matzuwa-oscar.webp',
+    'Oscar Matzuwa comes from the Yoreme people, deer nation of Sinaloa, Mexico. A pilgrim of the Wirikuta desert since 2005, he has taken the sacred oath of a Mara’akame (spiritual leader) in the Wixárika tradition, and carries the fire to run sweat lodges. An anthropologist specialized in traditional medicine and a traditional singer and musician, he established the Huya Aniwa Institute to implement sustainable land stewardship and sacred-medicine conservation.',
+    '50% 14%',
+  ),
+];
 
-/* ---- Helix strand geometry (vertical, one half-turn per seat) ----
+/** Number of helix rows — one changemaker and one wisdom keeper per row. */
+export const FELLOWSHIP_ROWS = Math.max(fellowshipLeft.length, fellowshipRight.length);
+
+/* ---- Helix strand geometry (vertical, one half-turn per row) ----
    viewBox is 600 wide × HELIX_UNIT·N tall; strands cross the 300-center
-   between seats and bulge to alternating sides at each seat row. */
-export const HELIX_UNIT = 160;
+   between rows and bulge to both sides at each row. */
+export const HELIX_UNIT = 230;
 export const HELIX_WIDTH = 600;
 export const HELIX_AMP = 180;
 
@@ -217,8 +302,7 @@ export interface Step {
 export const steps: Step[] = [
   { n: '01', label: 'Personal invitation or nomination' },
   { n: '02', label: 'Application to attend or to speak' },
-  { n: '03', label: 'Private alignment conversation' },
+  { n: '03', label: 'A private connection call' },
   { n: '04', label: 'Confirmation & entry to the guest channel' },
-  { n: '05', label: 'Pre-event onboarding & reading list' },
-  { n: '06', label: 'Arrival at the land' },
+  { n: '05', label: 'Arrival of changemakers at the land' },
 ];

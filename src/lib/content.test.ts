@@ -1,41 +1,40 @@
 import { describe, expect, test } from 'vitest';
 import {
+  FELLOWSHIP_ROWS,
   HELIX_UNIT,
-  buildFellowship,
-  builders,
-  fellowship,
+  fellowshipLeft,
+  fellowshipRight,
   founders,
   helixPath,
-  keepers,
   placeFounders,
 } from './content';
 
-describe('fellowship construction', () => {
-  test('pools have the expected sizes', () => {
-    expect(keepers).toHaveLength(4);
-    expect(builders).toHaveLength(12);
+describe('fellowship strands', () => {
+  test('strands have the expected sizes and row count', () => {
+    expect(fellowshipLeft).toHaveLength(10);
+    expect(fellowshipRight).toHaveLength(10);
+    expect(FELLOWSHIP_ROWS).toBe(10);
   });
 
-  test('seats everyone exactly once', () => {
-    expect(fellowship).toHaveLength(keepers.length + builders.length);
-    const names = new Set(fellowship.map((p) => p.name));
-    expect(names.size).toBe(fellowship.length);
-    [...keepers, ...builders].forEach((p) => expect(names.has(p.name)).toBe(true));
+  test('seats everyone exactly once across both strands', () => {
+    const all = [...fellowshipLeft, ...fellowshipRight];
+    const names = new Set(all.map((p) => p.name));
+    expect(names.size).toBe(all.length);
   });
 
-  test('spreads keepers evenly — one keeper in every group of four seats', () => {
-    for (let g = 0; g < 4; g++) {
-      const group = fellowship.slice(g * 4, g * 4 + 4);
-      expect(group.filter((p) => p.badge === 'Keeper')).toHaveLength(1);
-    }
+  test('every member carries a portrait crop position, a bio, and a portrait', () => {
+    [...fellowshipLeft, ...fellowshipRight].forEach((p) => {
+      expect(p.objectPosition).toMatch(/^\d+% \d+%$/);
+      expect(p.bio.length).toBeGreaterThan(80);
+      expect(p.img).toMatch(/^\/assets\/people\/.+\.webp$/);
+    });
   });
 
-  test('every member carries a portrait crop position', () => {
-    fellowship.forEach((p) => expect(p.objectPosition).toMatch(/^\d+% \d+%$/));
-  });
-
-  test('is a pure function of its pools', () => {
-    expect(buildFellowship(keepers, builders)).toEqual(fellowship);
+  test('leadership ordering is respected at the anchors', () => {
+    expect(fellowshipLeft[0].name).toBe('Tenzin Seldon');
+    expect(fellowshipLeft[9].name).toBe('Ruslan Gafarov');
+    expect(fellowshipRight[0].name).toBe('Kumu Ramsay Taum');
+    expect(fellowshipRight[9].name).toBe('Oscar Matzuwa');
   });
 });
 

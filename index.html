@@ -33,6 +33,18 @@
       <input name="linkedin" /><input name="instagram" /><input name="x" /><input name="website" />
       <input name="publicDirectory" /><input name="submittedAt" /><input name="id" /><input name="code" />
     </form>
+    <!-- Hidden static form so Netlify Forms detects "applications" (the
+         open application at #/apply — no invite code required). -->
+    <form name="applications" data-netlify="true" netlify-honeypot="bot-field" hidden style="display: none">
+      <input type="hidden" name="form-name" value="applications" />
+      <input name="bot-field" />
+      <input name="name" /><input name="email" /><input name="linkedin" />
+      <input name="organization" /><input name="title" />
+      <textarea name="about"></textarea>
+      <textarea name="whyJoin"></textarea>
+      <textarea name="contribution"></textarea>
+      <input name="donationReady" />
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

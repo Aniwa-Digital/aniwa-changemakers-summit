@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 
 const FireSphere = lazy(() => import('./FireSphere'));
 
-/* Closing — "We will see you at the fire." over the compass and the
+/* Closing — "Two paths. One fire. A new story." over the compass and the
    procedural fire orb (opaque render, screen-blended by its wrapper), with
    the Aniwa contact block in its own footer strip BELOW the visual, and the
    compass-design credit as the final footnote. */
@@ -53,9 +53,9 @@ export function Closing() {
         </div>
         <div data-reveal="" style={{ position: 'relative', zIndex: 2, padding: '0 24px', maxWidth: '37.71rem' }}>
           <h2 className="disp closing-title" style={{ color: '#fff', fontSize: '3.75rem', margin: 0 }}>
-            We will see you
+            Two paths. One fire.
             <br />
-            at the fire.
+            A new story.
           </h2>
           <p
             className="myth"

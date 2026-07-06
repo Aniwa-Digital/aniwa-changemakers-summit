@@ -37,13 +37,17 @@ export function Invitation() {
     <section id="reciprocity" style={{ position: 'relative', background: '#3A3128', padding: '55px 40px 118px', overflow: 'hidden' }}>
       <div id="invitation" style={{ position: 'relative', zIndex: 2, maxWidth: 1400, margin: '0 auto' }}>
         <div data-reveal="">
-          <h2 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2.8rem, 6vw, 5rem)', margin: 0 }}>
-            Entry is the first ceremony.
+          <h2 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2.8rem, 6vw, 5rem)', margin: 0, textTransform: 'uppercase' }}>
+            A Call to Purpose
           </h2>
-          <p className="myth" style={{ color: 'rgba(255,255,255,0.68)', fontSize: 'clamp(1.25rem, 2.2vw, 1.5rem)', margin: '38px 0 0', maxWidth: '42rem' }}>
-            Participation in the Summit as an attendee, or in the Fellowship as a Speaker, or in the Founders Circle
-            as a collaborator, is based on alignment, integrity, and capacity. If you feel called to join us, we look
-            forward to hearing from you.
+          <p className="myth" style={{ color: 'rgba(255,255,255,0.68)', fontSize: 'clamp(1.25rem, 2.2vw, 1.5rem)', margin: '38px 0 0', maxWidth: '46rem' }}>
+            Participation in the Aniwa Changemakers Summit&mdash;whether as an attendee, speaker, or member of the
+            Founders Circle&mdash;is by invitation, curated to ensure deep alignment, integrity, and shared commitment.
+            If you feel called to join this circle but do not have an invite code, we welcome you to{' '}
+            <a href="#/apply" style={{ color: 'var(--aniwa-terracotta)', textDecoration: 'none', borderBottom: '1px solid rgba(160,74,42,0.5)' }}>
+              fill out an application form
+            </a>
+            .
           </p>
         </div>
 
@@ -138,8 +142,8 @@ export function Invitation() {
 
             <p className="bd" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.94rem', margin: '26px 0 0' }}>
               No code yet?{' '}
-              <a href="#apply" style={{ color: 'var(--aniwa-terracotta)', textDecoration: 'none' }}>
-                Request an invitation →
+              <a href="#/apply" style={{ color: 'var(--aniwa-terracotta)', textDecoration: 'none' }}>
+                Fill out an application form →
               </a>
             </p>
           </div>
