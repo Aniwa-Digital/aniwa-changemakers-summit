@@ -295,24 +295,25 @@ img {
     width: 100%;
   }
 
-  /* Founders ring: the prototype has no mobile treatment; shrink the seats so
-     the 335px-wide ring doesn't collide */
+  /* Founders ring: the prototype has no mobile treatment; with 15 staggered
+     seats on a ~335px ring, shrink hard and drop the role lines */
   .founder-seat {
-    width: 86px !important;
+    width: 64px !important;
   }
   .founder-portrait {
-    width: 52px !important;
-    height: 52px !important;
+    width: 44px !important;
+    height: 44px !important;
   }
   .founder-seat .disp {
-    font-size: 0.74rem !important;
+    font-size: 0.62rem !important;
   }
   .founder-seat .bd {
-    font-size: 0.58rem !important;
+    display: none !important;
   }
   .open-seat {
-    width: 52px !important;
-    height: 52px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.2rem !important;
   }
 
   /* Closing: shrink the fire orb on narrow screens (the contact block now

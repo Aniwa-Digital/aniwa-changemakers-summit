@@ -256,7 +256,10 @@ export const elements: ElementBox[] = [
   { glyph: '▽', name: 'Water', description: 'Indigenous spirituality and the planetary polycrisis.' },
 ];
 
-/* ---- §07 Founders Circle: 7 members + 1 open seat on a polar ring ---- */
+/* ---- §07 Founders Circle: 14 members + 1 open seat on a polar ring.
+   Seats alternate between an outer and inner radius (a gentle stagger)
+   so fifteen seats breathe without colliding. Headshots link out —
+   LinkedIn where one exists, else the member's public profile. ---- */
 export interface FounderSeat {
   name?: string;
   role?: string;
@@ -267,26 +270,35 @@ export interface FounderSeat {
   top: number; // %
 }
 
-const RING_RADIUS = 40;
+const RING_RADIUS = 42;
+const RING_STAGGER = 9;
 
 const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; open?: boolean }> = [
   { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.webp', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
+  { name: 'Oscar Matzuwa', role: 'Medicine of the deer nation', img: '/assets/people/matzuwa-oscar.webp', linkedin: 'https://www.huyaaniwa.org/team/oscar' },
+  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.webp', linkedin: 'https://www.linkedin.com/in/malikone/' },
+  { name: 'Oona Chaplin', role: 'Stories that bridge worlds', img: '/assets/people/oona-chaplin.webp' },
+  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.webp', linkedin: 'https://www.linkedin.com/in/mitchkirsch/' },
+  { name: 'Angela Katragadda', role: 'Stewardship of the sacred', img: '/assets/people/angela-katragadda.webp' },
+  { name: 'Anton Stylyk', role: 'Bridges across industries', img: '/assets/people/anton-stylyk.webp', linkedin: 'https://www.linkedin.com/in/anton-stylyk-3ba109295' },
+  { name: 'Dr Jennifer Winingder', role: 'Embodied wisdom & healing', img: '/assets/people/jennifer-winingder.webp' },
+  { name: 'Heidi Ohms', role: 'Raised between two worlds', img: '/assets/people/heidi-ohms.webp' },
+  { name: 'Will Cady', role: 'A compass for creators', img: '/assets/people/will-cady.webp', linkedin: 'https://www.linkedin.com/in/willcady' },
   { name: 'Deven Raut', role: 'AI for human flourishing', img: '/assets/people/deven-raut.webp', linkedin: 'https://www.linkedin.com/in/devenraut/' },
   { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.webp', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
-  { name: 'Angela Katragadda', role: 'Stewardship of the sacred', img: '/assets/people/angela-katragadda.webp' },
-  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.webp', linkedin: 'https://www.linkedin.com/in/malikone/' },
-  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.webp', linkedin: 'https://www.linkedin.com/in/mitchkirsch/' },
   { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.webp', linkedin: 'https://www.linkedin.com/in/renmenon/' },
+  { name: 'Bita Zahedi Majd', role: 'A voice for the rights of Nature', img: '/assets/people/bita-zahedi-majd.webp', linkedin: 'https://www.linkedin.com/in/bita-zahedi-majd-3a4b46192' },
   { open: true },
 ];
 
-export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
+export function placeFounders(radius: number = RING_RADIUS, stagger: number = RING_STAGGER): FounderSeat[] {
   return ringMembers.map((m, i) => {
     const ang = (i / ringMembers.length) * Math.PI * 2 - Math.PI / 2;
+    const r = radius - (i % 2) * stagger;
     return {
       ...m,
-      left: Number((50 + radius * Math.cos(ang)).toFixed(2)),
-      top: Number((50 + radius * Math.sin(ang)).toFixed(2)),
+      left: Number((50 + r * Math.cos(ang)).toFixed(2)),
+      top: Number((50 + r * Math.sin(ang)).toFixed(2)),
     };
   });
 }

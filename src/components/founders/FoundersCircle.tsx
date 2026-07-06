@@ -49,15 +49,17 @@ export function FoundersCircle() {
             fontSize: '1.5rem',
             lineHeight: 1.42,
             margin: '20px auto 0',
-            maxWidth: 660,
+            maxWidth: 700,
           }}
         >
-          The circle of collaborators whose stewardship, resources, and vision carry the Summit from calling to
-          reality. The Founders convene the fire; the Fellowship gathers around it. One seat remains open.
+          The Founders Circle is the intimate circle of stewards who make the Summit possible — collaborators whose
+          contributions, reach, and vision carry the gathering from calling to reality, and whose stewardship sustains
+          the Huya Aniwa Foundation&rsquo;s work beyond it. The Founders convene the fire; the Fellowship gathers
+          around it. One seat remains open.
         </p>
       </div>
 
-      <div data-reveal="" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 659, aspectRatio: '1', margin: '40px auto 0' }}>
+      <div data-reveal="" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 790, aspectRatio: '1', margin: '40px auto 0' }}>
         {founders.map((f, i) => (
           <div
             key={f.name ?? `open-${i}`}
@@ -109,7 +111,7 @@ export function FoundersCircle() {
                       href={f.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`${f.name} on LinkedIn`}
+                      aria-label={`${f.name} — profile`}
                       style={{ display: 'block', borderRadius: '50%' }}
                     >
                       {portrait}

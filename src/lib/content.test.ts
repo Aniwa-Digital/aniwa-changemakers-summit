@@ -57,21 +57,30 @@ describe('helix path geometry', () => {
 });
 
 describe('founders ring placement', () => {
-  test('has 7 members and exactly one open seat', () => {
-    expect(founders).toHaveLength(8);
+  test('has 14 members and exactly one open seat', () => {
+    expect(founders).toHaveLength(15);
     expect(founders.filter((f) => f.open)).toHaveLength(1);
   });
 
-  test('places every seat on a circle of the given radius', () => {
-    placeFounders(40).forEach((f) => {
+  test('alternates seats between the outer and inner radius', () => {
+    placeFounders(40, 8).forEach((f, i) => {
       const d = Math.hypot(f.left - 50, f.top - 50);
-      expect(d).toBeCloseTo(40, 1);
+      expect(d).toBeCloseTo(i % 2 === 0 ? 40 : 32, 1);
     });
   });
 
   test('first seat sits at the top of the ring (12 o’clock)', () => {
-    const [first] = placeFounders(40);
+    const [first] = placeFounders(40, 8);
     expect(first.left).toBeCloseTo(50, 1);
     expect(first.top).toBeCloseTo(10, 1);
+  });
+
+  test('every member has a portrait, a role, and mostly links', () => {
+    const members = founders.filter((f) => !f.open);
+    members.forEach((m) => {
+      expect(m.img).toMatch(/^\/assets\/people\/.+\.webp$/);
+      expect((m.role ?? '').length).toBeGreaterThan(4);
+    });
+    expect(members.filter((m) => m.linkedin).length).toBeGreaterThanOrEqual(10);
   });
 });
