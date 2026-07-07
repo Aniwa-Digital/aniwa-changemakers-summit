@@ -4,7 +4,7 @@ A private, by-invitation gathering where Indigenous
 wisdom keepers meet frontier-technology builders. A nonprofit initiative of
 Aniwa & the Huya Aniwa Foundation.
 
-**Live:** https://aniwa-changemakers-summit.netlify.app
+**Live:**  https://darkslateblue-dunlin-103060.hostingersite.com
 
 ## Stack
 
