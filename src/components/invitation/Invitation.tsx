@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { fnUrl } from '../../lib/functions';
 import { steps } from '../../lib/content';
 
 /* Invitation — purple section. "Entry is the first ceremony." + the 6-step
@@ -16,7 +17,7 @@ export function Invitation() {
     setChecking(true);
     setError('');
     try {
-      const r = await fetch('/.netlify/functions/validate-code', {
+      const r = await fetch(fnUrl('validate-code'), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ code: c }),

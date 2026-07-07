@@ -1,9 +1,11 @@
-import { codesStore, regsStore, isAdmin, json, makeCode, type InviteCode, type Registration } from './_shared';
+import { codesStore, regsStore, isAdmin, json, makeCode, preflight, type InviteCode, type Registration } from './_shared';
 
 /* Team-only endpoint (x-admin-key header):
    POST {action:"generate", assignedBy, assignedTo?, count?} → new codes
    POST {action:"list"} → all codes + all registrations */
 export default async function handler(req: Request): Promise<Response> {
+  const pf = preflight(req);
+  if (pf) return pf;
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
   if (!isAdmin(req)) return json({ error: 'Invalid team password' }, 401);
 

@@ -60,5 +60,20 @@ export function isAdmin(req: Request): boolean {
   return diff === 0;
 }
 
+/* CORS: the site is also served from Hostinger (different origin), so the
+   functions must answer cross-origin requests. Endpoints are safe to open:
+   validate-code and register are public; codes requires x-admin-key. */
+export const CORS_HEADERS = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'POST, OPTIONS',
+  'access-control-allow-headers': 'content-type, x-admin-key',
+} as const;
+
+export const preflight = (req: Request): Response | null =>
+  req.method === 'OPTIONS' ? new Response(null, { status: 204, headers: CORS_HEADERS }) : null;
+
 export const json = (body: unknown, status = 200): Response =>
-  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json', ...CORS_HEADERS },
+  });

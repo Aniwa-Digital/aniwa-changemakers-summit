@@ -1,4 +1,5 @@
 import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
+import { fnUrl } from '../../lib/functions';
 
 /* Registration — gated behind a valid, unredeemed invite code. On submit the
    info is stored and forwarded to the team, who reach out directly. */
@@ -57,7 +58,7 @@ export function RegisterPage() {
     setGate('checking');
     setGateMsg('');
     try {
-      const r = await fetch('/.netlify/functions/validate-code', {
+      const r = await fetch(fnUrl('validate-code'), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ code: c }),
@@ -90,7 +91,7 @@ export function RegisterPage() {
       if (typeof v === 'string') body[k] = v;
     });
     try {
-      const r = await fetch('/.netlify/functions/register', {
+      const r = await fetch(fnUrl('register'), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(body),

@@ -1,9 +1,11 @@
-import { codesStore, regsStore, json, normalizeCode, type InviteCode, type Registration } from './_shared';
+import { codesStore, regsStore, json, normalizeCode, preflight, type InviteCode, type Registration } from './_shared';
 
 /* Public: POST full registration. Validates + redeems the invite code
    (single-use), stores the registration, and forwards a copy to the
    Netlify Form "registrations" so the team gets an email notification. */
 export default async function handler(req: Request): Promise<Response> {
+  const pf = preflight(req);
+  if (pf) return pf;
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
   let b: Record<string, unknown>;

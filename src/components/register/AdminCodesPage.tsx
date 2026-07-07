@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
+import { fnUrl } from '../../lib/functions';
 
 /* Team-only invite-code generator (#/codes). Shared password → generate
    codes with metadata (who assigned, for whom), see redemption status,
@@ -75,7 +76,7 @@ const btn: CSSProperties = {
 };
 
 async function api(key: string, body: Record<string, unknown>) {
-  const r = await fetch('/.netlify/functions/codes', {
+  const r = await fetch(fnUrl('codes'), {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-admin-key': key },
     body: JSON.stringify(body),

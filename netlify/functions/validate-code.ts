@@ -1,7 +1,9 @@
-import { codesStore, json, normalizeCode, type InviteCode } from './_shared';
+import { codesStore, json, normalizeCode, preflight, type InviteCode } from './_shared';
 
 /* Public: POST {code} → {valid, redeemed} (no metadata leaks). */
 export default async function handler(req: Request): Promise<Response> {
+  const pf = preflight(req);
+  if (pf) return pf;
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
   let body: { code?: string };
   try {
