@@ -37,14 +37,17 @@ export function ApplyPage() {
     setSending(true);
     const fd = new FormData(e.currentTarget);
     const body = new URLSearchParams();
-    body.set('form-name', 'applications');
     fd.forEach((v, k) => {
       if (typeof v === 'string') body.set(k, v);
     });
     try {
-      const r = await fetch('/', {
+      // Formspree form "applications" — submissions email the account owner.
+      const r = await fetch('https://formspree.io/f/xnjkrkzw', {
         method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+          accept: 'application/json',
+        },
         body: body.toString(),
       });
       if (r.ok) setSent(true);
