@@ -1,15 +1,10 @@
 # Aniwa Changemakers Summit
 
-Cinematic one-page marketing site for the Aniwa Changemakers Summit
-(October 23–25, 2026): a private, by-invitation gathering where Indigenous
+A private, by-invitation gathering where Indigenous
 wisdom keepers meet frontier-technology builders. A nonprofit initiative of
 Aniwa & the Huya Aniwa Foundation.
 
 **Live:** https://aniwa-changemakers-summit.netlify.app
-
-Built from the v1.0 design handoff in `../design_handoff_aniwa_summit_v1/`
-(see [docs/PLAN.md](docs/PLAN.md) for the implementation plan and locked
-decisions).
 
 ## Stack
 
