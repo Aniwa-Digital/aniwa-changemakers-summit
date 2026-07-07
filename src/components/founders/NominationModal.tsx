@@ -23,10 +23,34 @@ const fieldStyle: CSSProperties = {
 
 export function NominationModal({ open, onClose }: NominationModalProps) {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    setError('');
+    setSending(true);
+    const fd = new FormData(e.currentTarget);
+    const body = new URLSearchParams();
+    fd.forEach((v, k) => {
+      if (typeof v === 'string') body.set(k, v);
+    });
+    try {
+      // Formspree form "Founder Nomination" — submissions email the account owner.
+      const r = await fetch('https://formspree.io/f/xpqgnvpw', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+          accept: 'application/json',
+        },
+        body: body.toString(),
+      });
+      if (r.ok) setSent(true);
+      else setError('Something went wrong. Please try again.');
+    } catch {
+      setError('Something went wrong. Please try again.');
+    }
+    setSending(false);
   };
 
   return (
@@ -46,45 +70,52 @@ export function NominationModal({ open, onClose }: NominationModalProps) {
             <div>
               <label className="eye" style={labelStyle}>
                 Your name
-                <input className="field-l" type="text" required style={fieldStyle} />
+                <input className="field-l" type="text" name="name" required style={fieldStyle} />
               </label>
             </div>
             <div>
               <label className="eye" style={labelStyle}>
                 Email
-                <input className="field-l" type="email" required style={fieldStyle} />
+                <input className="field-l" type="email" name="email" required style={fieldStyle} />
               </label>
             </div>
           </div>
           <div style={{ marginTop: 14 }}>
             <label className="eye" style={labelStyle}>
               Who you're nominating
-              <input className="field-l" type="text" required style={fieldStyle} />
+              <input className="field-l" type="text" name="nominee" required style={fieldStyle} />
             </label>
           </div>
           <div style={{ marginTop: 14 }}>
             <label className="eye" style={labelStyle}>
               Why they belong at the fire
-              <textarea className="field-l" rows={3} required style={{ ...fieldStyle, resize: 'vertical' }} />
+              <textarea className="field-l" rows={3} name="why" required style={{ ...fieldStyle, resize: 'vertical' }} />
             </label>
           </div>
           <button
             type="submit"
             className="eye ember"
+            disabled={sending}
             style={{
               width: '100%',
               marginTop: 22,
               padding: 16,
               border: 'none',
-              cursor: 'pointer',
+              cursor: sending ? 'wait' : 'pointer',
               color: '#fff',
               background: 'var(--aniwa-terracotta)',
               borderRadius: 'var(--radius-house)',
               boxShadow: '0 12px 40px rgba(160,74,42,0.4), inset 0 1px 0 rgba(255,255,255,0.18)',
+              opacity: sending ? 0.7 : 1,
             }}
           >
-            Send nomination →
+            {sending ? 'Sending…' : 'Send nomination →'}
           </button>
+          {error && (
+            <p className="bd" style={{ color: 'var(--aniwa-terracotta)', fontSize: '0.85rem', margin: '12px 0 0', textAlign: 'center' }}>
+              {error}
+            </p>
+          )}
           <p className="bd" style={{ color: 'rgba(46,40,32,0.5)', fontSize: '0.78rem', margin: '14px 0 0', textAlign: 'center' }}>
             Reviewed within two weeks · summit@huyaaniwa.org
           </p>
