@@ -59,7 +59,7 @@ export function FoundersCircle() {
         </p>
       </div>
 
-      <div data-reveal="" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 830, aspectRatio: '1', margin: '40px auto 0' }}>
+      <div data-reveal="" className="founders-ring-wrap" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: 830, aspectRatio: '1', margin: '40px auto 0' }}>
         {founders.map((f, i) => (
           <div
             key={f.name ?? `open-${i}`}
@@ -168,6 +168,39 @@ export function FoundersCircle() {
         >
           ✦
         </div>
+      </div>
+
+      <div data-reveal="" className="founders-mobile-grid">
+        {founders.map((f, i) =>
+          f.open ? (
+            <button
+              key={`open-mobile-${i}`}
+              onClick={() => setNomOpen(true)}
+              className="founders-mobile-seat open-seat"
+              aria-label="Nominate a changemaker for the open seat"
+              type="button"
+            >
+              <span className="founders-mobile-open">+</span>
+              <span className="disp founders-mobile-name">Open seat</span>
+            </button>
+          ) : (
+            <div key={f.name} className="founders-mobile-seat">
+              {f.linkedin ? (
+                <a href={f.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${f.name} — profile`}>
+                  <div className="founder-portrait founders-mobile-portrait">
+                    <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+                  </div>
+                </a>
+              ) : (
+                <div className="founder-portrait founders-mobile-portrait">
+                  <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+                </div>
+              )}
+              <div className="disp founders-mobile-name">{f.name}</div>
+              <div className="bd founders-mobile-role">{f.role}</div>
+            </div>
+          ),
+        )}
       </div>
 
       <NominationModal open={nomOpen} onClose={() => setNomOpen(false)} />

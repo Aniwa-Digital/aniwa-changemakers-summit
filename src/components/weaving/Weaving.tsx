@@ -33,6 +33,7 @@ export function Weaving() {
         key={p.name}
         className="helix-seat"
         data-helix-seat={frac.toFixed(4)}
+        data-side={side}
         style={{
           position: 'absolute',
           left: `${left}%`,

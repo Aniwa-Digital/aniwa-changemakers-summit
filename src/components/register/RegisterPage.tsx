@@ -1,8 +1,9 @@
-import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { fnUrl } from '../../lib/functions';
+import { GIVEBUTTER_WIDGET_ID } from '../../lib/givebutter';
 
-/* Registration — gated behind a valid, unredeemed invite code. On submit the
-   info is stored and forwarded to the team, who reach out directly. */
+/* Registration — gated behind a valid invite code. After submitting, the
+   participant selects a ticket via the embedded Givebutter widget. */
 
 const INDUSTRIES = [
   'Technology & AI',
@@ -17,6 +18,16 @@ const INDUSTRIES = [
   'Land & Regenerative Agriculture',
   'Other',
 ];
+
+type Gate = 'checking' | 'open' | 'closed' | 'ticket';
+type TicketMode = 'fresh' | 'return';
+
+type ValidateResponse = {
+  valid: boolean;
+  redeemed: boolean;
+  registered?: boolean;
+  fullName?: string;
+};
 
 const field: CSSProperties = {
   width: '100%',
@@ -45,14 +56,59 @@ function readCodeFromHash(): string {
   return new URLSearchParams(q).get('code') ?? '';
 }
 
+function displayName(fullName: string): string {
+  const first = fullName.trim().split(/\s+/)[0];
+  return first || fullName;
+}
+
+function persistCodeInHash(c: string) {
+  const normalized = c.trim().toUpperCase().replace(/\s+/g, '');
+  if (!normalized) return;
+  window.location.hash = `#/register?code=${encodeURIComponent(normalized)}`;
+}
+
+function ticketGreeting(mode: TicketMode, fullName: string): string {
+  const name = fullName.trim();
+  if (mode === 'fresh') {
+    return name
+      ? `Thanks, ${displayName(name)}. Complete your registration by selecting a ticket option below.`
+      : 'Thanks. Complete your registration by selecting a ticket option below.';
+  }
+  return name
+    ? `Welcome back, ${displayName(name)}. Complete your registration by selecting a ticket option below.`
+    : 'Welcome back. Complete your registration by selecting a ticket option below.';
+}
+
+function TicketStep({ mode, fullName }: { mode: TicketMode; fullName: string }) {
+  return (
+    <div style={{ marginTop: 40 }}>
+      <p className="myth" style={{ color: '#F4F1EB', fontSize: '1.4rem', margin: 0, maxWidth: 560 }}>
+        {ticketGreeting(mode, fullName)}
+      </p>
+      <div style={{ marginTop: 28 }}>
+        <givebutter-widget id={GIVEBUTTER_WIDGET_ID} />
+      </div>
+    </div>
+  );
+}
+
 export function RegisterPage() {
+  const ticketRef = useRef<HTMLDivElement>(null);
   const [code, setCode] = useState(readCodeFromHash);
-  const [gate, setGate] = useState<'checking' | 'open' | 'closed'>(code ? 'checking' : 'closed');
+  const [gate, setGate] = useState<Gate>(code ? 'checking' : 'closed');
   const [gateMsg, setGateMsg] = useState('');
+  const [ticketMode, setTicketMode] = useState<TicketMode>('fresh');
+  const [registrantName, setRegistrantName] = useState('');
   const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
   const [publicDirectory, setPublicDirectory] = useState(false);
+
+  const openTicket = (mode: TicketMode, fullName: string) => {
+    setTicketMode(mode);
+    setRegistrantName(fullName);
+    setGate('ticket');
+    persistCodeInHash(code);
+  };
 
   const checkCode = async (c: string) => {
     setGate('checking');
@@ -63,12 +119,16 @@ export function RegisterPage() {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ code: c }),
       });
-      const d = (await r.json()) as { valid: boolean; redeemed: boolean };
+      const d = (await r.json()) as ValidateResponse;
       if (d.valid) {
         setGate('open');
+        persistCodeInHash(c);
+      } else if (d.redeemed) {
+        /* Registered but ticket not yet purchased — return to Givebutter checkout. */
+        openTicket('return', d.fullName ?? '');
       } else {
         setGate('closed');
-        setGateMsg(d.redeemed ? 'That invite code has already been used.' : c ? 'That invite code isn’t valid.' : '');
+        setGateMsg(c ? 'That invite code isn’t valid.' : '');
       }
     } catch {
       setGate('closed');
@@ -81,6 +141,16 @@ export function RegisterPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (gate !== 'ticket') return;
+
+    const scrollTimer = window.setTimeout(() => {
+      ticketRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+
+    return () => window.clearTimeout(scrollTimer);
+  }, [gate, registrantName]);
+
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
@@ -90,6 +160,7 @@ export function RegisterPage() {
     fd.forEach((v, k) => {
       if (typeof v === 'string') body[k] = v;
     });
+    const fullName = typeof body.fullName === 'string' ? body.fullName : '';
     try {
       const r = await fetch(fnUrl('register'), {
         method: 'POST',
@@ -97,7 +168,7 @@ export function RegisterPage() {
         body: JSON.stringify(body),
       });
       const d = (await r.json()) as { ok?: boolean; error?: string };
-      if (d.ok) setSent(true);
+      if (d.ok && fullName) openTicket('fresh', fullName);
       else setError(d.error ?? 'Something went wrong. Please try again.');
     } catch {
       setError('Something went wrong. Please try again.');
@@ -115,22 +186,9 @@ export function RegisterPage() {
           Registration
         </h1>
 
-        {sent ? (
-          <div
-            style={{
-              marginTop: 40,
-              padding: '28px 30px',
-              background: 'rgba(184,148,92,0.1)',
-              border: '1px solid rgba(184,148,92,0.4)',
-              borderRadius: 'var(--radius-house)',
-            }}
-          >
-            <p className="myth" style={{ color: '#F4F1EB', fontSize: '1.4rem', margin: 0 }}>
-              Thank you — your registration has been received.
-            </p>
-            <p className="bd" style={{ color: 'rgba(255,255,255,0.72)', fontSize: '1rem', margin: '14px 0 0' }}>
-              A member of the team will reach out to you directly. We will see you at the fire.
-            </p>
+        {gate === 'ticket' ? (
+          <div ref={ticketRef}>
+            <TicketStep mode={ticketMode} fullName={registrantName} />
           </div>
         ) : gate !== 'open' ? (
           <div style={{ marginTop: 34 }}>
@@ -179,7 +237,7 @@ export function RegisterPage() {
           <form onSubmit={submit} style={{ marginTop: 10 }}>
             <p className="bd" style={{ color: 'rgba(255,255,255,0.66)', fontSize: '1rem', margin: '18px 0 0' }}>
               Invite code <b style={{ color: 'var(--aniwa-gold)', letterSpacing: '0.08em' }}>{code.toUpperCase()}</b> accepted.
-              Tell us how to reach you — a member of the team will follow up directly.
+              Tell us how to reach you, then select your ticket.
             </p>
 
             <label style={labelStyle}>Full name *</label>
@@ -246,7 +304,6 @@ export function RegisterPage() {
               </div>
             </div>
 
-            {/* Public directory toggle */}
             <button
               type="button"
               role="switch"
@@ -323,7 +380,7 @@ export function RegisterPage() {
                 fontSize: '0.8rem',
               }}
             >
-              {sending ? 'Sending…' : 'Send →'}
+              {sending ? 'Registering…' : 'Register & Buy Ticket'}
             </button>
           </form>
         )}

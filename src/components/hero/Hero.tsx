@@ -1,5 +1,6 @@
 import { lazy, Suspense, type CSSProperties } from 'react';
 import { HeroStrokeText } from './HeroStrokeText';
+import { InviteCodeForm } from '../invitation/InviteCodeForm';
 
 const CompassShader = lazy(() => import('./CompassShader'));
 
@@ -166,19 +167,17 @@ export function Hero({ onLoginOpen }: HeroProps) {
         <div className="eye" style={{ letterSpacing: '0.24em', fontSize: 13, marginTop: 18 }}>
           <b style={{ color: 'var(--aniwa-terracotta)', fontSize: 13 }}>An invite-only convergence</b>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16, marginTop: 14 }}>
+        <div className="hero-invite-block" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, marginTop: 14, width: 'min(440px, 92vw)' }}>
+          <div className="eye" style={{ letterSpacing: '0.2em', fontSize: '0.68rem', color: 'rgba(244,241,235,0.72)' }}>
+            Have an invite code?
+          </div>
+          <InviteCodeForm variant="hero" />
           <a
             href="#invitation"
-            className="eye ghost"
-            style={{
-              color: 'rgba(255,255,255,0.85)',
-              textDecoration: 'none',
-              padding: '15px 32px',
-              border: '1px solid rgba(255,255,255,0.32)',
-              borderRadius: 'var(--radius-house)',
-            }}
+            className="eye"
+            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.62rem', letterSpacing: '0.14em', textDecoration: 'none' }}
           >
-            ENTER INVITE CODE
+            Learn about the entry process ↓
           </a>
         </div>
       </div>

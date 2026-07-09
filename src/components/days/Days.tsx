@@ -25,6 +25,7 @@ export function Days() {
         <img
           src="/assets/img/land.jpg"
           alt=""
+          className="land-band-img"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
         <div

@@ -1,6 +1,6 @@
 import { codesStore, json, normalizeCode, preflight, type InviteCode } from './_shared';
 
-/* Public: POST {code} → {valid, redeemed} (no metadata leaks). */
+/* Public: POST {code} → validity + return-visit info for redeemed codes. */
 export default async function handler(req: Request): Promise<Response> {
   const pf = preflight(req);
   if (pf) return pf;
@@ -16,5 +16,15 @@ export default async function handler(req: Request): Promise<Response> {
 
   const rec = (await codesStore().get(code, { type: 'json' })) as InviteCode | null;
   if (!rec) return json({ valid: false, redeemed: false });
+
+  if (rec.redeemed?.name) {
+    return json({
+      valid: false,
+      redeemed: true,
+      registered: true,
+      fullName: rec.redeemed.name,
+    });
+  }
+
   return json({ valid: !rec.redeemed, redeemed: !!rec.redeemed });
 }

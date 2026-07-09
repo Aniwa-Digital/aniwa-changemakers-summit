@@ -165,6 +165,10 @@ img {
     padding-left: 26px !important;
     padding-right: 26px !important;
   }
+  #prophecy {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
   nav {
     padding-left: 26px !important;
     padding-right: 26px !important;
@@ -208,10 +212,103 @@ img {
 }
 
 @media (max-width: 700px) {
-  /* §00 The Prophecy: cover crops the landscape photo to a narrow slice on
-     portrait screens — contain shows the full vista as a cinematic band */
+  /* §00 The Prophecy: fill the viewport on mobile — cover, full-res source */
   #prophecy [data-cine-bg] {
-    object-fit: contain !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+  }
+  .land-band {
+    min-height: 42vh !important;
+  }
+  .land-band-img {
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+  /* §05 invitation: code card before the long step list */
+  .invitation-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 44px !important;
+    margin-top: 44px !important;
+  }
+  .invite-card {
+    order: -1;
+  }
+  .invitation-mobile-code {
+    display: block;
+    margin-bottom: 36px;
+    padding: 24px 22px;
+    background: rgba(35, 29, 23, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: var(--radius-house);
+  }
+  .invitation-mobile-code .invite-form {
+    margin-top: 18px !important;
+  }
+  /* Founders ring → grid on narrow screens */
+  .founders-ring-wrap {
+    display: none !important;
+  }
+  .founders-mobile-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px 14px;
+    max-width: 420px;
+    margin: 36px auto 0;
+    position: relative;
+    z-index: 2;
+  }
+  .founders-mobile-seat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  .founders-mobile-portrait {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(160, 74, 42, 0.55);
+    box-shadow: 0 10px 26px -12px rgba(160, 74, 42, 0.55);
+  }
+  .founders-mobile-name {
+    color: var(--ink-on-light);
+    font-size: 0.68rem !important;
+    margin-top: 8px !important;
+    line-height: 1.2 !important;
+    word-break: break-word;
+  }
+  .founders-mobile-role {
+    color: rgba(46, 40, 32, 0.55);
+    font-size: 0.58rem !important;
+    margin-top: 2px !important;
+    line-height: 1.25 !important;
+    display: block !important;
+  }
+  .founders-mobile-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(46, 40, 32, 0.32);
+    color: var(--aniwa-terracotta);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1;
   }
   #weaving h2.disp {
     font-size: 2.1rem !important;
@@ -241,6 +338,10 @@ img {
   section {
     padding-left: 20px !important;
     padding-right: 20px !important;
+  }
+  #prophecy {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
   nav {
     padding-left: 16px !important;
@@ -295,8 +396,42 @@ img {
     width: 100%;
   }
 
-  /* Founders ring: the prototype has no mobile treatment; with 15 staggered
-     seats on a ~335px ring, shrink hard and drop the role lines */
+  /* Hero invite form: full-width stacked fields */
+  .invite-form-hero .invite-form {
+    flex-direction: column;
+    width: 100%;
+  }
+  .invite-form-hero .invite-form button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Fellowship helix: pull strands apart so portraits don't collide */
+  .helix-band {
+    width: min(880px, 100vw) !important;
+  }
+  .helix-seat[data-side='left'] {
+    left: 24% !important;
+    width: 108px !important;
+  }
+  .helix-seat[data-side='right'] {
+    left: 76% !important;
+    width: 108px !important;
+  }
+  .helix-seat .helix-portrait-btn {
+    width: 72px !important;
+    margin: 0 auto !important;
+  }
+  .helix-seat .disp {
+    font-size: 0.72rem !important;
+    margin-top: 8px !important;
+  }
+  .helix-seat .bd {
+    font-size: 0.58rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Founders ring desktop hidden above; legacy ring shrink rules removed */
   .founder-seat {
     width: 64px !important;
   }
@@ -350,6 +485,19 @@ img {
   .helix-tip-pulse {
     animation: none !important;
   }
+}
+
+#invitation,
+#invite-code-entry {
+  scroll-margin-top: 24px;
+}
+
+.founders-mobile-grid {
+  display: none;
+}
+
+.invitation-mobile-code {
+  display: none;
 }
 
 /* Fellowship portraits are buttons — invite the click */
