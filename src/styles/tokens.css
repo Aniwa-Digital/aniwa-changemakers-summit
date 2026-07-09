@@ -63,6 +63,7 @@
   /* ---- Families ---- */
   --font-display: 'Averia Serif Libre', ui-serif, Georgia, serif;
   --font-sans: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-yucca: 'Yucca', var(--font-sans);
 
   /* ---- Display scale (Averia Serif Libre) ---- */
   --display-2xl: clamp(3.5rem, 8vw, 7rem);

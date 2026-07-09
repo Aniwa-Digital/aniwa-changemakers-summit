@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { founders } from '../../lib/content';
+import { founders, type FounderSeat } from '../../lib/content';
+import { Modal } from '../ui/Modal';
 import { NominationModal } from './NominationModal';
 
 /* §04 The Founders Circle — bone section. 7 members + 1 dashed open seat on a
@@ -11,6 +12,53 @@ import { NominationModal } from './NominationModal';
    A second faint compass floats behind the whole section with parallax. */
 export function FoundersCircle() {
   const [nomOpen, setNomOpen] = useState(false);
+  const [selected, setSelected] = useState<FounderSeat | null>(null);
+
+  const portraitControl = (f: FounderSeat, className = 'founder-portrait') => {
+    const node = (
+      <div
+        className={className}
+        style={
+          className.includes('founders-mobile-portrait')
+            ? undefined
+            : {
+                width: 82,
+                height: 82,
+                borderRadius: '50%',
+                overflow: 'hidden',
+                border: '2px solid rgba(160,74,42,0.55)',
+                boxShadow: '0 10px 26px -12px rgba(160,74,42,0.55)',
+              }
+        }
+      >
+        <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+      </div>
+    );
+
+    if (f.bio) {
+      return (
+        <button
+          type="button"
+          onClick={() => setSelected(f)}
+          aria-haspopup="dialog"
+          aria-label={`About ${f.name}`}
+          style={{ display: 'block', padding: 0, border: 'none', background: 'transparent', cursor: 'pointer', borderRadius: '50%' }}
+        >
+          {node}
+        </button>
+      );
+    }
+
+    if (f.linkedin) {
+      return (
+        <a href={f.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${f.name} — profile`} style={{ display: 'block', borderRadius: '50%' }}>
+          {node}
+        </a>
+      );
+    }
+
+    return node;
+  };
 
   return (
     <section
@@ -90,36 +138,7 @@ export function FoundersCircle() {
               </button>
             ) : (
               <div className="founder-seat" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: 120 }}>
-                {(() => {
-                  const portrait = (
-                    <div
-                      className="founder-portrait"
-                      style={{
-                        width: 82,
-                        height: 82,
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        border: '2px solid rgba(160,74,42,0.55)',
-                        boxShadow: '0 10px 26px -12px rgba(160,74,42,0.55)',
-                      }}
-                    >
-                      <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-                    </div>
-                  );
-                  return f.linkedin ? (
-                    <a
-                      href={f.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${f.name} — profile`}
-                      style={{ display: 'block', borderRadius: '50%' }}
-                    >
-                      {portrait}
-                    </a>
-                  ) : (
-                    portrait
-                  );
-                })()}
+                {portraitControl(f)}
                 <div className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '0.95rem', marginTop: 11, lineHeight: 1.15 }}>
                   {f.name}
                 </div>
@@ -185,17 +204,7 @@ export function FoundersCircle() {
             </button>
           ) : (
             <div key={f.name} className="founders-mobile-seat">
-              {f.linkedin ? (
-                <a href={f.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${f.name} — profile`}>
-                  <div className="founder-portrait founders-mobile-portrait">
-                    <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-                  </div>
-                </a>
-              ) : (
-                <div className="founder-portrait founders-mobile-portrait">
-                  <img src={f.img} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-                </div>
-              )}
+              {portraitControl(f, 'founder-portrait founders-mobile-portrait')}
               <div className="disp founders-mobile-name">{f.name}</div>
               <div className="bd founders-mobile-role">{f.role}</div>
             </div>
@@ -204,6 +213,43 @@ export function FoundersCircle() {
       </div>
 
       <NominationModal open={nomOpen} onClose={() => setNomOpen(false)} />
+
+      <Modal open={selected !== null} onClose={() => setSelected(null)} label={selected?.name ?? 'Founder'} maxWidth={620} padding="40px">
+        {selected?.bio && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 22, flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  width: 108,
+                  height: 108,
+                  flex: '0 0 auto',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  border: '2px solid rgba(160,74,42,0.5)',
+                  background: '#EFE7D3',
+                }}
+              >
+                <img
+                  src={selected.img}
+                  alt={selected.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                />
+              </div>
+              <div style={{ minWidth: 200, flex: '1 1 auto' }}>
+                <h4 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '1.9rem', margin: 0, lineHeight: 1.1 }}>
+                  {selected.name}
+                </h4>
+                <div className="eye" style={{ color: 'var(--aniwa-terracotta)', fontSize: '0.66rem', marginTop: 8 }}>
+                  {selected.role}
+                </div>
+              </div>
+            </div>
+            <p className="bd" style={{ color: 'rgba(46,40,32,0.78)', fontSize: '0.98rem', lineHeight: 1.62, margin: '24px 0 0' }}>
+              {selected.bio}
+            </p>
+          </div>
+        )}
+      </Modal>
     </section>
   );
 }

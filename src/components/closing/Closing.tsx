@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { BrandMark } from '../ui/BrandMark';
 
 const FireSphere = lazy(() => import('./FireSphere'));
 
@@ -10,6 +11,7 @@ export function Closing() {
   return (
     <section id="closing" style={{ position: 'relative' }}>
       <div
+        className="closing-visual"
         style={{
           position: 'relative',
           minHeight: '72vh',
@@ -51,7 +53,7 @@ export function Closing() {
             <FireSphere bloomStrength={2.7} bloomRadius={1.05} />
           </Suspense>
         </div>
-        <div data-reveal="" style={{ position: 'relative', zIndex: 2, padding: '0 24px', maxWidth: '37.71rem' }}>
+        <div data-reveal="" className="closing-copy" style={{ position: 'relative', zIndex: 2, padding: '0 24px', maxWidth: '37.71rem' }}>
           <h2 className="disp closing-title" style={{ color: '#fff', fontSize: '3.75rem', margin: 0 }}>
             Two paths. One fire.
             <br />
@@ -77,16 +79,16 @@ export function Closing() {
         >
           Where the Earth and the future meet.
         </p>
-        <div className="closing-contact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 13 }}>
-          <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={34} height={26} style={{ height: 26, width: 'auto', filter: 'brightness(2.2)' }} />
+        <div className="closing-contact" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+          <BrandMark />
           <span className="eye" style={{ color: 'rgba(255,255,255,0.5)', letterSpacing: 'var(--tracking-wide)', fontSize: '0.64rem' }}>
-            ANIWĀ · summit@huyaaniwa.org
+            summit@huyaaniwa.org
           </span>
         </div>
         <div className="eye" style={{ color: 'rgba(255,255,255,0.32)', fontSize: '0.6rem', marginTop: 16 }}>
           A nonprofit initiative of Aniwa &amp; the Huya Aniwa Foundation
         </div>
-        <div className="bd" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.92rem', marginTop: 24, fontStyle: 'italic' }}>
+        <div className="eye" style={{ color: 'rgba(255,255,255,0.32)', fontSize: '0.6rem', marginTop: 24 }}>
           Compass design by Dante Orpilla from the book,{' '}
           <a
             href="https://www.amazon.com/Which-Way-North-Creative-Marketers/dp/1637744064"

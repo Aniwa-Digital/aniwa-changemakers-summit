@@ -37,7 +37,7 @@ export const fellowshipLeft: FellowshipMember[] = [
   ),
   member(
     'Oona Chaplin',
-    'Host · actor, Avatar: Fire and Ash',
+    'Actor. Avatar. Game of Thrones',
     'oona-chaplin.webp',
     'Oona Chaplin, granddaughter of the legendary Charlie Chaplin, is an acclaimed actress whose career spans Game of Thrones, Black Mirror, and, most recently, the Avatar franchise — where, as Varang, she inhabits a story that powerfully explores the struggle between Indigenous peoples and colonial, extractive forces. Beyond the screen, Oona is an artist, cultural bridge-builder, land steward, and mother, and a longtime ally of the Huya Aniwa Foundation in the protection of Indigenous wisdom and the living Earth.',
   ),
@@ -295,6 +295,8 @@ export interface FounderSeat {
   role?: string;
   img?: string;
   linkedin?: string;
+  /** Short bio shown in the click-to-open popup when present. */
+  bio?: string;
   open?: boolean;
   left: number; // % within the ring square
   top: number; // %
@@ -302,7 +304,7 @@ export interface FounderSeat {
 
 const RING_RADIUS = 42;
 
-const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; open?: boolean }> = [
+const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; bio?: string; open?: boolean }> = [
   { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.webp', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
   { name: 'Oscar Matzuwa', role: 'Medicine of the deer nation', img: '/assets/people/matzuwa-oscar.webp', linkedin: 'https://www.huyaaniwa.org/team/oscar' },
   { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.webp', linkedin: 'https://www.linkedin.com/in/malikone/' },
@@ -317,7 +319,12 @@ const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?
   { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.webp', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
   { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.webp', linkedin: 'https://www.linkedin.com/in/renmenon/' },
   { name: 'Bita Zahedi Majd', role: 'A voice for the rights of Nature', img: '/assets/people/bita-zahedi-majd.webp', linkedin: 'https://www.linkedin.com/in/bita-zahedi-majd-3a4b46192' },
-  { name: 'Anka Amaru', role: 'Founders Circle steward', img: '/assets/people/anka.webp' },
+  {
+    name: 'Anka Amaru',
+    role: 'Regenerative land steward',
+    img: '/assets/people/anka.webp',
+    bio: 'Anka Amaru is a founding member of Ayllu Illa Wasi, a multi-generational, land-based heirloom culture center focused on reindigenizing, sustainability, and world bridging. With more than 20 years of experience working with Indigenous communities and a background in zero-point energy studies, she serves as bridge and site manager for the Aniwa Summit.',
+  },
 ];
 
 export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
@@ -355,5 +362,5 @@ export const steps: PathStep[] = [
   { n: '02', label: 'Application to attend or to speak', top: 24, side: 'left', offset: 10 },
   { n: '03', label: 'A private interview call', top: 48, side: 'right' },
   { n: '04', label: 'Confirmation & entry to the guest channel', top: 68, side: 'left' },
-  { n: '05', label: 'Arrival of changemakers at the land', top: 88, side: 'right', offset: 10 },
+  { n: '05', label: 'Arrival of changemakers at the land', top: 88, side: 'right' },
 ];

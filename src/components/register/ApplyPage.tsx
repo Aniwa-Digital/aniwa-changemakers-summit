@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
+import { BrandMark } from '../ui/BrandMark';
 
 /* Application — for those called to the Summit without an invite code.
    Submits to the Netlify Form "applications" (declared statically in
@@ -61,8 +62,8 @@ export function ApplyPage() {
   return (
     <section style={{ minHeight: '100vh', background: '#3A3128', padding: '60px 24px 120px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
-        <a href="#" onClick={() => (window.location.hash = '')} style={{ textDecoration: 'none' }}>
-          <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={40} height={30} style={{ height: 30, width: 'auto', filter: 'brightness(2.2)' }} />
+        <a href="#" onClick={() => (window.location.hash = '')} style={{ display: 'inline-block', textDecoration: 'none' }}>
+          <BrandMark logoHeight={30} />
         </a>
         <h1 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2.2rem, 5vw, 3.4rem)', margin: '26px 0 0', textTransform: 'uppercase' }}>
           A Call to Purpose

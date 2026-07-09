@@ -10,6 +10,7 @@ export function PurposePath() {
       {steps.map((step, i) => (
         <div
           key={step.n}
+          data-step={step.n}
           className={`purpose-path__anchor purpose-path__anchor--${step.side}`}
           style={{ top: `${step.top}%` }}
         >

@@ -91,7 +91,7 @@ export function Weaving() {
         padding: '110px 40px 96px',
       }}
     >
-      <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', margin: '0 auto' }}>
+      <div data-reveal="" className="weaving-intro" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
         <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: 'clamp(2.4rem, 5.2vw, 3.6rem)', margin: 0 }}>
           A Convergence of Changemakers
         </h3>
