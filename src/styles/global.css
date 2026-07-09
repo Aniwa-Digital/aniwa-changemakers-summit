@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './fonts.css';
 @import './tokens.css';
 
 html {
@@ -136,6 +137,343 @@ img {
   transform: scale(1.07);
 }
 
+/* ---- Four Elements diamond cards ---- */
+.elements-stage {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 12px 0 8px;
+}
+
+.elements-geometry-wrap {
+  position: absolute;
+  inset: -80px -60px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.9;
+  filter: blur(0px);
+}
+
+.elements-geometry {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.55;
+  /* keep lines subtle and integrated */
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(circle at 50% 52%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.9) 55%, transparent 82%);
+  -webkit-mask-image: radial-gradient(circle at 50% 52%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.9) 55%, transparent 82%);
+}
+
+.elements-backdrop {
+  position: fixed;
+  inset: 0;
+  /* Must sit ABOVE the diamond grid so outside clicks close reliably */
+  z-index: 60;
+  border: none;
+  background: rgba(14, 12, 10, 0.62);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  animation: elements-fade-in 0.45s var(--ease-cinematic);
+}
+
+.elements-diamond {
+  position: relative;
+  z-index: 41;
+  display: grid;
+  grid-template-columns: 1fr minmax(200px, 260px) 1fr;
+  grid-template-rows: auto auto auto;
+  gap: clamp(18px, 3vw, 32px);
+  justify-items: center;
+  align-items: center;
+  min-height: clamp(520px, 62vh, 680px);
+  perspective: 1400px;
+}
+
+.element-slot {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 4 / 5;
+  transition:
+    opacity 0.55s var(--ease-cinematic),
+    filter 0.55s var(--ease-cinematic),
+    transform 0.55s var(--ease-cinematic);
+}
+
+.element-slot--air {
+  grid-column: 2;
+  grid-row: 1;
+}
+.element-slot--water {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: end;
+}
+.element-slot--fire {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: start;
+}
+.element-slot--earth {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.elements-diamond--focused .element-slot:not(:has(.element-card--active)) {
+  opacity: 0.22;
+  filter: blur(1.5px);
+  pointer-events: none;
+}
+
+.element-card {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    width 0.65s var(--ease-cinematic),
+    height 0.65s var(--ease-cinematic),
+    transform 0.65s var(--ease-cinematic),
+    filter 0.45s var(--ease-cinematic);
+}
+
+.element-card--active {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(420px, 88vw);
+  height: min(520px, 74vh);
+  aspect-ratio: auto;
+  transform: translate(-50%, -50%);
+  /* Above the click-catcher backdrop */
+  z-index: 61;
+  filter: drop-shadow(0 28px 64px rgba(0, 0, 0, 0.55));
+}
+
+.element-card__flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s var(--ease-cinematic);
+  will-change: transform;
+}
+
+.element-card--active .element-card__flipper {
+  transform: rotateY(180deg);
+}
+
+.element-card__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(244, 241, 235, 0.12);
+  background: rgba(24, 20, 16, 0.62);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 18px 44px -20px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  transition:
+    border-color 0.45s var(--ease-cinematic),
+    box-shadow 0.45s var(--ease-cinematic);
+  will-change: transform;
+}
+
+/* Keep typography crisp during 3D tilt */
+.element-card__icon-wrap,
+.element-card__copy,
+.element-card__label,
+.element-card__title,
+.element-card__detail,
+.element-card__hint {
+  transform: translateZ(26px);
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.element-card__icon {
+  transform: translateZ(34px);
+}
+
+/* Cursor-following highlight + 3D depth (variables set from JS) */
+.element-card {
+  --mx: 50%;
+  --my: 50%;
+  --tilt-x: 0;
+  --tilt-y: 0;
+}
+
+.element-card__face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-cinematic);
+  background:
+    radial-gradient(120px 120px at var(--mx) var(--my), rgba(255, 217, 160, 0.22), transparent 60%),
+    radial-gradient(220px 180px at var(--mx) var(--my), rgba(160, 74, 42, 0.12), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+.element-card:not(.element-card--active):hover .element-card__face::before {
+  opacity: 1;
+}
+
+/* (removed) spinning corner flare */
+
+.element-card:not(.element-card--active):hover .element-card__face {
+  border-color: rgba(160, 74, 42, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 74, 42, 0.45),
+    inset 0 0 34px rgba(160, 74, 42, 0.12),
+    0 24px 60px -26px rgba(0, 0, 0, 0.85),
+    0 0 28px rgba(160, 74, 42, 0.18);
+}
+
+/* 3D hover: tilt + lift (uses .elements-diamond perspective) */
+.element-card:not(.element-card--active):hover {
+  transform: translateY(-6px);
+}
+
+.element-card:not(.element-card--active):hover .element-card__flipper {
+  transform: rotateX(calc(var(--tilt-y, 0) * -10deg)) rotateY(calc(var(--tilt-x, 0) * 12deg)) translateZ(0);
+}
+
+.element-card__face--front {
+  padding: clamp(22px, 4vw, 30px);
+}
+
+.element-card__face--back {
+  transform: rotateY(180deg);
+  padding: clamp(26px, 4.5vw, 34px);
+  justify-content: flex-start;
+}
+
+.element-card__icon-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 8px 0 18px;
+}
+
+.element-card__icon {
+  width: min(72%, 168px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+.element-card__copy {
+  margin-top: auto;
+}
+
+.element-card__label {
+  display: block;
+  color: var(--aniwa-gold);
+  margin-bottom: 10px;
+}
+
+.element-card__title {
+  color: #f4f1eb;
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  line-height: 1.28;
+  margin: 0;
+  font-weight: 500;
+}
+
+.element-card__detail {
+  color: rgba(244, 241, 235, 0.86);
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 2vw, 1.12rem);
+  line-height: 1.48;
+  margin: 14px 0 0;
+}
+
+.element-card__hint {
+  margin-top: auto;
+  padding-top: 18px;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 235, 0.38);
+}
+
+@keyframes elements-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .element-card,
+  .element-card__flipper,
+  .element-slot,
+  .elements-backdrop {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .elements-diamond {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 16px;
+    min-height: auto;
+    padding: 8px 0 4px;
+  }
+
+  .element-slot {
+    max-width: none;
+  }
+
+  .element-slot--air {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    max-width: 240px;
+    justify-self: center;
+  }
+  .element-slot--water {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+  .element-slot--fire {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+  .element-slot--earth {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    max-width: 240px;
+    justify-self: center;
+  }
+
+  .element-card {
+    aspect-ratio: 3 / 4;
+  }
+}
+
 /* ---- Element boxes (§03): terracotta border + inner ember glow on hover ---- */
 .grid-4e > div {
   transition:
@@ -192,12 +530,6 @@ img {
   .grid-logos {
     grid-template-columns: repeat(3, 1fr) !important;
   }
-  /* Element quartet: stack the label above the topic on narrow screens */
-  .element-row {
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-    padding: 38px 4px !important;
-  }
   /* Invite-code generator: stack the form fields */
   .codes-gen-form {
     grid-template-columns: 1fr !important;
@@ -208,6 +540,25 @@ img {
   }
   .land-copy {
     padding: 30px 26px 38px !important;
+  }
+}
+
+/* Hero glow orb: full rainbow cycle, softly desaturated, gently biased warm */
+@keyframes orb-hue-cycle {
+  from {
+    filter: hue-rotate(10deg) saturate(0.82);
+  }
+  to {
+    filter: hue-rotate(370deg) saturate(0.82);
+  }
+}
+.compass-orb {
+  animation: orb-hue-cycle 14s linear infinite;
+  will-change: filter;
+}
+@media (prefers-reduced-motion: reduce) {
+  .compass-orb {
+    animation: none;
   }
 }
 
@@ -228,26 +579,9 @@ img {
     object-fit: cover !important;
     object-position: center center !important;
   }
-  /* §05 invitation: code card before the long step list */
-  .invitation-layout {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 44px !important;
-    margin-top: 44px !important;
-  }
-  .invite-card {
-    order: -1;
-  }
-  .invitation-mobile-code {
-    display: block;
-    margin-bottom: 36px;
-    padding: 24px 22px;
-    background: rgba(35, 29, 23, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    border-radius: var(--radius-house);
-  }
-  .invitation-mobile-code .invite-form {
-    margin-top: 18px !important;
+  /* §05 invitation: path is full-width centered */
+  .purpose-path {
+    width: min(100%, 440px) !important;
   }
   /* Founders ring → grid on narrow screens */
   .founders-ring-wrap {
@@ -487,8 +821,7 @@ img {
   }
 }
 
-#invitation,
-#invite-code-entry {
+#invitation {
   scroll-margin-top: 24px;
 }
 
@@ -496,8 +829,82 @@ img {
   display: none;
 }
 
-.invitation-mobile-code {
-  display: none;
+/* §05 invitation — steps along the river path */
+.invitation-path-wrap {
+  display: flex;
+  justify-content: center;
+}
+.purpose-path {
+  position: relative;
+  width: min(820px, 100%);
+  height: 100vh;
+  max-width: none;
+  margin: 0 auto;
+}
+.purpose-path__river {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+  mix-blend-mode: screen;
+  opacity: 0.88;
+  pointer-events: none;
+  user-select: none;
+}
+.purpose-path__anchor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+.purpose-path__step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 36%;
+}
+.purpose-path__anchor--left .purpose-path__step {
+  margin-left: 0;
+  margin-right: auto;
+  align-items: flex-end;
+  text-align: right;
+  padding-right: 2%;
+}
+.purpose-path__anchor--right .purpose-path__step {
+  margin-left: auto;
+  margin-right: 0;
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 2%;
+}
+.purpose-path__num {
+  color: var(--aniwa-terracotta);
+  font-size: 1.35rem;
+  font-feature-settings: 'onum' 1;
+  line-height: 1;
+}
+.purpose-path__label {
+  color: #f4f1eb;
+  font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+  font-weight: 400;
+  line-height: 1.25;
+}
+@media (max-width: 880px) {
+  .purpose-path {
+    width: min(100%, 440px);
+  }
+  .purpose-path__step {
+    max-width: 40%;
+  }
+  .purpose-path__label {
+    font-size: 1.05rem;
+  }
+  .purpose-path__num {
+    font-size: 1.1rem;
+  }
 }
 
 /* Fellowship portraits are buttons — invite the click */

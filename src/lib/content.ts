@@ -214,10 +214,9 @@ export interface Stat {
 }
 
 export const stats: Stat[] = [
-  { value: '14+', label: 'Years of partnership', detail: 'With Indigenous communities across the Americas and the Pacific.' },
-  { value: '$6M+', label: 'Distributed', detail: 'For Indigenous causes, land protection and cultural preservation.' },
-  { value: '40+', label: 'Elders', detail: 'Representing 6 regions across the Americas and the Pacific' },
-  { value: '$2.5B', label: 'Realized', detail: 'From energy initiatives by MAP Energy — acquired by Global Infrastructure Partners, 2020.' },
+  { value: '14+', label: 'Years of partnership', detail: 'Cultivating trusted relationships with Indigenous communities worldwide.' },
+  { value: '$6M+', label: 'Distributed', detail: 'Supporting Indigenous-led initiatives, land protection and cultural preservation.' },
+  { value: '50+', label: 'Elders', detail: 'An alliance with some of the world’s most respected Indigenous leaders.' },
   { value: '32 ', label: 'International productions', detail: '13 Olympic Games, 6 Super Bowls, 3 FIFA World Cups, 3 Rugby World Cups · 30 countries.' },
 ];
 
@@ -243,17 +242,49 @@ export const partnerLogos: PartnerLogo[] = [
 ];
 
 /* ---- Four Elements — One Mission ---- */
+export type ElementId = 'air' | 'water' | 'fire' | 'earth';
+
 export interface ElementBox {
-  glyph: string;
+  id: ElementId;
   name: string;
   description: string;
+  longDescription: string;
+  img: string;
 }
 
 export const elements: ElementBox[] = [
-  { glyph: '◎', name: 'Air', description: 'Ancestral intelligence in the age of artificial intelligence.' },
-  { glyph: '▢', name: 'Earth', description: 'Personal wellness and the evolution of consciousness.' },
-  { glyph: '△', name: 'Fire', description: 'Regenerative economies and nature finance.' },
-  { glyph: '▽', name: 'Water', description: 'Indigenous spirituality and the planetary polycrisis.' },
+  {
+    id: 'air',
+    name: 'Air',
+    description: 'Ancestral intelligence in the age of artificial intelligence.',
+    longDescription:
+      'Explore how Indigenous knowledge systems — refined over millennia — can guide the development and deployment of artificial intelligence. Sessions examine ancestral intelligence as a living counterpart to machine intelligence, asking how we might weave both into a shared path forward.',
+    img: '/assets/elements/air.webp',
+  },
+  {
+    id: 'water',
+    name: 'Water',
+    description: 'Indigenous spirituality and the planetary polycrisis.',
+    longDescription:
+      'Listen to the spiritual teachings of Original Peoples as they respond to climate collapse, biodiversity loss, and the converging crises of our time. This element holds ceremony, prayer, and the sacred relationship between humanity and Water.',
+    img: '/assets/elements/water.webp',
+  },
+  {
+    id: 'fire',
+    name: 'Fire',
+    description: 'Regenerative economies and nature finance.',
+    longDescription:
+      'Catalyze capital flows toward regeneration. Discussions and workshops on nature finance, circular economies, and the economic architectures that can shift us from extraction to mutual benefit with the living world.',
+    img: '/assets/elements/fire.webp',
+  },
+  {
+    id: 'earth',
+    name: 'Earth',
+    description: 'Personal wellness and the evolution of consciousness.',
+    longDescription:
+      'Ground in practices that reconnect body, mind, and spirit. From ceremonial healing to contemplative inquiry, this track invites leaders to tend their inner landscape — the foundation from which planetary stewardship grows.',
+    img: '/assets/elements/earth.webp',
+  },
 ];
 
 /* ---- §07 Founders Circle: 14 members + 1 open seat on a single polar
@@ -286,7 +317,7 @@ const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?
   { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.webp', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
   { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.webp', linkedin: 'https://www.linkedin.com/in/renmenon/' },
   { name: 'Bita Zahedi Majd', role: 'A voice for the rights of Nature', img: '/assets/people/bita-zahedi-majd.webp', linkedin: 'https://www.linkedin.com/in/bita-zahedi-majd-3a4b46192' },
-  { open: true },
+  { name: 'Anka Amaru', role: 'Founders Circle steward', img: '/assets/people/anka.webp' },
 ];
 
 export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
@@ -302,16 +333,27 @@ export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
 
 export const founders = placeFounders();
 
-/* ---- §06 Invitation: the six-step entry ceremony ---- */
+/* ---- §06 Invitation: the five-step entry ceremony along the river path ---- */
 export interface Step {
   n: string;
   label: string;
 }
 
-export const steps: Step[] = [
-  { n: '01', label: 'Personal invitation or nomination' },
-  { n: '02', label: 'Application to attend or to speak' },
-  { n: '03', label: 'A private connection call' },
-  { n: '04', label: 'Confirmation & entry to the guest channel' },
-  { n: '05', label: 'Arrival of changemakers at the land' },
+export interface PathStep extends Step {
+  /** Vertical position along the river (% of path container height). */
+  top: number;
+  /** Which side of the river the label sits on. */
+  side: 'left' | 'right';
+  /** Extra horizontal push away from the river (% of path width). */
+  offset?: number;
+}
+
+export const RIVER_PATH_SRC = '/assets/img/river-path.webp';
+
+export const steps: PathStep[] = [
+  { n: '01', label: 'Personal invitation or nomination', top: 8, side: 'right' },
+  { n: '02', label: 'Application to attend or to speak', top: 24, side: 'left', offset: 10 },
+  { n: '03', label: 'A private interview call', top: 48, side: 'right' },
+  { n: '04', label: 'Confirmation & entry to the guest channel', top: 68, side: 'left' },
+  { n: '05', label: 'Arrival of changemakers at the land', top: 88, side: 'right', offset: 10 },
 ];

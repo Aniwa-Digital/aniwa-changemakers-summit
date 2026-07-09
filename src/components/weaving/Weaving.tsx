@@ -91,34 +91,9 @@ export function Weaving() {
         padding: '110px 40px 96px',
       }}
     >
-      <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
-        <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
-          A Unifying Mission
-        </div>
-        <h2 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: '2.91rem', margin: '18px 0 0' }}>
-          Today&rsquo;s leaders don&rsquo;t need another event.
-          <br />
-          We need the truths that will guide us.
-        </h2>
-        <p
-          className="bd"
-          style={{
-            color: 'rgba(46,40,32,0.72)',
-            fontFamily: 'var(--font-display)',
-            fontSize: '1.5rem',
-            lineHeight: 1.42,
-            margin: '20px auto 0',
-            maxWidth: 680,
-          }}
-        >
-          Calling forth 100 Planetary Leaders. Charting the map from an extractive paradigm of destruction to a
-          regenerative destiny of mutual benefit. Weaving the Way forward together.
-        </p>
-      </div>
-
-      <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', margin: '86px auto 0' }}>
+      <div data-reveal="" style={{ position: 'relative', zIndex: 2, textAlign: 'center', margin: '0 auto' }}>
         <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: 'clamp(2.4rem, 5.2vw, 3.6rem)', margin: 0 }}>
-          The Fellowship of Changemakers
+          A Convergence of Changemakers
         </h3>
         <p className="bd" style={{ color: 'rgba(46,40,32,0.55)', fontSize: '0.9rem', margin: '14px 0 0', letterSpacing: '0.04em' }}>
           Meet the circle — select a portrait to learn more.

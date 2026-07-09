@@ -57,9 +57,9 @@ describe('helix path geometry', () => {
 });
 
 describe('founders ring placement', () => {
-  test('has 14 members and exactly one open seat', () => {
+  test('has 15 members', () => {
     expect(founders).toHaveLength(15);
-    expect(founders.filter((f) => f.open)).toHaveLength(1);
+    expect(founders.filter((f) => f.open)).toHaveLength(0);
   });
 
   test('places every seat on a circle of the given radius', () => {

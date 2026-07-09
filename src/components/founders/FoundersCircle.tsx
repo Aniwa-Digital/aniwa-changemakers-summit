@@ -55,7 +55,7 @@ export function FoundersCircle() {
           The Founders Circle is the intimate circle of stewards who make the Summit possible — collaborators whose
           contributions, reach, and vision carry the gathering from calling to reality, and whose stewardship sustains
           the Huya Aniwa Foundation&rsquo;s work beyond it. The Founders convene the fire; the Fellowship gathers
-          around it. One seat remains open.
+          around it.
         </p>
       </div>
 

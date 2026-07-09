@@ -2,21 +2,20 @@ import { lazy, Suspense } from 'react';
 
 const CosmicScene = lazy(() => import('./CosmicScene'));
 
-/* §00 The Prophecy — 300vh sticky cinematic. Three acts of serif-italic
-   prophecy copy cross-fade with scroll (driven by scroll-choreography's
-   cineProgression). The three.js starfield/beam renders opaque black inside a
-   mix-blend-mode:screen wrapper so only light adds over the photo. */
+/* §00 The Prophecy — sticky cinematic. Serif-italic prophecy copy cross-fades
+   with scroll (driven by scroll-choreography's cineProgression). Sits on a
+   beige field; the land photo fades in and the copy reads ink-on-light. After
+   "THIS TIME HAS ARRIVED" the scene fades to dark, the cosmic starfield fades
+   in, and — while that cosmic stage stays pinned — the "Calling forth 100
+   Planetary Leaders" copy scrolls up into frame over it. */
 export function Prophecy() {
   return (
-    <section id="prophecy" style={{ position: 'relative', height: '300vh', background: '#2A231C' }}>
+    <section id="prophecy" style={{ position: 'relative', height: '520vh', background: 'var(--aniwa-cream)' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden' }}>
         <img
           data-cine-bg=""
-          src="/assets/img/hero-patagonia-clean.jpg"
-          srcSet="/assets/img/hero-patagonia-clean-760.jpg 760w, /assets/img/hero-patagonia-clean.jpg 1264w"
+          src="/assets/img/land.webp"
           sizes="100vw"
-          width={1264}
-          height={848}
           loading="lazy"
           decoding="async"
           alt=""
@@ -26,59 +25,23 @@ export function Prophecy() {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            opacity: 0.5,
-            transformOrigin: 'center',
-            willChange: 'transform',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'radial-gradient(ellipse at 50% 55%, transparent 0%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.9) 100%)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: '66%',
-            background: 'linear-gradient(to top, rgba(42,35,28,0.9) 0%, rgba(42,35,28,0.2) 50%, transparent 100%)',
-          }}
-        />
-        <div
-          data-cine-ember=""
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: '50%',
-            pointerEvents: 'none',
             opacity: 0,
-            background:
-              'radial-gradient(ellipse at 50% 100%, color-mix(in oklab, var(--aniwa-terracotta) 45%, transparent), transparent 60%)',
+            transformOrigin: 'center',
+            willChange: 'opacity',
           }}
         />
         <div
+          data-cine-scrim=""
+          aria-hidden="true"
           style={{
             position: 'absolute',
             inset: 0,
+            zIndex: 1,
+            opacity: 0,
             pointerEvents: 'none',
-            opacity: 0.06,
-            backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)',
-            backgroundSize: '3px 3px',
-            mixBlendMode: 'overlay',
+            background: 'rgba(255,255,255,0.25)',
           }}
         />
-
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', mixBlendMode: 'screen' }}>
-          <Suspense fallback={null}>
-            <CosmicScene />
-          </Suspense>
-        </div>
 
         <div
           data-cine-act="0"
@@ -94,7 +57,7 @@ export function Prophecy() {
           }}
         >
           <div style={{ maxWidth: 780 }}>
-            <p className="myth" style={{ color: '#F4F1EB', fontSize: 'clamp(1.275rem, 3vw, 2.475rem)', lineHeight: 1.32 }}>
+            <p className="myth" style={{ color: 'var(--ink-on-light)', fontSize: 'clamp(1.275rem, 3vw, 2.475rem)', lineHeight: 1.32 }}>
               For thousands of years,
               <br />
               The Original Peoples of the Earth
@@ -103,10 +66,10 @@ export function Prophecy() {
               <strong style={{ fontWeight: 600, color: 'var(--aniwa-gold)' }}>time.</strong>
             </p>
             <div className="cue" style={{ marginTop: 46, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9 }}>
-              <span className="eye" style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.4)' }}>
+              <span className="eye" style={{ fontSize: '0.58rem', color: 'rgba(0,0,0,0.45)' }}>
                 Scroll
               </span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.6" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.55)" strokeWidth="1.6" aria-hidden="true">
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </div>
@@ -130,21 +93,20 @@ export function Prophecy() {
           <p
             className="myth"
             style={{
-              color: '#fff',
+              color: 'var(--ink-on-light)',
               fontWeight: 600,
               fontSize: 'clamp(1.25rem, 2.6vw, 2.05rem)',
               lineHeight: 1.5,
               maxWidth: 780,
-              textShadow: '0 0 40px rgba(255,255,255,0.32)',
             }}
           >
             A time when the people of the North&nbsp;
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.72)' }}>— of mind, of structure, of technology —</span>
+            <span style={{ color: 'rgba(0,0,0,0.55)' }}>— of mind, of structure, of technology —</span>
             <br />
             would meet around the same fire as the people of the South&nbsp;
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.72)' }}>— of heart, of spirit, of land —</span>
+            <span style={{ color: 'rgba(0,0,0,0.55)' }}>— of heart, of spirit, of land —</span>
           </p>
         </div>
 
@@ -165,12 +127,11 @@ export function Prophecy() {
           <p
             className="myth"
             style={{
-              color: '#F4F1EB',
+              color: 'var(--ink-on-light)',
               fontWeight: 500,
               fontSize: 'clamp(1.5rem, 2.9vw, 2.31rem)',
               lineHeight: 1.5,
               maxWidth: 780,
-              textShadow: '0 0 40px rgba(255,255,255,0.32)',
             }}
           >
             Converging the strengths of opposing paradigms
@@ -198,17 +159,114 @@ export function Prophecy() {
           <h2
             className="disp"
             style={{
-              color: '#F4F1EB',
+              color: 'var(--ink-on-light)',
               fontWeight: 400,
               letterSpacing: '0.06em',
               lineHeight: 1.04,
               fontSize: 'clamp(1.9rem, 3.6vw, 3rem)',
-              textShadow: '0 0 30px rgba(184,148,92,0.55), 0 0 60px rgba(184,148,92,0.28)',
               margin: 0,
             }}
           >
             THIS TIME HAS ARRIVED
           </h2>
+        </div>
+
+        {/* End-of-prophecy transition: after "THIS TIME HAS ARRIVED" the photo
+            expands and the scene fades to solid dark. */}
+        <div
+          data-cine-dark=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 3,
+            opacity: 0,
+            pointerEvents: 'none',
+            background: '#14100B',
+          }}
+        />
+
+        {/* Cosmic starfield fades in over the darkness and stays pinned in this
+            sticky stage while the copy below scrolls up over it. */}
+        <div
+          data-cine-cosmic=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 4,
+            opacity: 0,
+            pointerEvents: 'none',
+            mixBlendMode: 'screen',
+          }}
+        >
+          <Suspense fallback={null}>
+            <CosmicScene />
+          </Suspense>
+        </div>
+
+        {/* Outro: wash the cosmic/dark background back to bone; sits above the
+            cosmos but below the copy so the text stays readable on top. */}
+        <div
+          data-cine-outro=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 4,
+            opacity: 0,
+            pointerEvents: 'none',
+            background: 'var(--aniwa-bone)',
+          }}
+        />
+
+        {/* "Calling forth" copy scrolls up into frame over the pinned cosmos. */}
+        <div
+          data-cine-act="4"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 5,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0 40px',
+            textAlign: 'center',
+            opacity: 0,
+            willChange: 'opacity, transform',
+          }}
+        >
+          <div style={{ maxWidth: 880, margin: '0 auto' }}>
+            <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
+              A Unifying Mission
+            </div>
+            <h2
+              className="disp"
+              style={{
+                color: 'var(--ink-on-light)',
+                fontSize: '2.91rem',
+                lineHeight: 1.14,
+                margin: '18px 0 0',
+              }}
+            >
+              Calling forth 100 Planetary Leaders.
+            </h2>
+            <p
+              className="bd"
+              style={{
+                color: 'rgba(0,0,0,0.75)',
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.5rem',
+                lineHeight: 1.42,
+                margin: '26px auto 0',
+                maxWidth: 680,
+              }}
+            >
+              Today&rsquo;s leaders don&rsquo;t need another event. We need the truths that will guide us. Charting the
+              map from an extractive paradigm of destruction to a regenerative destiny of mutual benefit. Weaving the
+              Way forward together.
+            </p>
+          </div>
         </div>
 
         <div
@@ -225,9 +283,9 @@ export function Prophecy() {
           }}
         >
           <span style={{ display: 'block', height: 1, width: 40, background: 'rgba(160,74,42,0.8)', transition: 'width .6s, background .6s' }} />
-          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(255,255,255,0.2)', transition: 'width .6s, background .6s' }} />
-          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(255,255,255,0.2)', transition: 'width .6s, background .6s' }} />
-          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(255,255,255,0.2)', transition: 'width .6s, background .6s' }} />
+          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(0,0,0,0.2)', transition: 'width .6s, background .6s' }} />
+          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(0,0,0,0.2)', transition: 'width .6s, background .6s' }} />
+          <span style={{ display: 'block', height: 1, width: 24, background: 'rgba(0,0,0,0.2)', transition: 'width .6s, background .6s' }} />
         </div>
       </div>
     </section>

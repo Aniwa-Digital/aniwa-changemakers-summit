@@ -61,10 +61,10 @@
   --card-inner-dark: #2A231C; /* day-card inner ground */
 
   /* ---- Families ---- */
-  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Averia Serif Libre', ui-serif, Georgia, serif;
+  --font-sans: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* ---- Display scale (Cormorant) ---- */
+  /* ---- Display scale (Averia Serif Libre) ---- */
   --display-2xl: clamp(3.5rem, 8vw, 7rem);
   --display-xl: clamp(2.75rem, 6vw, 4.5rem);
   --display-lg: clamp(2rem, 4vw, 3rem);

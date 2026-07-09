@@ -5,8 +5,8 @@ import { Weaving } from './components/weaving/Weaving';
 import { Room } from './components/room/Room';
 import { Days } from './components/days/Days';
 import { FoundersCircle } from './components/founders/FoundersCircle';
-import { LoginModal, type LoginProvider } from './components/founders/LoginModal';
 import { Invitation } from './components/invitation/Invitation';
+import { InviteCodeModal } from './components/invitation/InviteCodeModal';
 import { Closing } from './components/closing/Closing';
 import { RegisterPage } from './components/register/RegisterPage';
 import { ApplyPage } from './components/register/ApplyPage';
@@ -27,8 +27,7 @@ function currentRoute(): 'register' | 'apply' | 'codes' | 'home' {
 
 export default function App() {
   const [route, setRoute] = useState(currentRoute);
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [loginProvider, setLoginProvider] = useState<LoginProvider | null>(null);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   useEffect(() => {
     const onHash = () => {
@@ -53,26 +52,16 @@ export default function App() {
   return (
     <div style={{ position: 'relative', background: 'var(--ground-night)', overflowX: 'clip' }}>
       <main>
-        <Hero
-          onLoginOpen={() => {
-            setLoginProvider(null);
-            setLoginOpen(true);
-          }}
-        />
+        <Hero onInviteOpen={() => setInviteOpen(true)} />
         <Prophecy />
         <Weaving />
         <Room />
         <Days />
         <FoundersCircle />
-        <Invitation />
+        <Invitation onInviteOpen={() => setInviteOpen(true)} />
       </main>
       <Closing />
-      <LoginModal
-        open={loginOpen}
-        provider={loginProvider}
-        onClose={() => setLoginOpen(false)}
-        onProvider={setLoginProvider}
-      />
+      <InviteCodeModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
     </div>
   );
 }

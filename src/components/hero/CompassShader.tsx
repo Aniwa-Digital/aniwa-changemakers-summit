@@ -1,7 +1,6 @@
-// Hero WebGL2 shader: 18 layered rainbow arcs sweep in a circle and reveal the
-// cream compass line-art, then fade out leaving the compass, which spins with
-// scroll (window.scrollY on purpose — upright at page top). Ported from the
-// handoff's CompassShader.jsx.
+// Hero WebGL2 shader: 9 layered arcs sweep in a circle as a soft full-spectrum
+// rainbow glow (desaturated, gently warmed toward orange). The compass line-art
+// lives in a separate <CompassOverlay/> component.
 import { useEffect, useRef } from 'react';
 import { dprCap, observeVisibility } from '../../lib/render-budget';
 
@@ -13,9 +12,6 @@ in vec2 v_uv;
 
 uniform vec3  iResolution;   // (width, height, dpr)
 uniform float iTime;         // seconds
-uniform sampler2D iCompass;  // compass line-art (alpha = lines)
-uniform float iCompassAspect;// compass width / height
-uniform float iRotate;       // scroll-driven compass rotation (radians)
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
@@ -25,8 +21,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
     vec2 p = fragCoord - r * 0.5;
 
-    // 18 layered arcs sweeping in a circle
-    for (float i, a; i++ < 18.0; )
+    // 9 layered arcs sweeping in a circle
+    for (float i, a; i++ < 9.0; )
     {
         a = (i * i) / 320.0 - length(p) / r.y;
         float denom = max(a, -a * 3.0) + 2.0 / r.y;
@@ -37,47 +33,21 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
         a = atan(p.y, p.x) + a + i * i;
         float sm = smoothstep(edge0, edge1, cos(a));
 
-        o += 0.022 / denom * sm * (1.2 + sin(a + i + vec4(0.0, 2.0, 4.0, 0.0)));
+        o += 0.058 / denom * sm * (1.2 + sin(a + i + vec4(0.0, 2.0, 4.0, 0.0)));
     }
 
     o = tanh(o);
+    o.rgb = pow(max(o.rgb, vec3(0.0)), vec3(0.84)) * 1.05;
 
-    // ---- reveal the compass with the circular motion ----
-    vec2 uvc = (fragCoord - 0.5 * r) / r.y;
-    float compassH = 0.972;                    // compass height in y-normalized units
-    float shiftY = 0.07 * compassH;            // hub on the canvas centre
-
-    // scroll-driven spin about the compass's TRUE centre (hub at tex y=0.57)
-    vec2 rc = uvc - vec2(0.0, shiftY);
-    const float COMPASS_CY = 0.57;
-    vec2 pivot = vec2(0.0, (0.5 - COMPASS_CY) * compassH);
-    vec2 d2 = rc - pivot;
-    float cr = cos(iRotate), sr = sin(iRotate);
-    d2 = vec2(d2.x * cr - d2.y * sr, d2.x * sr + d2.y * cr);
-    rc = pivot + d2;
-    vec2 tex;
-    tex.x = rc.x / (compassH * iCompassAspect) + 0.5;
-    tex.y = 0.5 - rc.y / compassH;             // flip Y
-    float ca = 0.0;
-    if (tex.x > 0.0 && tex.x < 1.0 && tex.y > 0.0 && tex.y < 1.0) {
-        ca = texture(iCompass, tex).a;
-    }
-
+    // Soft full-spectrum rainbow from the arc loop, desaturated with a gentle
+    // orange warmth — closer to the original look, just muted and slightly warmer.
     float lum = dot(o.rgb, vec3(0.3333));
-    float reveal = smoothstep(0.03, 0.42, lum);
-    vec3 cream = vec3(0.957, 0.945, 0.855);
+    vec3 col = mix(vec3(lum), o.rgb, 0.68);
+    col = mix(col, vec3(0.96, 0.70, 0.44), 0.10 * clamp(lum, 0.0, 1.0));
+    float swirl = pow(clamp(lum, 0.0, 1.0), 0.78) * 1.15;
+    float swirlA = clamp(swirl * 0.58, 0.0, 0.58);
 
-    float swirlFade = 1.0 - smoothstep(2.0, 4.0, t);   // backdrop 1 -> 0
-    float settle    = smoothstep(1.5, 4.0, t);         // compass locks fully in
-    float compassLit = mix(reveal, 1.0, settle);
-
-    float op = 0.25;                             // compass opacity
-    vec3 earth = vec3(0.114, 0.090, 0.071);      // warm umber base (#1D1712)
-    vec3 col = earth + o.rgb * 0.40 * swirlFade;
-    col += cream * ca * (0.07 + 0.85 * compassLit) * op;
-    col += o.rgb * ca * reveal * 1.35 * op * swirlFade;
-
-    fragColor = vec4(col, 1.0);
+    fragColor = vec4(col, swirlA);
 }
 
 void main(){
@@ -95,10 +65,6 @@ void main(){
 }
 `;
 
-const SPIN_RATE = 0.0032; // radians per scrolled pixel
-const FALLBACK_ASPECT = 0.611; // 547.73 / 896.57
-const TEXTURE_WIDTH = 768;
-
 function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLShader | null {
   const sh = gl.createShader(type);
   if (!sh) return null;
@@ -112,18 +78,17 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLSh
   return sh;
 }
 
-interface CompassShaderProps {
-  compassSrc?: string;
-}
-
-export default function CompassShader({ compassSrc = '/assets/compass/compass.svg' }: CompassShaderProps) {
+export default function CompassShader() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const gl = canvas.getContext('webgl2', { premultipliedAlpha: false });
+    const gl = canvas.getContext('webgl2', { premultipliedAlpha: false, alpha: true });
     if (!gl) return;
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     let disposed = false;
     let raf = 0;
@@ -152,38 +117,6 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
 
     const uResolution = gl.getUniformLocation(program, 'iResolution');
     const uTime = gl.getUniformLocation(program, 'iTime');
-    const uCompass = gl.getUniformLocation(program, 'iCompass');
-    const uCompassAspect = gl.getUniformLocation(program, 'iCompassAspect');
-    const uRotate = gl.getUniformLocation(program, 'iRotate');
-
-    // ---- compass line-art texture (alpha is the reveal mask) ----
-    let compassAspect = FALLBACK_ASPECT;
-    const tex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      if (disposed) return;
-      compassAspect = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : compassAspect;
-      const cw = TEXTURE_WIDTH;
-      const ch = Math.round(cw / compassAspect);
-      const oc = document.createElement('canvas');
-      oc.width = cw;
-      oc.height = ch;
-      const octx = oc.getContext('2d');
-      if (!octx) return;
-      octx.drawImage(img, 0, 0, cw, ch);
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, oc);
-    };
-    img.src = compassSrc;
 
     const getDpr = () => Math.max(1, Math.min(dprCap(), window.devicePixelRatio || 1));
 
@@ -227,18 +160,12 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
       }
       gl.useProgram(program);
       if (resizeScheduled) applySize();
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
       const t = (now - start) / 1000;
 
       gl.uniform3f(uResolution, canvas.width, canvas.height, getDpr());
       gl.uniform1f(uTime, t);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.uniform1i(uCompass, 0);
-      gl.uniform1f(uCompassAspect, compassAspect);
-      // Rotation from scrollY (NOT rect.top) so the canvas's CSS top offset
-      // never seeds a crooked initial angle.
-      const sy = window.scrollY || window.pageYOffset || 0;
-      gl.uniform1f(uRotate, Math.max(0, sy) * SPIN_RATE);
 
       gl.bindVertexArray(vao);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -253,10 +180,9 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
       ro.disconnect();
       gl.deleteBuffer(vbo);
       gl.deleteVertexArray(vao);
-      gl.deleteTexture(tex);
       gl.deleteProgram(program);
     };
-  }, [compassSrc]);
+  }, []);
 
   return (
     <div style={{ position: 'absolute', inset: 0 }}>
