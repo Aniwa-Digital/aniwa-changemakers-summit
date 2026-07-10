@@ -23,9 +23,11 @@ export function Days() {
         style={{ position: 'relative', margin: '0 -40px 78px', minHeight: '35vh', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}
       >
         <img
-          src="/assets/img/land.jpg"
+          src="/assets/img/land.webp"
           alt=""
           className="land-band-img"
+          loading="lazy"
+          decoding="async"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
         <div

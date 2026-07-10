@@ -168,8 +168,7 @@ img {
 .elements-backdrop {
   position: fixed;
   inset: 0;
-  /* Must sit ABOVE the diamond grid so outside clicks close reliably */
-  z-index: 60;
+  z-index: 61;
   border: none;
   background: rgba(14, 12, 10, 0.62);
   backdrop-filter: blur(4px);
@@ -219,9 +218,20 @@ img {
   grid-row: 3;
 }
 
-.elements-diamond--focused .element-slot:not(:has(.element-card--active)) {
+/* Air + water: same card size; icons slightly smaller */
+.element-slot--air .element-card__icon,
+.element-slot--water .element-card__icon {
+  width: min(58%, 142px);
+}
+
+.elements-diamond--focused .element-slot:not(.element-slot--open) {
   opacity: 0.22;
   filter: blur(1.5px);
+  pointer-events: none;
+}
+
+.element-slot--open {
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -240,19 +250,53 @@ img {
     height 0.65s var(--ease-cinematic),
     transform 0.65s var(--ease-cinematic),
     filter 0.45s var(--ease-cinematic);
+  --mx: 50%;
+  --my: 50%;
+  --tilt-x: 0;
+  --tilt-y: 0;
 }
 
-.element-card--active {
+/* Portaled open panel — flat layer above backdrop, no 3D compositing */
+.element-card--open {
   position: fixed;
   top: 50%;
   left: 50%;
   width: min(420px, 88vw);
   height: min(520px, 74vh);
   aspect-ratio: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
   transform: translate(-50%, -50%);
-  /* Above the click-catcher backdrop */
-  z-index: 61;
-  filter: drop-shadow(0 28px 64px rgba(0, 0, 0, 0.55));
+  z-index: 62;
+  filter: none;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55);
+  animation: elements-fade-in 0.35s var(--ease-cinematic);
+}
+
+.element-card--open .element-card__label,
+.element-card--open .element-card__detail,
+.element-card--open .element-card__hint {
+  transform: none;
+}
+
+.element-card__panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: clamp(26px, 4.5vw, 34px);
+  border-radius: 18px;
+  border: 1px solid rgba(244, 241, 235, 0.12);
+  background: #181410;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 18px 44px -20px rgba(0, 0, 0, 0.65);
+  overflow: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 .element-card__flipper {
@@ -261,11 +305,6 @@ img {
   height: 100%;
   transform-style: preserve-3d;
   transition: transform 0.75s var(--ease-cinematic);
-  will-change: transform;
-}
-
-.element-card--active .element-card__flipper {
-  transform: rotateY(180deg);
 }
 
 .element-card__face {
@@ -287,32 +326,21 @@ img {
   transition:
     border-color 0.45s var(--ease-cinematic),
     box-shadow 0.45s var(--ease-cinematic);
-  will-change: transform;
 }
 
-/* Keep typography crisp during 3D tilt */
-.element-card__icon-wrap,
-.element-card__copy,
-.element-card__label,
-.element-card__title,
-.element-card__detail,
-.element-card__hint {
+/* Keep typography crisp during idle 3D tilt (grid cards only) */
+.element-card:not(.element-card--open) .element-card__icon-wrap,
+.element-card:not(.element-card--open) .element-card__copy,
+.element-card:not(.element-card--open) .element-card__label,
+.element-card:not(.element-card--open) .element-card__title,
+.element-card:not(.element-card--open) .element-card__detail,
+.element-card:not(.element-card--open) .element-card__hint {
   transform: translateZ(26px);
-  will-change: transform;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-.element-card__icon {
+.element-card:not(.element-card--open) .element-card__icon {
   transform: translateZ(34px);
-}
-
-/* Cursor-following highlight + 3D depth (variables set from JS) */
-.element-card {
-  --mx: 50%;
-  --my: 50%;
-  --tilt-x: 0;
-  --tilt-y: 0;
 }
 
 .element-card__face::before {
@@ -328,13 +356,13 @@ img {
   mix-blend-mode: screen;
 }
 
-.element-card:not(.element-card--active):hover .element-card__face::before {
+.element-card:not(.element-card--open):hover .element-card__face::before {
   opacity: 1;
 }
 
 /* (removed) spinning corner flare */
 
-.element-card:not(.element-card--active):hover .element-card__face {
+.element-card:not(.element-card--open):hover .element-card__face {
   border-color: rgba(160, 74, 42, 0.55);
   box-shadow:
     inset 0 1px 0 rgba(160, 74, 42, 0.45),
@@ -344,11 +372,11 @@ img {
 }
 
 /* 3D hover: tilt + lift (uses .elements-diamond perspective) */
-.element-card:not(.element-card--active):hover {
+.element-card:not(.element-card--open):hover {
   transform: translateY(-6px);
 }
 
-.element-card:not(.element-card--active):hover .element-card__flipper {
+.element-card:not(.element-card--open):hover .element-card__flipper {
   transform: rotateX(calc(var(--tilt-y, 0) * -10deg)) rotateY(calc(var(--tilt-x, 0) * 12deg)) translateZ(0);
 }
 
@@ -451,14 +479,15 @@ img {
   .element-slot--air {
     grid-column: 1 / -1;
     grid-row: 1;
-    width: calc(45% - 8px);
+    width: 100%;
+    max-width: calc(50% - 8px);
     justify-self: center;
   }
   .element-slot--water {
     grid-column: 1;
     grid-row: 2;
-    width: 88%;
-    justify-self: center;
+    width: 100%;
+    justify-self: stretch;
   }
   .element-slot--fire {
     grid-column: 2;
@@ -468,7 +497,8 @@ img {
   .element-slot--earth {
     grid-column: 1 / -1;
     grid-row: 3;
-    width: calc(50% - 8px);
+    width: 100%;
+    max-width: calc(50% - 8px);
     justify-self: center;
   }
 
@@ -586,67 +616,6 @@ img {
   .purpose-path {
     width: min(100%, 440px) !important;
   }
-  /* Founders ring → grid on narrow screens */
-  .founders-ring-wrap {
-    display: none !important;
-  }
-  .founders-mobile-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px 14px;
-    max-width: 420px;
-    margin: 36px auto 0;
-    position: relative;
-    z-index: 2;
-  }
-  .founders-mobile-seat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-width: 0;
-    background: none;
-    border: none;
-    padding: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-  }
-  .founders-mobile-portrait {
-    width: 64px !important;
-    height: 64px !important;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid rgba(160, 74, 42, 0.55);
-    box-shadow: 0 10px 26px -12px rgba(160, 74, 42, 0.55);
-  }
-  .founders-mobile-name {
-    color: var(--ink-on-light);
-    font-size: 0.68rem !important;
-    margin-top: 8px !important;
-    line-height: 1.2 !important;
-    word-break: break-word;
-  }
-  .founders-mobile-role {
-    color: rgba(46, 40, 32, 0.55);
-    font-size: 0.58rem !important;
-    margin-top: 2px !important;
-    line-height: 1.25 !important;
-    display: block !important;
-  }
-  .founders-mobile-open {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: 1.5px dashed rgba(46, 40, 32, 0.32);
-    color: var(--aniwa-terracotta);
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    line-height: 1;
-  }
   #weaving h2.disp {
     font-size: 2.1rem !important;
   }
@@ -668,6 +637,29 @@ img {
   }
   .helix-seat .bd {
     font-size: 0.66rem !important;
+  }
+  /* Founders Circle (static desktop ring): scale down portraits and labels on tablet */
+  .founders-ring-wrap--static .founder-portrait {
+    width: 66px !important;
+    height: 66px !important;
+  }
+  .founders-ring-wrap--static .founder-seat {
+    width: 92px !important;
+  }
+  .founders-ring-wrap--static .founder-seat .disp {
+    font-size: 0.74rem !important;
+    margin-top: 7px !important;
+  }
+  .founders-ring-wrap--static .founder-seat .bd {
+    font-size: 0.54rem !important;
+  }
+  .founders-ring-wrap--static .open-seat {
+    width: 58px !important;
+    height: 58px !important;
+    font-size: 1.35rem !important;
+  }
+  .founders-ring-wrap--static .founders-spark {
+    font-size: 2rem !important;
   }
 }
 
@@ -778,24 +770,38 @@ img {
     line-height: 1.2 !important;
   }
 
-  /* Founders ring desktop hidden above; legacy ring shrink rules removed */
-  .founder-seat {
-    width: 64px !important;
+  /* Founders Circle (static ring only — ≤560px uses draggable ring) */
+  .founders-ring-wrap--static .founder-portrait {
+    width: 54px !important;
+    height: 54px !important;
+    border-width: 1.5px !important;
   }
-  .founder-portrait {
-    width: 44px !important;
-    height: 44px !important;
+  .founders-ring-wrap--static .founder-seat {
+    width: 72px !important;
   }
-  .founder-seat .disp {
-    font-size: 0.62rem !important;
+  .founders-ring-wrap--static .founder-seat .disp {
+    font-size: 0.58rem !important;
+    margin-top: 5px !important;
+    line-height: 1.08 !important;
   }
-  .founder-seat .bd {
-    display: none !important;
+  .founders-ring-wrap--static .founder-seat .bd {
+    font-size: 0.46rem !important;
+    margin-top: 1px !important;
+    line-height: 1.12 !important;
   }
-  .open-seat {
-    width: 44px !important;
-    height: 44px !important;
-    font-size: 1.2rem !important;
+  .founders-ring-wrap--static .open-seat {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 1.15rem !important;
+  }
+  .founders-ring-wrap--static .founders-spark {
+    font-size: 1.6rem !important;
+  }
+  .founders-ring-wrap--static [data-apply-compass] {
+    width: 680px !important;
+    height: 680px !important;
+    margin-left: -340px !important;
+    margin-top: -388px !important;
   }
 
   /* Closing: full-bleed fire on narrow screens */
@@ -858,10 +864,6 @@ img {
   line-height: 1;
   color: #f4f1eb;
   text-indent: 0.3em;
-}
-
-.founders-mobile-grid {
-  display: none;
 }
 
 /* §05 invitation — steps along the river path */
@@ -1003,5 +1005,295 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .helix-portrait-btn {
     transition: none;
+  }
+}
+
+/* ---- Founders Circle: draggable ring (mobile) ---- */
+.founders-interactive {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 52px auto 0;
+}
+.founders-interactive__hint {
+  text-align: center;
+  color: rgba(46, 40, 32, 0.42);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  margin: -20px 0 14px;
+}
+.founders-ring-stage {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 1;
+  margin-top: 40px;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: visible;
+}
+.founders-ring-stage--dragging {
+  touch-action: none;
+  cursor: grabbing;
+}
+.founders-ring-stage:active:not(.founders-ring-stage--dragging) {
+  cursor: grab;
+}
+.founders-ring-rotor {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.founders-ring-compass {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 995px;
+  height: 995px;
+  max-width: none;
+  margin-left: -497px;
+  margin-top: -569px;
+  transform-origin: 50% 57%;
+  opacity: 0.15;
+  filter: brightness(0);
+  pointer-events: none;
+  object-fit: contain;
+  z-index: 0;
+}
+.founders-ring-seat {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+.founders-ring-seat--active {
+  z-index: 4;
+}
+.founders-ring-seat__btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  transform-origin: center center;
+  touch-action: pan-y;
+}
+.founders-ring-stage--dragging .founders-ring-seat__btn,
+.founders-ring-stage--dragging .open-seat {
+  touch-action: none;
+}
+.founders-ring-seat .founder-portrait {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(160, 74, 42, 0.55);
+  box-shadow: 0 10px 26px -12px rgba(160, 74, 42, 0.55);
+  background: #efe7d3;
+  transition:
+    width 0.5s var(--ease-cinematic),
+    height 0.5s var(--ease-cinematic),
+    box-shadow 0.5s var(--ease-cinematic);
+}
+.founders-ring-seat .founder-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.founders-ring-seat--active .founder-portrait {
+  width: 80px;
+  height: 80px;
+  box-shadow: 0 16px 36px -10px rgba(160, 74, 42, 0.62), 0 0 32px rgba(160, 74, 42, 0.2);
+}
+.founders-ring-seat--dragging .founder-portrait {
+  transition-duration: 0.2s;
+}
+.founders-ring-rotor .founders-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: var(--aniwa-terracotta);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 1;
+  transform-origin: center center;
+}
+.founders-ring-rotor .open-seat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(46, 40, 32, 0.32);
+  background: transparent;
+  color: var(--aniwa-terracotta);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1;
+  transform-origin: center center;
+}
+
+.founders-detail-wrap {
+  width: 100%;
+}
+.founders-detail-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding-top: 56px;
+}
+.founders-detail-name-row .founders-detail__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+}
+.founders-nav__arrow {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(160, 74, 42, 0.35);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--aniwa-terracotta);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.25s var(--ease-cinematic),
+    border-color 0.25s var(--ease-cinematic),
+    transform 0.25s var(--ease-cinematic);
+}
+.founders-nav__arrow:hover,
+.founders-nav__arrow:focus-visible {
+  background: rgba(160, 74, 42, 0.12);
+  border-color: rgba(160, 74, 42, 0.55);
+  transform: scale(1.05);
+  outline: none;
+}
+
+.founders-detail {
+  text-align: center;
+  width: 100%;
+  padding: 10px 0 0;
+  min-height: 120px;
+}
+.founders-detail__name {
+  color: var(--ink-on-light);
+  font-size: 1.55rem;
+  line-height: 1.12;
+}
+.founders-detail__title {
+  color: var(--aniwa-terracotta);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  line-height: 1.45;
+  margin: 0 auto;
+  max-width: none;
+  text-transform: uppercase;
+}
+.founders-detail__bio {
+  color: rgba(46, 40, 32, 0.72);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 14px auto 0;
+  max-width: none;
+}
+.founders-detail__profile-link {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--aniwa-terracotta);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: color 0.25s var(--ease-cinematic), opacity 0.25s var(--ease-cinematic);
+}
+.founders-detail__profile-link:hover,
+.founders-detail__profile-link:focus-visible {
+  color: #8a3d22;
+  outline: none;
+}
+.founders-detail__link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--aniwa-terracotta);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(160, 74, 42, 0.35);
+}
+
+@keyframes founders-detail-text {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.founders-detail__inner {
+  animation: founders-detail-text 0.46s var(--ease-cinematic) both;
+}
+.founders-detail-name-row .founders-detail__name,
+.founders-detail__title,
+.founders-detail__bio,
+.founders-detail__profile-link,
+.founders-detail__link {
+  animation: founders-detail-text 0.46s var(--ease-cinematic) 0.06s both;
+}
+.founders-detail__inner--reduced {
+  animation: none;
+}
+.founders-detail__inner--reduced .founders-detail__title,
+.founders-detail__inner--reduced .founders-detail__bio,
+.founders-detail__inner--reduced .founders-detail__profile-link,
+.founders-detail__inner--reduced .founders-detail__link {
+  animation: none;
+}
+
+@media (max-width: 560px) {
+  .founders-ring-compass {
+    width: 680px;
+    height: 680px;
+    margin-left: -340px;
+    margin-top: -388px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .founders-ring-rotor {
+    transition: none !important;
+  }
+  .founders-ring-seat .founder-portrait {
+    transition: none;
+  }
+}
+
+/* Below-fold sections: skip paint/layout until near viewport (mobile). */
+@media (max-width: 768px) {
+  .lazy-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 80vh;
   }
 }

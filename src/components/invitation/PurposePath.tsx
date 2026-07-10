@@ -5,7 +5,7 @@ import { RIVER_PATH_SRC, steps } from '../../lib/content';
 export function PurposePath() {
   return (
     <div className="purpose-path" aria-label="Five steps to join the summit">
-      <img className="purpose-path__river" src={RIVER_PATH_SRC} alt="" aria-hidden decoding="async" />
+      <img className="purpose-path__river" src={RIVER_PATH_SRC} alt="" aria-hidden loading="lazy" decoding="async" />
 
       {steps.map((step, i) => (
         <div

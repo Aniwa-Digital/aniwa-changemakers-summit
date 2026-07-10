@@ -167,7 +167,7 @@ function drawWeave(reduce: boolean): void {
 function spinApplyCompass(reduce: boolean): void {
   const img = document.querySelector<HTMLElement>('[data-apply-compass]');
   const sec = document.getElementById('apply');
-  if (!img || !sec) return;
+  if (!img || !sec || img.closest('[data-drag-ring]')) return;
   const top = sec.getBoundingClientRect().top;
   const rot = reduce ? 0 : Math.max(0, -top) * SPIN_RATE;
   img.style.transform = `rotate(${rot.toFixed(4)}rad)`;

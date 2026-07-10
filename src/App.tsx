@@ -1,18 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Hero } from './components/hero/Hero';
-import { Prophecy } from './components/prophecy/Prophecy';
-import { Weaving } from './components/weaving/Weaving';
-import { Room } from './components/room/Room';
-import { Days } from './components/days/Days';
-import { FoundersCircle } from './components/founders/FoundersCircle';
-import { Invitation } from './components/invitation/Invitation';
-import { InviteCodeModal } from './components/invitation/InviteCodeModal';
-import { Closing } from './components/closing/Closing';
-import { RegisterPage } from './components/register/RegisterPage';
-import { ApplyPage } from './components/register/ApplyPage';
-import { AdminCodesPage } from './components/register/AdminCodesPage';
+import { Suspense, useEffect, useState } from 'react';
 import { useReveal } from './hooks/useReveal';
+import { lazyNamed } from './lib/lazy-named';
 import { startScrollChoreography } from './lib/scroll-choreography';
+import { HomeScroll } from './pages/HomeScroll';
+
+const RegisterPage = lazyNamed(() => import('./components/register/RegisterPage'), 'RegisterPage');
+const ApplyPage = lazyNamed(() => import('./components/register/ApplyPage'), 'ApplyPage');
+const AdminCodesPage = lazyNamed(() => import('./components/register/AdminCodesPage'), 'AdminCodesPage');
 
 /* Tiny hash router: '#/register' (invite-gated registration), '#/apply'
    (open application) and '#/codes' (team invite-code generator) render as
@@ -45,23 +39,33 @@ export default function App() {
     return startScrollChoreography();
   }, [route]);
 
-  if (route === 'register') return <RegisterPage />;
-  if (route === 'apply') return <ApplyPage />;
-  if (route === 'codes') return <AdminCodesPage />;
+  if (route === 'register') {
+    return (
+      <Suspense fallback={null}>
+        <RegisterPage />
+      </Suspense>
+    );
+  }
+  if (route === 'apply') {
+    return (
+      <Suspense fallback={null}>
+        <ApplyPage />
+      </Suspense>
+    );
+  }
+  if (route === 'codes') {
+    return (
+      <Suspense fallback={null}>
+        <AdminCodesPage />
+      </Suspense>
+    );
+  }
 
   return (
-    <div style={{ position: 'relative', background: 'var(--ground-night)', overflowX: 'clip' }}>
-      <main>
-        <Hero onInviteOpen={() => setInviteOpen(true)} />
-        <Prophecy />
-        <Weaving />
-        <Room />
-        <Days />
-        <FoundersCircle />
-        <Invitation onInviteOpen={() => setInviteOpen(true)} />
-      </main>
-      <Closing />
-      <InviteCodeModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
-    </div>
+    <HomeScroll
+      inviteOpen={inviteOpen}
+      onInviteOpen={() => setInviteOpen(true)}
+      onInviteClose={() => setInviteOpen(false)}
+    />
   );
 }

@@ -25,6 +25,8 @@ export function Closing() {
         <img
           src="/assets/img/day4-fire.jpg"
           alt=""
+          loading="lazy"
+          decoding="async"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #251F19 0%, #17110CEB)' }} />

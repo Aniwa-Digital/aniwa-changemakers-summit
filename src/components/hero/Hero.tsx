@@ -207,6 +207,8 @@ export function Hero({ onInviteOpen }: HeroProps) {
             alt="Aniwa"
             width={80}
             height={60}
+            fetchPriority="high"
+            decoding="async"
             style={{ height: 60, width: 'auto' }}
           />
         </div>

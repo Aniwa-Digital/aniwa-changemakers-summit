@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { elements, type ElementBox, type ElementId } from '../../lib/content';
 import { SacredGeometryBg } from './SacredGeometryBg';
 
@@ -42,20 +43,22 @@ function ElementCard({
   };
 
   return (
-    <div className={`element-slot ${slotClass[element.id]}`}>
+    <div className={`element-slot ${slotClass[element.id]}${active ? ' element-slot--open' : ''}`}>
       <button
         type="button"
-        className={`element-card${active ? ' element-card--active' : ''}`}
+        className="element-card"
         onClick={onToggle}
-        onPointerMove={active ? undefined : onPointerMove}
-        onPointerLeave={active ? undefined : onPointerLeave}
+        onPointerMove={onPointerMove}
+        onPointerLeave={onPointerLeave}
         aria-expanded={active}
-        aria-label={active ? `Close ${element.name}` : `Learn more about ${element.name}`}
+        aria-hidden={active}
+        tabIndex={active ? -1 : 0}
+        aria-label={active ? undefined : `Learn more about ${element.name}`}
       >
         <div className="element-card__flipper">
           <div className="element-card__face element-card__face--front">
             <div className="element-card__icon-wrap">
-              <img src={element.img} alt="" className="element-card__icon" />
+              <img src={element.img} alt="" className="element-card__icon" loading="lazy" decoding="async" />
             </div>
             <div className="element-card__copy">
               <span className="eye element-card__label">{element.name}</span>
@@ -73,9 +76,34 @@ function ElementCard({
   );
 }
 
+function ElementCardOverlay({
+  element,
+  onClose,
+}: {
+  element: ElementBox;
+  onClose: () => void;
+}) {
+  return createPortal(
+    <button
+      type="button"
+      className="element-card element-card--open"
+      onClick={onClose}
+      aria-label={`Close ${element.name}`}
+    >
+      <div className="element-card__panel">
+        <span className="eye element-card__label">{element.name}</span>
+        <p className="bd element-card__detail">{element.longDescription}</p>
+        <span className="element-card__hint">Tap to return</span>
+      </div>
+    </button>,
+    document.body,
+  );
+}
+
 /* Four elemental cards in a diamond — click to center and flip for the full description. */
 export function ElementCards() {
   const [activeId, setActiveId] = useState<ElementId | null>(null);
+  const activeElement = activeId ? elements.find((el) => el.id === activeId) : undefined;
 
   useEffect(() => {
     if (!activeId) return;
@@ -94,12 +122,15 @@ export function ElementCards() {
         <SacredGeometryBg />
       </div>
       {activeId && (
-        <button
-          type="button"
-          className="elements-backdrop"
-          aria-label="Close element card"
-          onClick={() => setActiveId(null)}
-        />
+        <>
+          <button
+            type="button"
+            className="elements-backdrop"
+            aria-label="Close element card"
+            onClick={() => setActiveId(null)}
+          />
+          {activeElement && <ElementCardOverlay element={activeElement} onClose={() => setActiveId(null)} />}
+        </>
       )}
       <div className={`elements-diamond${activeId ? ' elements-diamond--focused' : ''}`} data-active={activeId ?? undefined}>
         {elements.map((el) => (

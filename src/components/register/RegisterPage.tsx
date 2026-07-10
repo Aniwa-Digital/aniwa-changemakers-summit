@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { fnUrl } from '../../lib/functions';
-import { GIVEBUTTER_WIDGET_ID } from '../../lib/givebutter';
+import { GIVEBUTTER_WIDGET_ID, loadGivebutterScript } from '../../lib/givebutter';
 
 /* Registration — gated behind a valid invite code. After submitting, the
    participant selects a ticket via the embedded Givebutter widget. */
@@ -150,6 +150,11 @@ export function RegisterPage() {
 
     return () => window.clearTimeout(scrollTimer);
   }, [gate, registrantName]);
+
+  useEffect(() => {
+    if (gate !== 'ticket') return;
+    void loadGivebutterScript();
+  }, [gate]);
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
