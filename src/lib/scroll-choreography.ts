@@ -30,7 +30,19 @@ function viewportHeight(): number {
   return window.innerHeight || document.documentElement.clientHeight;
 }
 
-/* ---- §00 The Prophecy: four acts cross-fade through the 300vh pin ---- */
+function revealActInner(act: HTMLElement | null, p: number, start: number, end: number, reduce: boolean) {
+  if (!act) return;
+  const inner = act.querySelector<HTMLElement>('.prophecy-act__inner');
+  if (!inner) return;
+  if (reduce) {
+    inner.style.transform = 'translate3d(0, 0, 0)';
+    return;
+  }
+  const t = easeOutCubic(lerp(p, start, end));
+  inner.style.transform = `translate3d(0, ${((1 - t) * 32).toFixed(2)}px, 0)`;
+}
+
+/* ---- §00 The Prophecy: acts cross-fade through the pinned scroll runway ---- */
 function cineProgression(reduce: boolean): void {
   const cine = document.getElementById('prophecy');
   if (!cine) return;
@@ -54,7 +66,17 @@ function cineProgression(reduce: boolean): void {
   if (a0) a0.style.opacity = String(vis(p, -0.05, 0, 0.1, 0.14));
   if (a1) a1.style.opacity = String(vis(p, 0.14, 0.18, 0.24, 0.28));
   if (a2) a2.style.opacity = String(vis(p, 0.28, 0.32, 0.38, 0.42));
-  if (a3) a3.style.opacity = String(lerp(p, 0.42, 0.48));
+  // Act 3 must fully exit before act 4 ("Calling forth…") rises in — no overlap.
+  if (a3) {
+    const a3o = vis(p, 0.42, 0.48, 0.5, 0.58);
+    a3.style.opacity = String(a3o);
+    a3.style.visibility = a3o < 0.01 ? 'hidden' : 'visible';
+  }
+  revealActInner(a0, p, -0.05, 0.1, reduce);
+  revealActInner(a1, p, 0.14, 0.24, reduce);
+  revealActInner(a2, p, 0.28, 0.38, reduce);
+  revealActInner(a3, p, 0.42, 0.5, reduce);
+  revealActInner(a4, p, 0.64, 0.78, reduce);
   if (ember) ember.style.opacity = (lerp(p, 0.42, 0.5) * 0.55).toFixed(3);
   // Beige field slowly fades into the land photo as the section scrolls in;
   // the white scrim fades in with it so the empty top stays cream (matching the
@@ -76,8 +98,10 @@ function cineProgression(reduce: boolean): void {
   const cosmicIn = lerp(p, 0.54, 0.64);
   if (cosmic) cosmic.style.opacity = (cosmicIn * (1 - outroP)).toFixed(3);
   if (a4) {
-    a4.style.opacity = lerp(p, 0.62, 0.74).toFixed(3);
-    const rise = reduce ? 0 : (1 - lerp(p, 0.6, 0.82)) * 80;
+    const a4o = p < 0.58 ? 0 : lerp(p, 0.62, 0.74);
+    a4.style.opacity = a4o.toFixed(3);
+    a4.style.visibility = a4o < 0.01 ? 'hidden' : 'visible';
+    const rise = reduce ? 0 : (1 - lerp(p, 0.62, 0.84)) * 80;
     a4.style.transform = `translateY(${rise.toFixed(1)}px)`;
   }
   // Outro: wash only the cosmic/dark background back to bone; copy stays on top.
@@ -118,6 +142,7 @@ function drawWeave(reduce: boolean): void {
     const strands = band.querySelectorAll<SVGPathElement>('[data-weave]');
     if (!strands.length) return;
     const r = band.getBoundingClientRect();
+    if (!reduce && (r.bottom < -120 || r.top > h + 120)) return;
     const p = reduce ? 1 : clamp01((h * 0.55 - r.top) / Math.max(r.height, 1));
     strands.forEach((s) => {
       const d = parseFloat(s.getAttribute('data-delay') || '0') || 0;
@@ -189,39 +214,49 @@ function compassParallax(reduce: boolean): void {
   });
 }
 
-/* The ember stroke linking the §03 outcome box down across the section seam to
+/* The ember stroke linking §03 down across the section seam to
    the §07 compass's north tip. Measured from live rects every frame. */
 function positionConnector(): void {
   const wrap = document.querySelector<HTMLElement>('[data-connector]');
   const line = document.querySelector<HTMLElement>('[data-connector-line]');
-  const outcome = document.querySelector<HTMLElement>('[data-outcome-box]');
-  const wf = document.getElementById('work-flow');
+  const anchor =
+    document.querySelector<HTMLElement>('[data-connector-anchor]') ??
+    document.querySelector<HTMLElement>('[data-outcome-box]');
+  const section = document.getElementById('the-days');
   const compass = document.querySelector<HTMLElement>('[data-apply-compass]');
-  if (!wrap || !line || !outcome || !wf || !compass) return;
-  const wfTop = wf.getBoundingClientRect().top;
-  const outB = outcome.getBoundingClientRect().bottom;
+  if (!wrap || !line || !anchor || !section || !compass) return;
+  const sectionRect = section.getBoundingClientRect();
+  const vh = viewportHeight();
+  if (sectionRect.bottom < -200 || sectionRect.top > vh + 400) return;
+  const outB = anchor.getBoundingClientRect().bottom;
   const cTop = compass.getBoundingClientRect().top;
   let len = Math.round(cTop + 8 - outB);
   if (len < 24) len = 24;
-  wrap.style.top = `${Math.round(outB - wfTop)}px`;
+  wrap.style.top = `${Math.round(outB - sectionRect.top)}px`;
   line.style.height = `${len}px`;
 }
 
+/** Run one frame of scroll-driven DOM updates. */
+export function tickScrollChoreography(reduce: boolean): void {
+  cineProgression(reduce);
+  compassParallax(reduce);
+  spinApplyCompass(reduce);
+  positionConnector();
+  drawWeave(reduce);
+}
+
 /** Start the choreography loop. Returns a stop function. */
-export function startScrollChoreography(): () => void {
+export function startScrollChoreography(onRaf?: (time: number) => void): () => void {
   const reduce =
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let raf = 0;
   let running = true;
 
-  const tick = () => {
+  const tick = (time: number) => {
     if (!running) return;
-    cineProgression(reduce);
-    compassParallax(reduce);
-    spinApplyCompass(reduce);
-    positionConnector();
-    drawWeave(reduce);
+    onRaf?.(time);
+    tickScrollChoreography(reduce);
     raf = requestAnimationFrame(tick);
   };
   raf = requestAnimationFrame(tick);

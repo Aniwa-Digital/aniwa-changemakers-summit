@@ -1,33 +1,51 @@
-import { RIVER_PATH_SRC, steps } from '../../lib/content';
+import { steps } from '../../lib/content';
+import { useStepTimeline } from '../../hooks/useStepTimeline';
 
-/* Steps placed along the meandering river path — the white line is the
-   journey; labels alternate to the left and right of each bend. */
+const ACTIVATION = 0.5;
+
+/* Scroll-driven five-step path — straight line fills as you move down the page. */
 export function PurposePath() {
-  return (
-    <div className="purpose-path" aria-label="Five steps to join the summit">
-      <img className="purpose-path__river" src={RIVER_PATH_SRC} alt="" aria-hidden loading="lazy" decoding="async" />
+  const timelineRef = useStepTimeline<HTMLDivElement>();
 
-      {steps.map((step, i) => (
-        <div
-          key={step.n}
-          data-step={step.n}
-          className={`purpose-path__anchor purpose-path__anchor--${step.side}`}
-          style={{ top: `${step.top}%` }}
-        >
-          <div
-            className={`purpose-path__step purpose-path__step--${step.side}`}
-            data-reveal=""
-            style={{
-              transitionDelay: `${i * 0.08}s`,
-              ...(step.offset && step.side === 'left' ? { marginLeft: `-${step.offset}%` } : {}),
-              ...(step.offset && step.side === 'right' ? { marginRight: `-${step.offset}%` } : {}),
-            }}
-          >
-            <span className="purpose-path__num disp">{step.n}</span>
-            <span className="purpose-path__label disp">{step.label}</span>
-          </div>
+  return (
+    <div
+      ref={timelineRef}
+      className="purpose-timeline"
+      data-step-timeline-init=""
+      data-step-timeline-activation={String(ACTIVATION)}
+      aria-label="Path to the Summit"
+    >
+      <div className="purpose-timeline__header">
+        <h3 className="disp purpose-timeline__title">Path to the Summit</h3>
+      </div>
+
+      <div className="purpose-timeline__wrapper" data-step-timeline-wrapper="">
+        <svg className="purpose-timeline__curve" preserveAspectRatio="none" aria-hidden="true">
+          <path className="purpose-timeline__track" data-step-timeline-track="" vectorEffect="non-scaling-stroke" />
+          <path
+            data-step-timeline-fill=""
+            className="purpose-timeline__fill"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        <div className="purpose-timeline__list" data-no-reveal="">
+          {steps.map((step, i) => (
+            <div
+              key={step.n}
+              data-step-timeline-item=""
+              className={`purpose-timeline__item purpose-timeline__item--${i % 2 === 0 ? 'right' : 'left'}`}
+            >
+              <div className="purpose-timeline__content">
+                <h4 className="disp purpose-timeline__content-h">{step.label}</h4>
+              </div>
+              <div data-step-timeline-marker="" className="purpose-timeline__marker">
+                <span>{step.n.replace(/^0/, '')}</span>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

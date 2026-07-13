@@ -7,7 +7,7 @@ export function Room() {
   return (
     <section id="room" style={{ position: 'relative', background: 'var(--aniwa-bone)', padding: '110px 40px 116px' }}>
       <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto' }}>
-        <div data-reveal="">
+        <div>
           <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
             WITH SKILLSETS SPANNING
           </div>
@@ -36,7 +36,7 @@ export function Room() {
           </div>
         </div>
 
-        <div data-reveal="" style={{ marginTop: 78 }}>
+        <div style={{ marginTop: 78 }}>
           <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
             WITH LEADERSHIP EXPERIENCE FROM&nbsp;
           </div>
@@ -44,8 +44,8 @@ export function Room() {
             className="grid-logos"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(6, 1fr)',
-              gap: '34px 28px',
+              gridTemplateColumns: 'repeat(5, 1fr)',
+              gap: '18px 16px',
               marginTop: 34,
               alignItems: 'center',
               justifyItems: 'center',

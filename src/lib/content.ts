@@ -10,15 +10,34 @@ export interface FellowshipMember {
   objectPosition: string;
   /** Short bio shown in the click-to-open popup. */
   bio: string;
+  linkedin?: string;
+  website?: string;
 }
 
-const member = (name: string, role: string, img: string, bio: string, objectPosition = '50% 18%'): FellowshipMember => ({
-  name,
-  role,
-  img: `/assets/people/${img}`,
-  objectPosition,
-  bio,
-});
+type MemberOpts = {
+  objectPosition?: string;
+  linkedin?: string;
+  website?: string;
+};
+
+const member = (
+  name: string,
+  role: string,
+  img: string,
+  bio: string,
+  opts: string | MemberOpts = '50% 18%',
+): FellowshipMember => {
+  const options = typeof opts === 'string' ? { objectPosition: opts } : opts;
+  return {
+    name,
+    role,
+    img: `/assets/people/${img}`,
+    objectPosition: options.objectPosition ?? '50% 18%',
+    bio,
+    linkedin: options.linkedin,
+    website: options.website,
+  };
+};
 
 /* Left strand — the changemakers, in leadership's order. */
 export const fellowshipLeft: FellowshipMember[] = [
@@ -60,32 +79,35 @@ export const fellowshipLeft: FellowshipMember[] = [
     'Reddit · author, Which Way Is North',
     'will-cady.webp',
     'Will Cady is a multimedia artist, cultural strategist, and founder of HEAL MVMNT, an initiative positioning Healing, Environments, Art, and Language as vital counterparts to STEM. An early leader at Reddit, he helped grow the platform into a billion-dollar business through deep insight into culture and creativity. His book Which Way Is North: A Creative Compass for Makers, Marketers, and Mystics was named a must-read by Inc Magazine and selected for The Next Big Idea Book Club.',
-    '50% 14%',
+    { objectPosition: '50% 14%', linkedin: 'https://www.linkedin.com/in/willcady' },
   ),
   member(
     'Deven Raut',
     'Kaiteki.AI · ex-Google Stadia',
     'deven-raut.webp',
     'Deven Raut is a polymath entrepreneur with deep experience building mission-critical technologies that power the modern internet. He co-founded CiiNOW, which evolved into Google Stadia, led the creation of Prisma SASE at Palo Alto Networks, and headed Network Security at Google. He is currently building Kaiteki.AI, reimagining digital consumption in healthier, more human-centered ways — work that reflects a lifelong devotion to soul, mind, and body wellness for all species.',
-    '50% 14%',
+    { objectPosition: '50% 14%', linkedin: 'https://www.linkedin.com/in/devenraut/' },
   ),
   member(
     'Denise Roberson',
     'Chief Purpose Officer, Omnicom',
     'denise-roberson.webp',
     'Denise Roberson serves as Chief Purpose Officer at Omnicom’s TBWA\\Chiat\\Day — the first role of its kind at the agency — helping C-suites and boards build the business case for purpose and embed it across their organizations. She is also the founder of Conspiracy of Love, a purpose-led B Corp consultancy, a marketing professor in Pepperdine’s Presidents & Key Executives MBA, and a doctoral researcher studying next-generation purpose and sustainability models.',
+    { linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
   ),
   member(
     'Ren Menon',
     'Co-Founder & CEO, OrthoFX',
     'ren-menon.webp',
     'Ren Menon is the Co-founder and CEO of OrthoFX, an orthodontic technology company advancing clear-aligner treatment through innovations in material science, digital workflows, and patient experience. He previously held senior leadership roles at Align Technology, contributing to global product innovation for Invisalign. The holder of several patents spanning orthodontics and consumer healthtech, Ren combines advanced materials, AI-driven workflows, and scalable care models to make healthcare more accessible.',
+    { linkedin: 'https://www.linkedin.com/in/renmenon/' },
   ),
   member(
     'Ruslan Gafarov',
     'Founder & CEO, SF Innovation Hub',
     'ruslan-gafarov.webp',
     'Ruslan Gafarov is the founder and CEO of the San Francisco Innovation Hub. An entrepreneur with more than 15 years of experience and the author of three books on organizational culture, he has been building entrepreneurial communities in Silicon Valley since 2016 — connecting founders across borders and cultures around conscious leadership and long-term community.',
+    { linkedin: 'https://www.linkedin.com/in/malikone/' },
   ),
 ];
 
@@ -152,13 +174,14 @@ export const fellowshipRight: FellowshipMember[] = [
     'Founder & CEO, Aniwa',
     'vivien-vilela.webp',
     'Vivien Vilela has spent over 14 years pioneering ethical relations with Indigenous peoples across the Americas. Born and raised in Brazil, she founded Aniwa, an international platform that shares Indigenous wisdom and amplifies Indigenous voices, and the Huya Aniwa Foundation and Institute, dedicated to preserving sacred land in alliance with native collectives. She has taken a sacred oath in the Wixárika tradition to serve as a Marakame — one who can heal, sing, and dream.',
+    { linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
   ),
   member(
     'Oscar Matzuwa',
     'Yoreme · Huya Aniwa Foundation',
     'matzuwa-oscar.webp',
     'Oscar Matzuwa comes from the Yoreme people, deer nation of Sinaloa, Mexico. A pilgrim of the Wirikuta desert since 2005, he has taken the sacred oath of a Mara’akame (spiritual leader) in the Wixárika tradition, and carries the fire to run sweat lodges. An anthropologist specialized in traditional medicine and a traditional singer and musician, he established the Huya Aniwa Institute to implement sustainable land stewardship and sacred-medicine conservation.',
-    '50% 14%',
+    { objectPosition: '50% 14%', website: 'https://www.huyaaniwa.org/team/oscar' },
   ),
 ];
 
@@ -232,13 +255,16 @@ export const partnerLogos: PartnerLogo[] = [
   { name: 'Disney+', src: '/assets/logos/disney.webp', large: true },
   { name: 'Netflix', src: '/assets/logos/netflix.webp', large: true },
   { name: 'Adobe', src: '/assets/logos/adobe.webp', large: false },
-  { name: 'Amazon', src: '/assets/logos/amazon.webp', large: false },
-  { name: 'PepsiCo', src: '/assets/logos/pepsico.webp', large: true },
-  { name: "McDonald's", src: '/assets/logos/mcdonalds.webp', large: false },
+  { name: 'Palo Alto Networks', src: '/assets/logos/palo-alto-networks.webp', large: true },
+  { name: 'Pachamama Alliance', src: '/assets/logos/pachamama-alliance.webp', large: true },
+  { name: 'Pulse Fund', src: '/assets/logos/pulse-fund.png', large: true },
   { name: 'National Geographic', src: '/assets/logos/natgeo.webp', large: true },
   { name: 'Reddit', src: '/assets/logos/reddit.webp', large: false },
   { name: 'Block', src: '/assets/logos/block.webp', large: true },
   { name: 'Stanford', src: '/assets/logos/stanford.webp', large: true },
+  { name: 'Amazon', src: '/assets/logos/amazon.webp', large: false },
+  { name: 'PepsiCo', src: '/assets/logos/pepsico.webp', large: true },
+  { name: "McDonald's", src: '/assets/logos/mcdonalds.webp', large: false },
 ];
 
 /* ---- Four Elements — One Mission ---- */
@@ -420,21 +446,10 @@ export interface Step {
   label: string;
 }
 
-export interface PathStep extends Step {
-  /** Vertical position along the river (% of path container height). */
-  top: number;
-  /** Which side of the river the label sits on. */
-  side: 'left' | 'right';
-  /** Extra horizontal push away from the river (% of path width). */
-  offset?: number;
-}
-
-export const RIVER_PATH_SRC = '/assets/img/river-path.webp';
-
-export const steps: PathStep[] = [
-  { n: '01', label: 'Personal invitation or nomination', top: 8, side: 'right' },
-  { n: '02', label: 'Application to attend or to speak', top: 24, side: 'left', offset: 10 },
-  { n: '03', label: 'A private interview call', top: 48, side: 'right' },
-  { n: '04', label: 'Confirmation & entry to the guest channel', top: 68, side: 'left' },
-  { n: '05', label: 'Arrival of changemakers at the land', top: 88, side: 'right' },
+export const steps: Step[] = [
+  { n: '01', label: 'Personal invitation or nomination' },
+  { n: '02', label: 'Application to attend or to speak' },
+  { n: '03', label: 'A private interview call' },
+  { n: '04', label: 'Confirmation & entry to the guest channel' },
+  { n: '05', label: 'Arrival of changemakers at the land' },
 ];

@@ -1,7 +1,9 @@
 import { Suspense, useEffect, useState } from 'react';
+import { signalHeroCompassResize } from './lib/compass-svg';
 import { useReveal } from './hooks/useReveal';
 import { lazyNamed } from './lib/lazy-named';
-import { startScrollChoreography } from './lib/scroll-choreography';
+import { scrollToTop, startSmoothScroll } from './lib/smooth-scroll';
+import { tickScrollChoreography } from './lib/scroll-choreography';
 import { HomeScroll } from './pages/HomeScroll';
 
 const RegisterPage = lazyNamed(() => import('./components/register/RegisterPage'), 'RegisterPage');
@@ -23,20 +25,36 @@ export default function App() {
   const [route, setRoute] = useState(currentRoute);
   const [inviteOpen, setInviteOpen] = useState(false);
 
+  useReveal(true);
+
   useEffect(() => {
     const onHash = () => {
       setRoute(currentRoute());
-      window.scrollTo(0, 0);
+      scrollToTop(true);
     };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  useReveal(route);
-
   useEffect(() => {
     if (route !== 'home') return;
-    return startScrollChoreography();
+    signalHeroCompassResize();
+    const t = window.setTimeout(signalHeroCompassResize, 120);
+    return () => window.clearTimeout(t);
+  }, [route]);
+
+  useEffect(() => {
+    const reduce =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (route !== 'home') {
+      return startSmoothScroll();
+    }
+
+    return startSmoothScroll(() => {
+      tickScrollChoreography(reduce);
+    });
   }, [route]);
 
   if (route === 'register') {

@@ -13,7 +13,7 @@ const Invitation = lazyNamed(() => import('../components/invitation/Invitation')
 const Closing = lazyNamed(() => import('../components/closing/Closing'), 'Closing');
 
 const prophecyFallback = (
-  <div id="prophecy" style={{ height: '520vh', background: 'var(--aniwa-cream)' }} aria-hidden="true" />
+  <div id="prophecy" aria-hidden="true" style={{ minHeight: '100vh', background: 'var(--ground-light)' }} />
 );
 
 type HomeScrollProps = {
@@ -24,7 +24,7 @@ type HomeScrollProps = {
 
 export function HomeScroll({ inviteOpen, onInviteOpen, onInviteClose }: HomeScrollProps) {
   return (
-    <div style={{ position: 'relative', background: 'var(--ground-night)', overflowX: 'clip' }}>
+    <div style={{ position: 'relative', background: 'var(--ground-light)', overflowX: 'clip' }}>
       <main>
         <Hero onInviteOpen={onInviteOpen} />
         <Suspense fallback={prophecyFallback}>
@@ -40,7 +40,7 @@ export function HomeScroll({ inviteOpen, onInviteOpen, onInviteClose }: HomeScro
             <Room />
           </Suspense>
         </LazySection>
-        <LazySection minHeight="100vh" className="lazy-section">
+        <LazySection minHeight="100vh" className="lazy-section lazy-section--elements">
           <Suspense fallback={null}>
             <Days />
           </Suspense>
@@ -50,13 +50,13 @@ export function HomeScroll({ inviteOpen, onInviteOpen, onInviteClose }: HomeScro
             <FoundersCircle />
           </Suspense>
         </LazySection>
-        <LazySection minHeight="100vh" className="lazy-section">
+        <LazySection minHeight="100vh" className="lazy-section" style={{ background: 'var(--aniwa-purple)' }}>
           <Suspense fallback={null}>
             <Invitation onInviteOpen={onInviteOpen} />
           </Suspense>
         </LazySection>
       </main>
-      <LazySection minHeight="100vh" className="lazy-section">
+      <LazySection minHeight="100vh" className="lazy-section" style={{ background: 'var(--aniwa-purple)' }}>
         <Suspense fallback={null}>
           <Closing />
         </Suspense>

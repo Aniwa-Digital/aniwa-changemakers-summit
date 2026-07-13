@@ -1,6 +1,5 @@
-// Hero WebGL2 shader: 9 layered arcs sweep in a circle as a soft full-spectrum
-// rainbow glow (desaturated, gently warmed toward orange). The compass line-art
-// lives in a separate <CompassOverlay/> component.
+// Hero WebGL2 shader: fluorescent rainbow arcs soft-blend into the cream hero
+// inside the compass rose. Line-art is rendered separately via CompassOverlay.
 import { useEffect, useRef } from 'react';
 import { dprCap, observeVisibility } from '../../lib/render-budget';
 
@@ -12,17 +11,20 @@ in vec2 v_uv;
 
 uniform vec3  iResolution;   // (width, height, dpr)
 uniform float iTime;         // seconds
+uniform sampler2D iCompass;  // compass line-art (alpha = lines)
+uniform float iCompassAspect;// compass width / height
+uniform float iRotate;       // scroll-driven compass rotation (radians)
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
     vec2  r  = iResolution.xy;
-    float t  = iTime * 2.0;      // 2x: rainbow swirl sweeps + fades out twice as fast
+    float t  = iTime * 2.0;
     vec4  o  = vec4(0.0);
 
     vec2 p = fragCoord - r * 0.5;
 
-    // 9 layered arcs sweeping in a circle
-    for (float i, a; i++ < 9.0; )
+    // 18 layered arcs sweeping in a circle (production fluorescent formula)
+    for (float i, a; i++ < 18.0; )
     {
         a = (i * i) / 320.0 - length(p) / r.y;
         float denom = max(a, -a * 3.0) + 2.0 / r.y;
@@ -33,21 +35,52 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
         a = atan(p.y, p.x) + a + i * i;
         float sm = smoothstep(edge0, edge1, cos(a));
 
-        o += 0.058 / denom * sm * (1.2 + sin(a + i + vec4(0.0, 2.0, 4.0, 0.0)));
+        o += 0.022 / denom * sm * (1.2 + sin(a + i + vec4(0.0, 2.0, 4.0, 0.0)));
     }
 
     o = tanh(o);
-    o.rgb = pow(max(o.rgb, vec3(0.0)), vec3(0.84)) * 1.05;
 
-    // Soft full-spectrum rainbow from the arc loop, desaturated with a gentle
-    // orange warmth — closer to the original look, just muted and slightly warmer.
+    // ---- compass line-art (scroll-spun about hub) ----
+    vec2 uvc = (fragCoord - 0.5 * r) / r.y;
+    float compassH = 0.972;
+    float shiftY = 0.07 * compassH;
+
+    vec2 rc = uvc - vec2(0.0, shiftY);
+    const float COMPASS_CY = 0.57;
+    vec2 pivot = vec2(0.0, (0.5 - COMPASS_CY) * compassH);
+    vec2 d2 = rc - pivot;
+    float cr = cos(iRotate), sr = sin(iRotate);
+    d2 = vec2(d2.x * cr - d2.y * sr, d2.x * sr + d2.y * cr);
+    rc = pivot + d2;
+    vec2 tex;
+    tex.x = rc.x / (compassH * iCompassAspect) + 0.5;
+    tex.y = 0.5 - rc.y / compassH;
+    float ca = 0.0;
+    if (tex.x > 0.0 && tex.x < 1.0 && tex.y > 0.0 && tex.y < 1.0) {
+        ca = texture(iCompass, tex).a;
+    }
+
     float lum = dot(o.rgb, vec3(0.3333));
-    vec3 col = mix(vec3(lum), o.rgb, 0.68);
-    col = mix(col, vec3(0.96, 0.70, 0.44), 0.10 * clamp(lum, 0.0, 1.0));
-    float swirl = pow(clamp(lum, 0.0, 1.0), 0.78) * 1.15;
-    float swirlA = clamp(swirl * 0.58, 0.0, 0.58);
+    float reveal = smoothstep(0.03, 0.42, lum);
 
-    fragColor = vec4(col, swirlA);
+    // Arcs inside the outer compass ring — soft edge, no second outer halo.
+    float roseR = compassH * 0.32;
+    float orbMask = 1.0 - smoothstep(roseR * 0.80, roseR * 1.06, length(uvc));
+
+    vec3 cream = vec3(0.957, 0.945, 0.922);      // #F4F1EB
+    vec3 col = cream * (1.0 - orbMask * 0.10);
+
+    // Fluorescent arcs on cream (line-art comes from CompassOverlay SVG).
+    float arcLum = dot(o.rgb, vec3(0.299, 0.587, 0.114));
+    vec3 arcsSat = mix(vec3(arcLum), o.rgb, 2.05);
+    arcsSat = clamp(arcsSat * 1.20, 0.0, 1.5);
+
+    vec3 arcs = clamp(arcsSat, 0.0, 1.0) * orbMask;
+    col = 1.0 - (1.0 - col) * (1.0 - arcs * 0.95);
+    col = mix(col, col * mix(vec3(1.0), clamp(arcsSat, 0.0, 1.0), 0.48), orbMask * lum * 0.48);
+    col += arcsSat * orbMask * reveal * 0.16;
+
+    fragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
 
 void main(){
@@ -65,6 +98,10 @@ void main(){
 }
 `;
 
+const SPIN_RATE = 0.0032; // radians per scrolled pixel
+const FALLBACK_ASPECT = 0.611; // 547.73 / 896.57
+const TEXTURE_WIDTH = 768;
+
 function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLShader | null {
   const sh = gl.createShader(type);
   if (!sh) return null;
@@ -78,17 +115,18 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLSh
   return sh;
 }
 
-export default function CompassShader() {
+interface CompassShaderProps {
+  compassSrc?: string;
+}
+
+export default function CompassShader({ compassSrc = '/assets/compass/compass.svg' }: CompassShaderProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const gl = canvas.getContext('webgl2', { premultipliedAlpha: false, alpha: true });
+    const gl = canvas.getContext('webgl2', { premultipliedAlpha: false });
     if (!gl) return;
-
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     let disposed = false;
     let raf = 0;
@@ -117,6 +155,38 @@ export default function CompassShader() {
 
     const uResolution = gl.getUniformLocation(program, 'iResolution');
     const uTime = gl.getUniformLocation(program, 'iTime');
+    const uCompass = gl.getUniformLocation(program, 'iCompass');
+    const uCompassAspect = gl.getUniformLocation(program, 'iCompassAspect');
+    const uRotate = gl.getUniformLocation(program, 'iRotate');
+
+    // ---- compass line-art texture (alpha is the reveal mask) ----
+    let compassAspect = FALLBACK_ASPECT;
+    const tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      if (disposed) return;
+      compassAspect = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : compassAspect;
+      const cw = TEXTURE_WIDTH;
+      const ch = Math.round(cw / compassAspect);
+      const oc = document.createElement('canvas');
+      oc.width = cw;
+      oc.height = ch;
+      const octx = oc.getContext('2d');
+      if (!octx) return;
+      octx.drawImage(img, 0, 0, cw, ch);
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, oc);
+    };
+    img.src = compassSrc;
 
     const getDpr = () => Math.max(1, Math.min(dprCap(), window.devicePixelRatio || 1));
 
@@ -144,7 +214,6 @@ export default function CompassShader() {
 
     const start = performance.now();
 
-    // Pause the render loop while the hero is scrolled out of view.
     let visible = true;
     const stopVisibility = observeVisibility(canvas, (v) => {
       if (v === visible) return;
@@ -160,12 +229,16 @@ export default function CompassShader() {
       }
       gl.useProgram(program);
       if (resizeScheduled) applySize();
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
       const t = (now - start) / 1000;
 
       gl.uniform3f(uResolution, canvas.width, canvas.height, getDpr());
       gl.uniform1f(uTime, t);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.uniform1i(uCompass, 0);
+      gl.uniform1f(uCompassAspect, compassAspect);
+      const sy = window.scrollY || window.pageYOffset || 0;
+      gl.uniform1f(uRotate, Math.max(0, sy) * SPIN_RATE);
 
       gl.bindVertexArray(vao);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -180,9 +253,10 @@ export default function CompassShader() {
       ro.disconnect();
       gl.deleteBuffer(vbo);
       gl.deleteVertexArray(vao);
+      gl.deleteTexture(tex);
       gl.deleteProgram(program);
     };
-  }, []);
+  }, [compassSrc]);
 
   return (
     <div style={{ position: 'absolute', inset: 0 }}>

@@ -2,6 +2,7 @@
 // swirl and spins it about its hub in sync with scroll (matching the rate the
 // shader used to use).
 import { useEffect, useRef, useState } from 'react';
+import { loadCompassLayersSvg, signalHeroCompassResize } from '../../lib/compass-svg';
 
 const SPIN_RATE = 0.0032; // radians per scrolled pixel (matches old CompassShader)
 const COMPASS_CY = 0.57; // hub position as a fraction of the svg height
@@ -9,16 +10,26 @@ const COMPASS_H = 97.2; // compass height as a % of the container height
 
 interface CompassOverlayProps {
   src?: string;
+  /** When false, compass stays fixed (e.g. closing section). Default: true. */
+  scrollSpin?: boolean;
+  /** Stroke color for currentColor SVG layers. */
+  color?: string;
+  opacity?: number;
 }
 
-export default function CompassOverlay({ src = '/assets/compass/compass-layers.svg' }: CompassOverlayProps) {
+export default function CompassOverlay({
+  src = '/assets/compass/compass-layers.svg',
+  scrollSpin = true,
+  color = '#7A5230',
+  opacity = 0.2,
+}: CompassOverlayProps) {
   const [svg, setSvg] = useState<string | null>(null);
   const innerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(src)
-      .then((r) => r.text())
+    const load = src === '/assets/compass/compass-layers.svg' ? loadCompassLayersSvg() : fetch(src).then((r) => r.text());
+    load
       .then((text) => {
         if (!cancelled) setSvg(text);
       })
@@ -39,16 +50,22 @@ export default function CompassOverlay({ src = '/assets/compass/compass-layers.s
       svgEl.style.height = '100%';
       svgEl.style.width = 'auto';
       svgEl.style.display = 'block';
+      // Override any inline SVG color (compass.svg ships as cream currentColor).
+      svgEl.style.color = color;
+      signalHeroCompassResize();
+      requestAnimationFrame(signalHeroCompassResize);
     }
 
     let raf = 0;
     const translate = `translate(-50%, -${COMPASS_CY * 100}%)`;
     const update = () => {
       raf = 0;
-      const sy = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      const sy = scrollSpin ? Math.max(0, window.scrollY || window.pageYOffset || 0) : 0;
       el.style.transform = `${translate} rotate(${sy * SPIN_RATE}rad)`;
     };
     update();
+
+    if (!scrollSpin) return;
 
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -58,10 +75,10 @@ export default function CompassOverlay({ src = '/assets/compass/compass-layers.s
       window.removeEventListener('scroll', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [svg]);
+  }, [svg, scrollSpin, color]);
 
   return (
-    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} aria-hidden="true">
+    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }} aria-hidden="true">
       {svg && (
         <div
           ref={innerRef}
@@ -74,8 +91,8 @@ export default function CompassOverlay({ src = '/assets/compass/compass-layers.s
             lineHeight: 0,
             transform: `translate(-50%, -${COMPASS_CY * 100}%)`,
             transformOrigin: `50% ${COMPASS_CY * 100}%`,
-            opacity: 0.2,
-            color: '#7A5230',
+            opacity,
+            color,
           }}
         />
       )}

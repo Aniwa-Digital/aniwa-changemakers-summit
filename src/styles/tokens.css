@@ -55,6 +55,7 @@
   --on-light-border: color-mix(in oklab, var(--aniwa-charcoal) 15%, transparent);
 
   /* ---- Section grounds ---- */
+  --ground-light: var(--aniwa-cream); /* hero + prophecy opening — warm cream */
   --ground-night: #26201a; /* page base + section-03 gradient ends */
   --ground-days: linear-gradient(180deg, #26201a 0%, #2C251D 60%, #26201a 100%);
   --ink-on-light: #2E2820; /* charcoal text on light sections */
@@ -86,9 +87,11 @@
   --tracking-wide: 0.3em;
 
   /* ---- Geometry & motion ---- */
+  --prophecy-pin-height: 580vh; /* sticky scroll runway for §00 prophecy */
   --radius-house: 2px; /* buttons / tiles / chips */
   --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-cinematic: 1.15s;
+  --duration-reveal: 0.55s;
   --shadow-ember: 0 8px 30px rgba(160, 74, 42, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   --shadow-ember-lift: 0 14px 40px rgba(160, 74, 42, 0.45);
 }

@@ -12,7 +12,7 @@ interface HeroStrokeTextProps {
 
 const DASH = 8000;
 
-export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 3.6 }: HeroStrokeTextProps) {
+export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 2.2 }: HeroStrokeTextProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const maskRef = useRef<SVGRadialGradientElement>(null);
   const animRef = useRef<SVGTextElement>(null);

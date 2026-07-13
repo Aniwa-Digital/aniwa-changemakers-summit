@@ -13,7 +13,7 @@ const glowColorMap: Record<GlowColor, { base: number; spread: number; sat: numbe
 };
 
 // Inject the ::before/::after glow-border rules once for all instances.
-const GLOW_STYLE_ID = 'glowcard-pseudo-styles';
+const GLOW_STYLE_ID = 'glowcard-pseudo-styles-v2';
 
 function ensureGlowStyles(): void {
   if (typeof document === 'undefined' || document.getElementById(GLOW_STYLE_ID)) return;
@@ -26,7 +26,6 @@ function ensureGlowStyles(): void {
       inset: calc(var(--border-size) * -1);
       border: var(--border-size) solid transparent;
       border-radius: calc(var(--radius) * 1px);
-      background-attachment: fixed;
       background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
       background-repeat: no-repeat;
       background-position: 50% 50%;
@@ -98,16 +97,20 @@ export function GlowCard({ children, glowColor = 'ember', radius = 14, border = 
 
   useEffect(() => {
     ensureGlowStyles();
+    const el = cardRef.current;
+    if (!el) return;
+
     const syncPointer = (e: PointerEvent) => {
-      const el = cardRef.current;
-      if (!el) return;
-      el.style.setProperty('--x', e.clientX.toFixed(2));
-      el.style.setProperty('--xp', (e.clientX / window.innerWidth).toFixed(2));
-      el.style.setProperty('--y', e.clientY.toFixed(2));
-      el.style.setProperty('--yp', (e.clientY / window.innerHeight).toFixed(2));
+      const card = cardRef.current;
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--x', (e.clientX - rect.left).toFixed(2));
+      card.style.setProperty('--xp', (e.clientX / window.innerWidth).toFixed(2));
+      card.style.setProperty('--y', (e.clientY - rect.top).toFixed(2));
+      card.style.setProperty('--yp', (e.clientY / window.innerHeight).toFixed(2));
     };
-    document.addEventListener('pointermove', syncPointer, { passive: true });
-    return () => document.removeEventListener('pointermove', syncPointer);
+    el.addEventListener('pointermove', syncPointer, { passive: true });
+    return () => el.removeEventListener('pointermove', syncPointer);
   }, []);
 
   const g = glowColorMap[glowColor];
@@ -140,7 +143,6 @@ export function GlowCard({ children, glowColor = 'ember', radius = 14, border = 
       hsl(var(--hue, 30) calc(var(--saturation, 80) * 1%) ${g.lightBg}% / var(--bg-spot-opacity, 0.08)), transparent)`,
     backgroundSize: 'calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))',
     backgroundPosition: '50% 50%',
-    backgroundAttachment: 'fixed',
     backdropFilter: 'blur(5px)',
     WebkitBackdropFilter: 'blur(5px)',
     boxShadow: '0 1rem 2.4rem -1.2rem #000',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   fellowshipLeft,
   fellowshipRight,
@@ -10,6 +10,7 @@ import {
   HELIX_AMP,
   type FellowshipMember,
 } from '../../lib/content';
+import { useWeavingScrambleCursor } from '../../hooks/useWeavingScrambleCursor';
 import { Modal } from '../ui/Modal';
 
 /* The Fellowship of Changemakers — light (bone) section. A unifying mission,
@@ -23,6 +24,10 @@ export function Weaving() {
   const N = FELLOWSHIP_ROWS;
   const viewH = N * HELIX_UNIT;
   const [selected, setSelected] = useState<FellowshipMember | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+
+  useWeavingScrambleCursor(sectionRef, cursorRef);
 
   const seat = (p: FellowshipMember, row: number, side: 'left' | 'right') => {
     const left = side === 'left' ? ((300 - HELIX_AMP) / HELIX_WIDTH) * 100 : ((300 + HELIX_AMP) / HELIX_WIDTH) * 100;
@@ -42,7 +47,7 @@ export function Weaving() {
           width: 'clamp(150px, 30vw, 250px)',
           textAlign: 'center',
           opacity: 0,
-          transition: 'opacity 0.7s var(--ease-cinematic), transform 0.7s var(--ease-cinematic)',
+          transition: 'opacity 0.45s var(--ease-cinematic), transform 0.45s var(--ease-cinematic)',
         }}
       >
         <button
@@ -51,6 +56,7 @@ export function Weaving() {
           onClick={() => setSelected(p)}
           aria-haspopup="dialog"
           aria-label={`About ${p.name}`}
+          data-cursor-hover=""
           style={{
             display: 'block',
             width: 'clamp(104px, 24vw, 216px)',
@@ -62,7 +68,6 @@ export function Weaving() {
             border: '2px solid rgba(160,74,42,0.5)',
             boxShadow: '0 14px 34px -12px rgba(46,40,32,0.4), 0 0 30px rgba(160,74,42,0.14)',
             background: '#EFE7D3',
-            cursor: 'pointer',
           }}
         >
           <img
@@ -85,6 +90,7 @@ export function Weaving() {
 
   return (
     <section
+      ref={sectionRef}
       id="weaving"
       style={{
         position: 'relative',
@@ -93,13 +99,10 @@ export function Weaving() {
         padding: '110px 40px 96px',
       }}
     >
-      <div data-reveal="" className="weaving-intro" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
+      <div className="weaving-intro" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
         <h3 className="disp" style={{ color: 'var(--ink-on-light)', fontSize: 'clamp(2.4rem, 5.2vw, 3.6rem)', margin: 0 }}>
           A Convergence of Changemakers
         </h3>
-        <p className="bd" style={{ color: 'rgba(46,40,32,0.55)', fontSize: '0.9rem', margin: '14px 0 0', letterSpacing: '0.04em' }}>
-          Meet the circle — select a portrait to learn more.
-        </p>
       </div>
 
       <div
@@ -182,26 +185,50 @@ export function Weaving() {
         {fellowshipRight.map((p, row) => seat(p, row, 'right'))}
       </div>
 
-      <p
-        data-reveal=""
-        className="disp weaving-tagline"
+      <div
+        className="weaving-tagline"
         style={{
           position: 'relative',
           zIndex: 2,
-          textAlign: 'center',
-          textTransform: 'uppercase',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          lineHeight: 1.35,
-          fontSize: 'clamp(1.5rem, 3.2vw, 2.5rem)',
-          color: 'var(--ink-on-light)',
           margin: '90px auto 0',
           maxWidth: 940,
         }}
       >
-        Two paradigms weaving a shared path towards{' '}
-        <span style={{ color: 'var(--aniwa-terracotta)' }}>a regenerative future for all life.</span>
-      </p>
+        <p className="disp weaving-tagline__line" data-reveal>
+          Multiple paradigms weaving a shared path towards
+        </p>
+        <p className="disp weaving-tagline__line" data-reveal>
+          <span style={{ color: 'var(--aniwa-terracotta)' }}>a regenerative future for all life.</span>
+        </p>
+      </div>
+
+      <div ref={cursorRef} data-cursor="" className="weaving-cursor" aria-hidden="true">
+        <div className="weaving-cursor-lens">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M15.7138 6.8382C18.1647 9.28913 18.1647 13.2629 15.7138 15.7138C13.2629 18.1647 9.28913 18.1647 6.8382 15.7138C4.38727 13.2629 4.38727 9.28913 6.8382 6.8382C9.28913 4.38727 13.2629 4.38727 15.7138 6.8382"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M19 19L15.71 15.71"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      </div>
 
       <Modal open={selected !== null} onClose={() => setSelected(null)} label={selected?.name ?? 'Fellowship member'} maxWidth={620} padding="40px">
         {selected && (
@@ -236,6 +263,32 @@ export function Weaving() {
             <p className="bd" style={{ color: 'rgba(46,40,32,0.78)', fontSize: '0.98rem', lineHeight: 1.62, margin: '24px 0 0' }}>
               {selected.bio}
             </p>
+            {(selected.linkedin || selected.website) && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', marginTop: 20 }}>
+                {selected.linkedin ? (
+                  <a
+                    href={selected.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="eye founders-detail__profile-link"
+                    style={{ marginTop: 0 }}
+                  >
+                    View profile →
+                  </a>
+                ) : null}
+                {selected.website ? (
+                  <a
+                    href={selected.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="eye founders-detail__profile-link"
+                    style={{ marginTop: 0 }}
+                  >
+                    View website →
+                  </a>
+                ) : null}
+              </div>
+            )}
           </div>
         )}
       </Modal>

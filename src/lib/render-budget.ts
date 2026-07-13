@@ -16,7 +16,7 @@ export function dprCap(): number {
 
 /** Star count per starfield layer (CosmicScene). */
 export function starBudget(): number {
-  return isSmallScreen() ? 2000 : 5000;
+  return isSmallScreen() ? 1200 : 2500;
 }
 
 /** Calls back with visibility so offscreen scenes can pause their render

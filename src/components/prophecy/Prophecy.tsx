@@ -2,15 +2,15 @@ import { lazy, Suspense } from 'react';
 
 const CosmicScene = lazy(() => import('./CosmicScene'));
 
-/* §00 The Prophecy — sticky cinematic. Serif-italic prophecy copy cross-fades
-   with scroll (driven by scroll-choreography's cineProgression). Sits on a
-   beige field; the land photo fades in and the copy reads ink-on-light. After
+/* §00 The Prophecy — sticky cinematic. Prophecy copy cross-fades with scroll
+   (driven by scroll-choreography's cineProgression). Sits on a beige field;
+   the land photo fades in and the copy reads ink-on-light. After
    "THIS TIME HAS ARRIVED" the scene fades to dark, the cosmic starfield fades
    in, and — while that cosmic stage stays pinned — the "Calling forth 100
    Planetary Leaders" copy scrolls up into frame over it. */
 export function Prophecy() {
   return (
-    <section id="prophecy" style={{ position: 'relative', height: '520vh', background: 'var(--aniwa-cream)' }}>
+    <section id="prophecy" style={{ position: 'relative' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden' }}>
         <img
           data-cine-bg=""
@@ -56,7 +56,7 @@ export function Prophecy() {
             textAlign: 'center',
           }}
         >
-          <div style={{ maxWidth: 780 }}>
+          <div className="prophecy-act__inner" style={{ maxWidth: 780 }}>
             <p className="myth" style={{ color: 'var(--ink-on-light)', fontSize: 'clamp(1.275rem, 3vw, 2.475rem)', lineHeight: 1.32 }}>
               For thousands of years,
               <br />
@@ -90,6 +90,7 @@ export function Prophecy() {
             opacity: 0,
           }}
         >
+          <div className="prophecy-act__inner">
           <p
             className="myth"
             style={{
@@ -108,6 +109,7 @@ export function Prophecy() {
             <br />
             <span style={{ color: 'rgba(0,0,0,0.55)' }}>— of heart, of spirit, of land —</span>
           </p>
+          </div>
         </div>
 
         <div
@@ -124,6 +126,7 @@ export function Prophecy() {
             opacity: 0,
           }}
         >
+          <div className="prophecy-act__inner">
           <p
             className="myth"
             style={{
@@ -138,6 +141,7 @@ export function Prophecy() {
             <br />
             to weave a shared path forward together.
           </p>
+          </div>
         </div>
 
         <div
@@ -156,6 +160,7 @@ export function Prophecy() {
             opacity: 0,
           }}
         >
+          <div className="prophecy-act__inner">
           <h2
             className="disp"
             style={{
@@ -169,6 +174,7 @@ export function Prophecy() {
           >
             THIS TIME HAS ARRIVED
           </h2>
+          </div>
         </div>
 
         {/* End-of-prophecy transition: after "THIS TIME HAS ARRIVED" the photo
@@ -236,7 +242,7 @@ export function Prophecy() {
             willChange: 'opacity, transform',
           }}
         >
-          <div style={{ maxWidth: 880, margin: '0 auto' }}>
+          <div className="prophecy-act__inner" style={{ maxWidth: 880, margin: '0 auto' }}>
             <div className="eye" style={{ color: 'var(--aniwa-terracotta)' }}>
               A Unifying Mission
             </div>
@@ -254,10 +260,9 @@ export function Prophecy() {
             <p
               className="bd"
               style={{
-                color: 'rgba(0,0,0,0.75)',
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.5rem',
-                lineHeight: 1.42,
+                color: 'var(--on-light-body)',
+                fontSize: '0.98rem',
+                lineHeight: 'var(--leading-body)',
                 margin: '26px auto 0',
                 maxWidth: 680,
               }}
