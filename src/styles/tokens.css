@@ -95,3 +95,11 @@
   --shadow-ember: 0 8px 30px rgba(160, 74, 42, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   --shadow-ember-lift: 0 14px 40px rgba(160, 74, 42, 0.45);
 }
+
+/* Mobile: shorter hero→prophecy scroll runway; choreography + cosmic fly-in
+   both map to 0–1 progress, so the full background animation still plays. */
+@media (max-width: 720px) {
+  :root {
+    --prophecy-pin-height: 380vh;
+  }
+}

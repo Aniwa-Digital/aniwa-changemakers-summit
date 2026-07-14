@@ -8,6 +8,7 @@ import {
   rotationForIndex,
   rotationToIndex,
 } from '../../lib/founders-ring';
+import { FounderBioText, FounderProfileLinks } from './FounderBio';
 
 const DRAG_START_RAD = 0.06;
 
@@ -28,17 +29,8 @@ function FounderDetail({ founder, reduceMotion }: FounderDetailProps) {
         className={`founders-detail__inner${reduceMotion ? ' founders-detail__inner--reduced' : ''}`}
       >
         {founder.role ? <p className="eye founders-detail__title">{founder.role}</p> : null}
-        {founder.bio ? <p className="bd founders-detail__bio">{founder.bio}</p> : null}
-        {founder.linkedin ? (
-          <a
-            href={founder.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="eye founders-detail__profile-link"
-          >
-            View profile →
-          </a>
-        ) : null}
+        {founder.bio ? <FounderBioText key={founder.name} bio={founder.bio} /> : null}
+        <FounderProfileLinks founder={founder} />
       </div>
     </div>
   );

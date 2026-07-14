@@ -58,9 +58,9 @@ export function Room() {
                 alt={logo.name}
                 loading="lazy"
                 style={{
-                  height: logo.large ? 68 : 34,
+                  height: logo.height ?? (logo.large ? 68 : 34),
                   width: '100%',
-                  maxWidth: logo.large ? 184 : 92,
+                  maxWidth: logo.maxWidth ?? (logo.large ? 184 : 92),
                   objectFit: 'contain',
                 }}
               />

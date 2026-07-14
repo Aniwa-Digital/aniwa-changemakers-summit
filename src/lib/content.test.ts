@@ -34,7 +34,7 @@ describe('fellowship strands', () => {
     expect(fellowshipLeft[0].name).toBe('Tenzin Seldon');
     expect(fellowshipLeft[9].name).toBe('Ruslan Gafarov');
     expect(fellowshipRight[0].name).toBe('Kumu Ramsay Taum');
-    expect(fellowshipRight[9].name).toBe('Oscar Matzuwa');
+    expect(fellowshipRight[9].name).toBe('Matzuwa Oscar');
   });
 });
 
@@ -81,6 +81,6 @@ describe('founders ring placement', () => {
       expect(m.img).toMatch(/^\/assets\/people\/.+\.webp$/);
       expect((m.role ?? '').length).toBeGreaterThan(4);
     });
-    expect(members.filter((m) => m.linkedin).length).toBeGreaterThanOrEqual(10);
+    expect(members.filter((m) => m.linkedin || m.website || m.instagram).length).toBeGreaterThanOrEqual(10);
   });
 });

@@ -24,6 +24,7 @@ export function Hero({ onInviteOpen }: HeroProps) {
     >
       {/* Rainbow swirl (WebGL) + compass.svg line-art overlay */}
       <div
+        className="hero-compass"
         style={{
           position: 'absolute',
           top: -80,

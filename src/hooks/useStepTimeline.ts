@@ -3,19 +3,34 @@ import { getLenis } from '../lib/smooth-scroll';
 
 const ACTIVATION = 0.5;
 const VIEW_W = 100;
+const CURVE_AMP = 22;
+/** Stub past #4 center so the stroke lands inside the disc. */
+const END_PAD = 20;
 
 type Point = { x: number; y: number };
 
-/** Straight vertical line through the marker column center, first → last. */
-function buildStraightPath(points: Point[]): string {
-  if (points.length < 2) return '';
-  const start = points[0];
-  const end = points[points.length - 1];
-  const x = VIEW_W / 2;
-  return `M ${x.toFixed(2)} ${start.y.toFixed(2)} L ${x.toFixed(2)} ${end.y.toFixed(2)}`;
+function clamp(n: number, lo: number, hi: number) {
+  return Math.min(hi, Math.max(lo, n));
 }
 
-/** Marker centers in wrapper-local coords (matches painted positions). */
+/** S-curve through points, alternating left / right between steps. */
+function buildCurvePath(points: Point[]): string {
+  if (points.length < 2) return '';
+  const cx = VIEW_W / 2;
+  let d = `M ${cx.toFixed(2)} ${points[0].y.toFixed(2)}`;
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const y0 = points[i].y;
+    const y1 = points[i + 1].y;
+    const dy = y1 - y0;
+    const side = i % 2 === 0 ? 1 : -1;
+    const bulge = side * CURVE_AMP;
+    d += ` C ${(cx + bulge).toFixed(2)} ${(y0 + dy * 0.33).toFixed(2)}, ${(cx + bulge).toFixed(2)} ${(y0 + dy * 0.67).toFixed(2)}, ${cx.toFixed(2)} ${y1.toFixed(2)}`;
+  }
+
+  return d;
+}
+
 function markerPoints(wrapper: HTMLElement, items: HTMLElement[]): Point[] {
   const wr = wrapper.getBoundingClientRect();
   if (wr.width <= 0) return [];
@@ -31,18 +46,50 @@ function markerPoints(wrapper: HTMLElement, items: HTMLElement[]): Point[] {
   });
 }
 
-function pathLengthAtY(path: SVGPathElement, targetY: number, maxLength: number): number {
-  let lo = 0;
-  let hi = maxLength;
-  for (let i = 0; i < 24; i++) {
-    const mid = (lo + hi) / 2;
-    if (path.getPointAtLength(mid).y < targetY) lo = mid;
-    else hi = mid;
-  }
-  return (lo + hi) / 2;
+/**
+ * Arc-length fractions (0–1) at each marker, measured on the live fill path
+ * before pathLength normalization (must not use a 0×0 scratch SVG).
+ */
+function measureFractions(fillPath: SVGPathElement, points: Point[], fullD: string): number[] {
+  fillPath.removeAttribute('pathLength');
+  fillPath.setAttribute('d', fullD);
+  const total = fillPath.getTotalLength();
+  if (total <= 0) return points.map((_, i) => (i === 0 ? 0 : 1));
+
+  const fracs = points.map((_, i) => {
+    if (i === 0) return 0;
+    if (i === points.length - 1) return 1;
+    /* Prefix through this marker — same control points as the full path. */
+    fillPath.setAttribute('d', buildCurvePath(points.slice(0, i + 1)));
+    return clamp(fillPath.getTotalLength() / total, 0, 1);
+  });
+
+  fillPath.setAttribute('d', fullD);
+  return fracs;
 }
 
-/** Scroll-driven step timeline: straight path fill + active/current step states. */
+/** Scroll progress 0→1 as the activation line sweeps from marker 1 → marker N. */
+function fillProgress(activationY: number, centers: number[], fracs: number[]): number {
+  const last = centers.length - 1;
+  if (last < 1 || fracs.length !== centers.length) return 0;
+
+  if (activationY <= centers[0]) return 0;
+  if (activationY >= centers[last]) return 1;
+
+  for (let i = 0; i < last; i++) {
+    const y0 = centers[i];
+    const y1 = centers[i + 1];
+    if (activationY < y0 || activationY > y1) continue;
+    const t = (activationY - y0) / Math.max(y1 - y0, 1);
+    const a = fracs[i] ?? 0;
+    const b = fracs[i + 1] ?? 1;
+    return a + t * (b - a);
+  }
+
+  return 0;
+}
+
+/** Scroll-driven step timeline: progressive S-curve fill + step states. */
 export function useStepTimeline<T extends HTMLElement>() {
   const rootRef = useRef<T>(null);
 
@@ -61,35 +108,41 @@ export function useStepTimeline<T extends HTMLElement>() {
     const items = Array.from(root.querySelectorAll<HTMLElement>('[data-step-timeline-item]'));
     if (!wrapper || !svg || !trackPath || !fillPath || !items.length) return;
 
-    let endLength = 0;
-    let markerPathLengths: number[] = [];
+    let fracs: number[] = [];
 
     const layoutPath = () => {
       const points = markerPoints(wrapper, items);
       if (points.length < 2) return;
 
-      const lastY = points[points.length - 1].y;
-      const h = Math.max(wrapper.clientHeight, Math.ceil(lastY + 8));
+      const lastCenterY = points[points.length - 1].y;
+      const pathEndY = lastCenterY + END_PAD;
+      const h = Math.max(wrapper.clientHeight, Math.ceil(pathEndY + 12));
       if (h <= 0) return;
 
       svg.setAttribute('viewBox', `0 0 ${VIEW_W} ${h}`);
       svg.setAttribute('preserveAspectRatio', 'none');
-      /* Keep SVG tall enough to include the last marker when layout grows. */
       svg.style.height = `${h}px`;
       svg.style.bottom = 'auto';
 
-      const d = buildStraightPath(points);
+      const drawn = points.map((pt, i) =>
+        i === points.length - 1 ? { x: VIEW_W / 2, y: pathEndY } : pt,
+      );
+      const d = buildCurvePath(drawn);
+
       trackPath.setAttribute('d', d);
+      trackPath.setAttribute('fill', 'none');
+      fillPath.setAttribute('fill', 'none');
+
+      /*
+       * Measure real arc fractions on the painted path, then normalize dashes
+       * with pathLength=1 so the stroke always reaches #4 under SVG stretching.
+       */
+      fracs = measureFractions(fillPath, points, d);
+
       fillPath.setAttribute('d', d);
-
-      endLength = fillPath.getTotalLength();
-      markerPathLengths = points.map((pt) => pathLengthAtY(fillPath, pt.y, endLength));
-      /* Snap last length to full path so the track/fill always reach #5. */
-      if (markerPathLengths.length) {
-        markerPathLengths[markerPathLengths.length - 1] = endLength;
-      }
-
-      fillPath.style.strokeDasharray = String(endLength);
+      fillPath.setAttribute('pathLength', '1');
+      /* dash + gap both 1 → offset 1 hides, offset 0 reveals full path */
+      fillPath.style.strokeDasharray = '1 1';
       trackPath.style.strokeDasharray = 'none';
       trackPath.style.strokeDashoffset = '0';
     };
@@ -102,19 +155,23 @@ export function useStepTimeline<T extends HTMLElement>() {
         return r.top + r.height / 2;
       });
 
+    const setFillProgress = (progress: number) => {
+      fillPath.style.strokeDashoffset = String(1 - clamp(progress, 0, 1));
+    };
+
     const updateFill = () => {
       const vh = window.innerHeight || document.documentElement.clientHeight;
       const activationY = vh * ACTIVATION;
       const centers = markerCenters();
-      const lastMarkerLength = markerPathLengths[markerPathLengths.length - 1] ?? endLength;
+      const last = items.length - 1;
 
       if (reduce) {
         items.forEach((item, i) => {
           item.setAttribute('data-status', 'active');
-          if (i === items.length - 1) item.setAttribute('data-current', '');
+          if (i === last) item.setAttribute('data-current', '');
           else item.removeAttribute('data-current');
         });
-        fillPath.style.strokeDashoffset = String(Math.max(endLength - lastMarkerLength, 0));
+        setFillProgress(1);
         return;
       }
 
@@ -128,41 +185,15 @@ export function useStepTimeline<T extends HTMLElement>() {
         }
         item.removeAttribute('data-current');
       });
+      if (currentIndex >= 0) items[currentIndex].setAttribute('data-current', '');
 
-      if (currentIndex >= 0) {
-        items[currentIndex].setAttribute('data-current', '');
-      }
+      if (fracs.length !== items.length) return;
 
-      if (!endLength || markerPathLengths.length !== items.length) return;
-
-      const firstY = centers[0];
-      const lastY = centers[centers.length - 1];
-
-      let visibleLength = 0;
-      if (activationY <= firstY) {
-        visibleLength = 0;
-      } else if (activationY >= lastY) {
-        visibleLength = lastMarkerLength;
-      } else {
-        for (let i = 0; i < items.length - 1; i++) {
-          const y0 = centers[i];
-          const y1 = centers[i + 1];
-          if (activationY >= y0 && activationY <= y1) {
-            const t = (activationY - y0) / Math.max(y1 - y0, 1);
-            visibleLength = markerPathLengths[i] + t * (markerPathLengths[i + 1] - markerPathLengths[i]);
-            break;
-          }
-        }
-      }
-
-      fillPath.style.strokeDashoffset = String(Math.max(endLength - visibleLength, 0));
+      setFillProgress(fillProgress(activationY, centers, fracs));
     };
 
     const relayout = () => {
       layoutPath();
-      fillPath.style.strokeDashoffset = reduce
-        ? String(Math.max(endLength - (markerPathLengths.at(-1) ?? endLength), 0))
-        : String(endLength);
       updateFill();
     };
 

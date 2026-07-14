@@ -173,16 +173,16 @@ export default function CosmicScene() {
 
       // Scroll-driven reveal: map the fly-in to progress through the prophecy
       // pin so it plays fully as you scroll and can't be skipped. The intro
-      // window (0.56 -> 0.98) sits after the cosmos fades in and runs almost to
-      // the end of the pin so the motion fills the whole scroll (no dead scroll
-      // after it lands) before the section unpins into the next block.
+      // window sits after the cosmos fades in and runs almost to the end of
+      // the pin so the motion fills the whole scroll (no dead scroll after it
+      // lands) before the section unpins into the next block.
       let pp = 0;
       if (host) {
         const total = host.offsetHeight - window.innerHeight;
         const passed = -host.getBoundingClientRect().top;
         pp = Math.max(0, Math.min(1, passed / Math.max(total, 1)));
       }
-      const intro = reduce ? 1 : Math.max(0, Math.min(1, (pp - 0.56) / 0.42));
+      const intro = reduce ? 1 : Math.max(0, Math.min(1, (pp - 0.64) / 0.34));
       const e = intro * intro * (4.5 - 2 * intro);
       nebula.rotation.z = e * 2.2 + t * 0.05;
       const targetZ = 260 - e * 340;

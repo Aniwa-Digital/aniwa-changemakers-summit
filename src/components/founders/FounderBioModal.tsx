@@ -1,5 +1,6 @@
 import type { FounderSeat } from '../../lib/content';
 import { Modal } from '../ui/Modal';
+import { FounderBioText, FounderProfileLinks } from './FounderBio';
 
 type FounderBioModalProps = {
   founder: FounderSeat | null;
@@ -42,21 +43,15 @@ export function FounderBioModal({ founder, onClose }: FounderBioModalProps) {
           </div>
         </div>
         {founder.bio ? (
-          <p className="bd" style={{ color: 'rgba(46,40,32,0.78)', fontSize: '0.98rem', lineHeight: 1.62, margin: '24px 0 0' }}>
-            {founder.bio}
-          </p>
+          <div style={{ marginTop: 24 }}>
+            <FounderBioText
+              key={founder.name}
+              bio={founder.bio}
+              className="bd founders-detail__bio"
+            />
+          </div>
         ) : null}
-        {founder.linkedin ? (
-          <a
-            href={founder.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="eye founders-detail__profile-link"
-            style={{ marginTop: founder.bio ? 20 : 24 }}
-          >
-            View profile →
-          </a>
-        ) : null}
+        <FounderProfileLinks founder={founder} />
       </div>
     </Modal>
   );

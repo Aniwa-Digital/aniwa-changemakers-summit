@@ -62,7 +62,7 @@ export function FoundersCircle() {
           style={{
             color: 'rgba(46,40,32,0.72)',
             fontFamily: 'var(--font-display)',
-            fontSize: '1.5rem',
+            fontSize: 'clamp(1.05rem, 2.8vw, 1.25rem)',
             lineHeight: 1.42,
             margin: '20px auto 0',
             maxWidth: 700,

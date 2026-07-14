@@ -66,26 +66,27 @@ function cineProgression(reduce: boolean): void {
   if (a0) a0.style.opacity = String(vis(p, -0.05, 0, 0.1, 0.14));
   if (a1) a1.style.opacity = String(vis(p, 0.14, 0.18, 0.24, 0.28));
   if (a2) a2.style.opacity = String(vis(p, 0.28, 0.32, 0.38, 0.42));
-  // Act 3 must fully exit before act 4 ("Calling forth…") rises in — no overlap.
+  // Act 3 must fully land and hold before fading — no overlap with act 4.
   if (a3) {
-    const a3o = vis(p, 0.42, 0.48, 0.5, 0.58);
+    const a3o = vis(p, 0.42, 0.48, 0.58, 0.66);
     a3.style.opacity = String(a3o);
     a3.style.visibility = a3o < 0.01 ? 'hidden' : 'visible';
   }
   revealActInner(a0, p, -0.05, 0.1, reduce);
   revealActInner(a1, p, 0.14, 0.24, reduce);
   revealActInner(a2, p, 0.28, 0.38, reduce);
-  revealActInner(a3, p, 0.42, 0.5, reduce);
-  revealActInner(a4, p, 0.64, 0.78, reduce);
-  if (ember) ember.style.opacity = (lerp(p, 0.42, 0.5) * 0.55).toFixed(3);
+  revealActInner(a3, p, 0.42, 0.48, reduce);
+  revealActInner(a4, p, 0.70, 0.84, reduce);
+  if (ember) ember.style.opacity = (lerp(p, 0.42, 0.48) * 0.55).toFixed(3);
   // Beige field slowly fades into the land photo as the section scrolls in;
   // the white scrim fades in with it so the empty top stays cream (matching the
   // hero) and the wash only appears once the photo is present.
   const bgOpacity = reduce ? 1 : Number(lerp(p, 0, 0.13));
   if (scrim) scrim.style.opacity = bgOpacity.toFixed(3);
 
-  // After "THIS TIME HAS ARRIVED": expand the photo and fade to solid dark.
-  const endP = reduce ? 0 : clamp01((p - 0.46) / 0.08);
+  // After "THIS TIME HAS ARRIVED" has fully settled: expand the photo and fade
+  // to solid dark (starts near the end of act 3's hold, not mid fade-in).
+  const endP = reduce ? 0 : clamp01((p - 0.56) / 0.1);
   const outroP = lerp(p, 0.94, 1);
   if (bg) {
     bg.style.opacity = bgOpacity.toFixed(3);
@@ -95,13 +96,13 @@ function cineProgression(reduce: boolean): void {
 
   // Cosmic starfield fades in over the darkness and holds; the "Calling forth"
   // copy then scrolls up (translateY) into frame while the cosmos stays pinned.
-  const cosmicIn = lerp(p, 0.54, 0.64);
+  const cosmicIn = lerp(p, 0.62, 0.72);
   if (cosmic) cosmic.style.opacity = (cosmicIn * (1 - outroP)).toFixed(3);
   if (a4) {
-    const a4o = p < 0.58 ? 0 : lerp(p, 0.62, 0.74);
+    const a4o = p < 0.66 ? 0 : lerp(p, 0.70, 0.82);
     a4.style.opacity = a4o.toFixed(3);
     a4.style.visibility = a4o < 0.01 ? 'hidden' : 'visible';
-    const rise = reduce ? 0 : (1 - lerp(p, 0.62, 0.84)) * 80;
+    const rise = reduce ? 0 : (1 - lerp(p, 0.70, 0.90)) * 80;
     a4.style.transform = `translateY(${rise.toFixed(1)}px)`;
   }
   // Outro: wash only the cosmic/dark background back to bone; copy stays on top.

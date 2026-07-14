@@ -9,8 +9,7 @@ const Weaving = lazyNamed(() => import('../components/weaving/Weaving'), 'Weavin
 const Room = lazyNamed(() => import('../components/room/Room'), 'Room');
 const Days = lazyNamed(() => import('../components/days/Days'), 'Days');
 const FoundersCircle = lazyNamed(() => import('../components/founders/FoundersCircle'), 'FoundersCircle');
-const Invitation = lazyNamed(() => import('../components/invitation/Invitation'), 'Invitation');
-const Closing = lazyNamed(() => import('../components/closing/Closing'), 'Closing');
+const PurposeClosing = lazyNamed(() => import('../components/closing/PurposeClosing'), 'PurposeClosing');
 
 const prophecyFallback = (
   <div id="prophecy" aria-hidden="true" style={{ minHeight: '100vh', background: 'var(--ground-light)' }} />
@@ -50,17 +49,12 @@ export function HomeScroll({ inviteOpen, onInviteOpen, onInviteClose }: HomeScro
             <FoundersCircle />
           </Suspense>
         </LazySection>
-        <LazySection minHeight="100vh" className="lazy-section" style={{ background: 'var(--aniwa-purple)' }}>
+        <LazySection minHeight="120vh" className="lazy-section lazy-section--purpose">
           <Suspense fallback={null}>
-            <Invitation onInviteOpen={onInviteOpen} />
+            <PurposeClosing onInviteOpen={onInviteOpen} />
           </Suspense>
         </LazySection>
       </main>
-      <LazySection minHeight="100vh" className="lazy-section" style={{ background: 'var(--aniwa-purple)' }}>
-        <Suspense fallback={null}>
-          <Closing />
-        </Suspense>
-      </LazySection>
       <InviteCodeModal open={inviteOpen} onClose={onInviteClose} />
     </div>
   );

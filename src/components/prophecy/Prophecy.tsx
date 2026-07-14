@@ -103,11 +103,15 @@ export function Prophecy() {
           >
             A time when the people of the North&nbsp;
             <br />
-            <span style={{ color: 'rgba(0,0,0,0.55)' }}>— of mind, of structure, of technology —</span>
+            <span style={{ color: 'rgba(0,0,0,0.55)', fontSize: '0.82em', fontWeight: 500 }}>
+              — of mind, of structure, of technology —
+            </span>
             <br />
             would meet around the same fire as the people of the South&nbsp;
             <br />
-            <span style={{ color: 'rgba(0,0,0,0.55)' }}>— of heart, of spirit, of land —</span>
+            <span style={{ color: 'rgba(0,0,0,0.55)', fontSize: '0.82em', fontWeight: 500 }}>
+              — of heart, of spirit, of land —
+            </span>
           </p>
           </div>
         </div>
@@ -137,9 +141,13 @@ export function Prophecy() {
               maxWidth: 780,
             }}
           >
-            Converging the strengths of opposing paradigms
+            Converging the{' '}
+            <strong style={{ fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '0.12em' }}>
+              strengths
+            </strong>{' '}
+            of opposing paradigms
             <br />
-            to weave a shared path forward together.
+            to weave a shared path forward together
           </p>
           </div>
         </div>
@@ -151,10 +159,8 @@ export function Prophecy() {
             inset: 0,
             zIndex: 2,
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: 26,
             padding: '0 24px',
             textAlign: 'center',
             opacity: 0,
@@ -170,6 +176,7 @@ export function Prophecy() {
               lineHeight: 1.04,
               fontSize: 'clamp(1.9rem, 3.6vw, 3rem)',
               margin: 0,
+              marginTop: '6vh',
             }}
           >
             THIS TIME HAS ARRIVED
@@ -255,7 +262,7 @@ export function Prophecy() {
                 margin: '18px 0 0',
               }}
             >
-              Calling forth 100 Planetary Leaders.
+              Calling forth 100 Planetary Leaders
             </h2>
             <p
               className="bd"
@@ -264,12 +271,18 @@ export function Prophecy() {
                 fontSize: '0.98rem',
                 lineHeight: 'var(--leading-body)',
                 margin: '26px auto 0',
-                maxWidth: 680,
+                maxWidth: 480,
               }}
             >
-              Today&rsquo;s leaders don&rsquo;t need another event. We need the truths that will guide us. Charting the
-              map from an extractive paradigm of destruction to a regenerative destiny of mutual benefit. Weaving the
-              Way forward together.
+              Today&rsquo;s leaders don&rsquo;t need another event.
+              <br />
+              We need the truths that will guide us.
+              <br />
+              <br />
+              Charting the map from an extractive paradigm of destruction to a regenerative destiny of mutual benefit.
+              <br />
+              <br />
+              Weaving the Way forward together.
             </p>
           </div>
         </div>

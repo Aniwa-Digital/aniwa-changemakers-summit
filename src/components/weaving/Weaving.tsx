@@ -263,7 +263,7 @@ export function Weaving() {
             <p className="bd" style={{ color: 'rgba(46,40,32,0.78)', fontSize: '0.98rem', lineHeight: 1.62, margin: '24px 0 0' }}>
               {selected.bio}
             </p>
-            {(selected.linkedin || selected.website) && (
+            {(selected.linkedin || selected.website || selected.instagram) && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', marginTop: 20 }}>
                 {selected.linkedin ? (
                   <a
@@ -273,7 +273,7 @@ export function Weaving() {
                     className="eye founders-detail__profile-link"
                     style={{ marginTop: 0 }}
                   >
-                    View profile →
+                    LinkedIn →
                   </a>
                 ) : null}
                 {selected.website ? (
@@ -284,7 +284,18 @@ export function Weaving() {
                     className="eye founders-detail__profile-link"
                     style={{ marginTop: 0 }}
                   >
-                    View website →
+                    Website →
+                  </a>
+                ) : null}
+                {selected.instagram ? (
+                  <a
+                    href={selected.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="eye founders-detail__profile-link"
+                    style={{ marginTop: 0 }}
+                  >
+                    Instagram →
                   </a>
                 ) : null}
               </div>
