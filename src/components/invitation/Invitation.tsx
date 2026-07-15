@@ -12,12 +12,12 @@ export function Invitation({ onInviteOpen }: InvitationProps) {
       <div className="invitation-intro">
         <h2 className="disp invitation-intro__title">A Call to Purpose</h2>
         <p className="myth invitation-intro__body">
-          Participation in the Aniwa Changemakers Summit&mdash;whether as an attendee, speaker, or member of the
-          Founders Circle&mdash;is by invitation, curated to ensure deep alignment, integrity, and shared commitment.
+          Participation in the Aniwa Changemakers Summit&mdash;whether as an attendee or member of the Founders
+          Circle&mdash;is by invitation, curated to ensure deep alignment, integrity, and shared commitment.
         </p>
         <div className="invitation-actions">
           <a href="#/apply" className="eye ember invitation-actions__apply">
-            Apply for Invite
+            Apply for an Invitation
           </a>
           <button type="button" onClick={onInviteOpen} className="eye invitation-actions__code">
             Enter Invite Code

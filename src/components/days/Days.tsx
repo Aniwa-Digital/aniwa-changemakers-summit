@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { ElementCards } from './ElementCards';
 
-const ELEMENTS_BG_DESKTOP =
-  'https://res.cloudinary.com/dpd7ju6vn/image/upload/f_webp,q_auto:good/v1784009995/desktop_four_elements_wqxtjf.webp';
+const ELEMENTS_BG_DESKTOP = '/assets/img/bg_elements.webp';
 const ELEMENTS_BG_MOBILE =
   'https://res.cloudinary.com/dpd7ju6vn/image/upload/f_webp,q_auto:good/v1784008247/four_elements_mobile_ikoctf.webp';
 
@@ -85,8 +84,8 @@ export function Days() {
               src={ELEMENTS_BG_DESKTOP}
               alt=""
               className="elements-panel__bg-img"
-              width={2624}
-              height={6528}
+              width={2816}
+              height={6028}
               loading="lazy"
               decoding="async"
               aria-hidden="true"
@@ -98,29 +97,23 @@ export function Days() {
           <div className="elements-panel__header">
             <span className="eye elements-panel__pill">OUR TOPICS FOR 2026</span>
             <h2 className="disp elements-panel__title">
-              <span className="elements-panel__title-desk">Explore the Four Elements</span>
-              <span className="elements-panel__title-mobile">
-                Our Topics:
-                <br />
-                The Four Elements
-              </span>
+              <span className="elements-panel__title-desk">Our Elemental Focus</span>
+              <span className="elements-panel__title-mobile">Our Elemental Focus</span>
             </h2>
           </div>
           <div className="elements-panel__dock">
             <ElementCards />
           </div>
           <div className="elements-expect">
-            <div className="eye elements-expect__eyebrow">What to expect</div>
             <h3 className="disp elements-expect__title">
               Mind&nbsp;+&nbsp;Body&nbsp;+&nbsp;Planet
             </h3>
             <p className="bd elements-expect__body">
-              Workshops, panels and 1:1 sessions designed to cultivate mind-share and heart presence in alignment with the
-              four elements — on a private reserve tucked amongst the savannah oak of Sonoma
-              County, California.
+              Panels, practices, and private sessions designed to cultivate mind-share and presence in alignment with our
+              full selves — on a private meadow tucked among the countryside for Sonoma County, California.
             </p>
             <p className="bd elements-expect__body">
-              Come knowing some names, leave with a shared mission.
+              Arrive knowing some names and leave with a shared mission.
             </p>
           </div>
         </div>

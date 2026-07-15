@@ -84,7 +84,7 @@ export function ApplyPage() {
               borderRadius: 'var(--radius-house)',
             }}
           >
-            <p className="myth" style={{ color: '#F4F1EB', fontSize: '1.4rem', margin: 0 }}>
+            <p className="myth" style={{ color: '#F4F1EB', fontSize: '1.4rem', margin: 0, fontStyle: 'normal' }}>
               Thank you — your application has been received.
             </p>
             <p className="bd" style={{ color: 'rgba(255,255,255,0.72)', fontSize: '1rem', margin: '14px 0 0' }}>

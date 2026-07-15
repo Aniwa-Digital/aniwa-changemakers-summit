@@ -35,7 +35,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
         a = atan(p.y, p.x) + a + i * i;
         float sm = smoothstep(edge0, edge1, cos(a));
 
-        o += 0.022 / denom * sm * (1.2 + sin(a + i + vec4(0.0, 2.0, 4.0, 0.0)));
+        o += 0.022 / denom * sm * (1.15 + sin(a + i + 2.5 + vec4(0.0, 2.094, 4.188, 0.0)));
     }
 
     o = tanh(o);

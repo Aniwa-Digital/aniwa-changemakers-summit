@@ -104,13 +104,13 @@ export function Prophecy() {
             A time when the people of the North&nbsp;
             <br />
             <span style={{ color: 'rgba(0,0,0,0.55)', fontSize: '0.82em', fontWeight: 500 }}>
-              — of mind, of structure, of technology —
+              — of mind, of structure, of technology
             </span>
             <br />
             would meet around the same fire as the people of the South&nbsp;
             <br />
             <span style={{ color: 'rgba(0,0,0,0.55)', fontSize: '0.82em', fontWeight: 500 }}>
-              — of heart, of spirit, of land —
+              — of heart, of spirit, of land
             </span>
           </p>
           </div>
@@ -141,13 +141,10 @@ export function Prophecy() {
               maxWidth: 780,
             }}
           >
-            Converging the{' '}
-            <strong style={{ fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '0.12em' }}>
-              strengths
-            </strong>{' '}
-            of opposing paradigms
+            Converging the strengths of opposing paradigms
             <br />
-            to weave a shared path forward together
+            to weave a shared path forward{' '}
+            <span style={{ color: 'var(--aniwa-gold)' }}>together</span>
           </p>
           </div>
         </div>
@@ -179,7 +176,7 @@ export function Prophecy() {
               marginTop: '6vh',
             }}
           >
-            THIS TIME HAS ARRIVED
+            THIS TIME HAS <span style={{ color: 'var(--aniwa-gold)' }}>ARRIVED</span>
           </h2>
           </div>
         </div>
@@ -262,11 +259,16 @@ export function Prophecy() {
                 margin: '18px 0 0',
               }}
             >
-              Calling forth 100 Planetary Leaders
+              Calling forth
+              <br />
+              100
+              <br />
+              Planetary Leaders
             </h2>
             <p
               className="bd"
               style={{
+                fontFamily: 'var(--font-display)',
                 color: 'var(--on-light-body)',
                 fontSize: '0.98rem',
                 lineHeight: 'var(--leading-body)',
@@ -274,9 +276,7 @@ export function Prophecy() {
                 maxWidth: 480,
               }}
             >
-              Today&rsquo;s leaders don&rsquo;t need another event.
-              <br />
-              We need the truths that will guide us.
+              At this pivotal moment in our history, we need the critical truths that will guide us.
               <br />
               <br />
               Charting the map from an extractive paradigm of destruction to a regenerative destiny of mutual benefit.

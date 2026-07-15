@@ -195,7 +195,10 @@ export function Weaving() {
         }}
       >
         <p className="disp weaving-tagline__line" data-reveal>
-          Multiple paradigms weaving a shared path towards
+          Multiple paradigms weaving
+        </p>
+        <p className="disp weaving-tagline__line" data-reveal>
+          a shared path towards
         </p>
         <p className="disp weaving-tagline__line" data-reveal>
           <span style={{ color: 'var(--aniwa-terracotta)' }}>a regenerative future for all life.</span>

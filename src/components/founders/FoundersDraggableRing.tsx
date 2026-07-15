@@ -157,8 +157,6 @@ export function FoundersDraggableRing({ founders }: FoundersDraggableRingProps) 
 
   return (
     <div className="founders-interactive" data-drag-ring="" data-reveal="">
-      <p className="eye founders-interactive__hint">Drag the circle to explore</p>
-
       <div
         ref={stageRef}
         className={`founders-ring-stage${dragging ? ' founders-ring-stage--dragging' : ''}`}

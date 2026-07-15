@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Invitation } from '../invitation/Invitation';
-import { BrandMark } from '../ui/BrandMark';
+import { HUYA_ANIWA_HEADER_LOGO_SRC } from '../../lib/brand';
 
 const FireSphere = lazy(() => import('./FireSphere'));
 const CompassOverlay = lazy(() => import('../hero/CompassOverlay'));
@@ -34,7 +34,7 @@ export function PurposeClosing({ onInviteOpen }: PurposeClosingProps) {
         <div id="closing" className="closing-band">
           <div className="closing-copy">
             <h2 className="disp closing-title">
-              Two paths.
+              Many paths.
               <br />
               One fire.
               <br />
@@ -60,11 +60,15 @@ export function PurposeClosing({ onInviteOpen }: PurposeClosingProps) {
       <footer className="closing-footer">
         <p className="closing-footer__lead">Shaping our future with wisdom</p>
         <div className="closing-contact">
-          <BrandMark logoHeight={34} word="Huya Aniwa" wordFont="display" />
+          <img
+            src={HUYA_ANIWA_HEADER_LOGO_SRC}
+            alt="Huya Aniwa Foundation"
+            className="closing-footer__logo"
+          />
           <span className="eye closing-footer__meta">summit@huyaaniwa.org</span>
         </div>
         <div className="eye closing-footer__meta closing-footer__meta--soft">
-          A nonprofit initiative of Aniwa &amp; the Huya Aniwa Foundation
+          A nonprofit initiative of Aniwa
         </div>
         <div className="eye closing-footer__meta closing-footer__meta--soft closing-footer__credit">
           Compass design by Dante Orpilla from the book,{' '}

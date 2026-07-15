@@ -274,15 +274,15 @@ export interface PartnerLogo {
 
 export const partnerLogos: PartnerLogo[] = [
   { name: 'Google', src: '/assets/logos/google.webp', large: false },
-  { name: 'Apple', src: '/assets/logos/apple.webp', large: false },
-  { name: 'Disney+', src: '/assets/logos/disney.webp', large: true },
+  { name: 'Apple', src: '/assets/logos/apple.webp', large: false, height: 50, maxWidth: 120 },
+  { name: 'Disney+', src: '/assets/logos/disney.webp', large: true, height: 88, maxWidth: 220 },
   { name: 'Netflix', src: '/assets/logos/netflix.webp', large: true },
   { name: 'Adobe', src: '/assets/logos/adobe.webp', large: false },
   { name: 'Palo Alto Networks', src: '/assets/logos/palo-alto-networks.webp', large: true },
   { name: 'Pachamama Alliance', src: '/assets/logos/pachamama-alliance.webp', large: true },
   { name: 'Pulse Fund', src: '/assets/logos/pulse-fund.png', large: true, height: 52, maxWidth: 140 },
   { name: 'National Geographic', src: '/assets/logos/natgeo.webp', large: true },
-  { name: 'Reddit', src: '/assets/logos/reddit.webp', large: false },
+  { name: 'Reddit', src: '/assets/logos/reddit.webp', large: false, height: 50, maxWidth: 130 },
   { name: 'Block', src: '/assets/logos/block.webp', large: true },
   { name: 'Stanford', src: '/assets/logos/stanford.webp', large: true },
   { name: 'Amazon', src: '/assets/logos/amazon.webp', large: false },
@@ -313,7 +313,7 @@ export const elements: ElementBox[] = [
   {
     id: 'water',
     name: 'Water',
-    description: 'Indigenous spirituality and the planetary polycrisis.',
+    description: 'Indigenous spirituality & the planetary polycrisis.',
     longDescription:
       'Listen to the spiritual teachings of Original Peoples as they respond to climate collapse, biodiversity loss, and the converging crises of our time. This element holds ceremony, prayer, and the sacred relationship between humanity and Water as a source of planetary perspective.',
     img: '/assets/elements/water.webp',
@@ -321,7 +321,7 @@ export const elements: ElementBox[] = [
   {
     id: 'fire',
     name: 'Fire',
-    description: 'Regenerative economies and nature finance.',
+    description: 'Regenerative economies & nature finance.',
     longDescription:
       'Catalyze capital toward regeneration. Discussions and workshops on nature finance, circular economies, and the economic architectures that can shift us from extraction to mutual benefit with the living world.',
     img: '/assets/elements/fire.webp',
@@ -329,7 +329,7 @@ export const elements: ElementBox[] = [
   {
     id: 'earth',
     name: 'Earth',
-    description: 'Personal wellness and the evolution of consciousness.',
+    description: 'Personal wellness & the evolution of consciousness.',
     longDescription:
       'Ground in practices that reconnect body, mind, and spirit. From ceremonial healing to contemplative inquiry, this track invites leaders to tend their inner landscape — the foundation from which planetary stewardship grows.',
     img: '/assets/elements/earth.webp',
@@ -469,7 +469,7 @@ const ringMembers: RingMember[] = [
     name: 'Anka Amaru',
     role: 'Regenerative Land Steward',
     img: '/assets/people/anka.webp',
-    bio: 'Anka Amaru is a founding member of Ayllu Illa Wasi, a multi-generational, land-based heirloom culture center focused on reindigenizing, sustainability, and world bridging. Bringing over 20 years of experience working with Indigenous communities as well as a background in zero-point energy studies, she serves as host and bridge for the Aniwa Summit.',
+    bio: 'Anka Amaru is a founding member of Ayllu Illa Wasi, a multi-generational, land-based heirloom culture center focused on reindigenizing, sustainability, and world bridging. Bringing over 20 years of experience working with Indigenous communities as well as a background in zero-point energy studies, he serves as host and bridge for the Aniwa Summit.',
   },
 ];
 
@@ -495,6 +495,6 @@ export interface Step {
 export const steps: Step[] = [
   { n: '01', label: 'Receive invitation code' },
   { n: '02', label: 'Apply to attend' },
-  { n: '03', label: 'Enter the guest portal' },
-  { n: '04', label: 'Arrive on land' },
+  { n: '03', label: 'Join the Changemakers community' },
+  { n: '04', label: 'Arrive on the land' },
 ];

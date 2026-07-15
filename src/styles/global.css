@@ -310,7 +310,9 @@ img {
   display: block;
   padding: 0;
   overflow: visible;
-  background: #0a0a12;
+  /* Transparent so no dark fill shows around/under the framed art — the
+     bg image carries its own cosmos + cream border. */
+  background: transparent;
   /* Keep glass samples stable (avoids backdrop-filter first-paint glitch) */
   transform: translateZ(0);
 }
@@ -322,6 +324,29 @@ img {
   line-height: 0;
 }
 
+/* Desktop: pull the four elements section 40px wider on each side */
+@media (min-width: 768px) {
+  .elements-panel {
+    margin-left: -40px;
+    margin-right: -40px;
+  }
+
+  /* Lift the header (four elements text), cards, and Mind + Body + Planet */
+  .elements-panel__header {
+    transform: translateY(60px);
+  }
+  .elements-panel__dock {
+    transform: translateY(24px);
+  }
+  .elements-expect {
+    transform: translateY(-220px);
+  }
+  /* Nudge the "Our topics for 2026" pill up above the title */
+  .elements-panel__pill {
+    transform: translateY(-24px);
+  }
+}
+
 .elements-panel__bg-img {
   display: block;
   width: 100%;
@@ -329,8 +354,8 @@ img {
   max-height: none;
   object-fit: contain;
   object-position: top center;
-  /* Four Elements watercolor — desktop 2624×6528 */
-  aspect-ratio: 2624 / 6528;
+  /* Four Elements watercolor — desktop 2816×6028 */
+  aspect-ratio: 2816 / 6028;
   filter: none;
   opacity: 1;
 }
@@ -388,12 +413,12 @@ img {
   padding: 0 clamp(28px, 5vw, 48px) clamp(28px, 4vw, 40px);
   text-align: center;
   pointer-events: none;
-  /* Soft cosmos blue bloom — lifts white copy off the starfield */
+  /* Soft bloom (#272738) — lifts white copy off the starfield */
   background: radial-gradient(
     ellipse 72% 68% at 50% 48%,
-    rgba(10, 28, 72, 0.78) 0%,
-    rgba(8, 22, 58, 0.52) 38%,
-    rgba(6, 16, 42, 0.18) 64%,
+    rgba(39, 39, 56, 0.78) 0%,
+    rgba(39, 39, 56, 0.52) 38%,
+    rgba(39, 39, 56, 0.18) 64%,
     transparent 78%
   );
 }
@@ -439,10 +464,10 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 9px 18px;
+  padding: 12px 26px;
   border-radius: 999px;
   color: #fff;
-  font-size: 0.62rem;
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
   letter-spacing: 0.16em;
   background: rgba(255, 255, 255, 0.38);
   border: 1px solid rgba(255, 255, 255, 0.65);
@@ -957,6 +982,7 @@ img {
   line-height: 1.28;
   margin: 0;
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 .element-card__detail {
@@ -1206,9 +1232,9 @@ img {
     max-width: 34rem;
     background: radial-gradient(
       ellipse 85% 75% at 50% 45%,
-      rgba(8, 22, 62, 0.82) 0%,
-      rgba(6, 18, 50, 0.55) 42%,
-      rgba(4, 12, 36, 0.2) 68%,
+      rgba(39, 39, 56, 0.82) 0%,
+      rgba(39, 39, 56, 0.55) 42%,
+      rgba(39, 39, 56, 0.2) 68%,
       transparent 82%
     );
   }
@@ -1645,7 +1671,8 @@ img {
   object-position: center top;
 }
 
-/* Soft blend from Founders bone into the photo — clears before Call to Purpose */
+/* Soft blend from Founders bone into the photo — clears quickly so the
+   gathering photo is visible behind Call to Purpose */
 .purpose-continuum::before {
   content: '';
   position: absolute;
@@ -1653,12 +1680,12 @@ img {
   right: 0;
   top: 0;
   z-index: 1;
-  height: clamp(100px, 14vh, 180px);
+  height: clamp(70px, 9vh, 120px);
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     var(--aniwa-bone) 0%,
-    color-mix(in oklab, var(--aniwa-bone) 70%, transparent) 55%,
+    color-mix(in oklab, var(--aniwa-bone) 55%, transparent) 45%,
     transparent 100%
   );
 }
@@ -1686,14 +1713,16 @@ img {
 
 .invitation-intro__title {
   color: var(--ink-on-light);
-  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-size: 3.9rem;
   margin: 0;
   text-transform: uppercase;
 }
 
 .invitation-intro__body {
   color: color-mix(in oklab, var(--ink-on-light) 72%, transparent);
-  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+  line-height: 1.42;
   margin: 38px auto 0;
   max-width: 46rem;
   font-style: normal;
@@ -1787,47 +1816,26 @@ img {
   overflow: hidden;
 }
 
-/* Large black radial behind title + compass */
+/* Solid black field with a clean straight top edge — a crisp line between
+   the beige photo above and the black closing below (no gradient blend). */
 #closing.closing-band::before {
   content: '';
   position: absolute;
   left: 50%;
-  top: 56%;
+  top: 0;
   z-index: 0;
-  width: min(190vw, 1680px);
-  height: min(190vw, 1680px);
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
+  width: 100vw;
+  height: 100%;
+  transform: translateX(-50%);
+  border-radius: 0;
   pointer-events: none;
-  background: radial-gradient(
-    circle closest-side,
-    #000 0%,
-    rgba(0, 0, 0, 0.88) 32%,
-    rgba(0, 0, 0, 0.48) 55%,
-    rgba(0, 0, 0, 0.16) 78%,
-    transparent 100%
-  );
+  background: #000;
 }
 
 @media (min-width: 768px) {
-  /* Let the soft radial bleed (section clips overflow, so no extra page height) */
   #closing.closing-band,
   .closing-band#closing {
     overflow: visible;
-  }
-
-  #closing.closing-band::before {
-    width: min(240vw, 2600px);
-    height: min(240vw, 2600px);
-    background: radial-gradient(
-      circle closest-side,
-      #000 0%,
-      rgba(0, 0, 0, 0.9) 28%,
-      rgba(0, 0, 0, 0.55) 48%,
-      rgba(0, 0, 0, 0.22) 68%,
-      rgba(0, 0, 0, 0.06) 86%,
-      transparent 100%
-    );
   }
 }
 
@@ -1839,38 +1847,16 @@ img {
   padding: calc(clamp(72px, 12vh, 120px)) 24px 0;
 }
 
-/* Mobile: dark field fades in smoothly from the top of the band (blending the
-   grey timeline area into black) before it reaches the title — no hard cut. */
+/* Mobile: solid black band with a clean straight top edge against the beige. */
 @media (max-width: 767px) {
-  /* Let the full-width overlay bleed past the padded band to the screen edges;
-     pull the whole closing block (title, gradient, compass) + footer up 200px */
   #closing.closing-band,
   .closing-band#closing {
     overflow: visible;
-    margin-top: -350px;
+    margin-top: 0;
   }
 
-  #closing.closing-band::before {
-    top: 0;
-    left: 50%;
-    width: 100vw;
-    height: 100%;
-    transform: translateX(-50%);
-    border-radius: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 0,
-      rgba(0, 0, 0, 0.35) 80px,
-      rgba(0, 0, 0, 0.82) 150px,
-      #000 210px,
-      #000 100%
-    );
-  }
-
-  /* Title drops below the fade so it always sits on solid black
-     (+100px lower; compass kept in place via reduced bottom margin) */
   #closing .closing-copy {
-    padding: 270px 24px 0;
+    padding: 140px 24px 0;
     margin-bottom: 30px;
   }
 
@@ -1928,6 +1914,16 @@ img {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   /* Prevent any child overflow from inventing page height past the credit line */
   overflow: hidden;
+}
+
+.closing-footer__logo {
+  height: 40px;
+  width: auto;
+  max-width: min(340px, 78vw);
+  object-fit: contain;
+  /* Invert (not flatten) so the black arc bands read as white concentric
+     arcs while the cream gaps invert to near-black and blend into the footer. */
+  filter: invert(1);
 }
 
 .closing-footer__lead {
