@@ -166,18 +166,27 @@ Connecting the domain changes nothing on Netlify and requires no code change.
 
 ## 8. Forms & where submissions go
 
-Both public forms post to **Formspree** (a form-backend service):
+The two public forms post to different backends:
 
 
-| Form                       | Where it appears | Formspree form                       |
-| -------------------------- | ---------------- | ------------------------------------ |
-| Applications               | `#/apply` page   | "Changemakers Summit" (`f/xnjkrkzw`) |
-| Founders Circle nomination | open-seat modal  | "Founder Nomination" (`f/xpqgnvpw`)  |
+| Form                       | Where it appears | Backend                                       |
+| -------------------------- | ---------------- | --------------------------------------------- |
+| Applications               | `#/apply` page   | **Netlify Forms** (form name `applications`)  |
+| Founders Circle nomination | open-seat modal  | Formspree "Founder Nomination" (`f/xpqgnvpw`) |
 
 
-- Submissions land in the **Formspree account** (currently on a paid plan, ~100 submissions/month, project "ANIWA"). Access will be transferred separately.
-- There's a hidden static form in `index.html` — leave it; it's harmless and only exists so the old Netlify Forms detection stays happy.
-- Registration notifications from the invite-code flow are stored in Netlify Blobs (Section 6), separate from Formspree.
+**Applications flow (Netlify → Zapier → Airtable + Brevo):**
+
+- The `#/apply` form submits to the **Netlify Forms** `applications` form. It's registered by the hidden static `<form name="applications">` in `index.html` — leave that in place; it's what makes Netlify capture the AJAX submission.
+- A **Zapier** Zap triggers on each new Netlify Forms submission and automatically:
+  1. Adds a row to an **Airtable** base, and
+  2. Sends a notification **email via Brevo** to the designated recipient address configured in the Zap.
+- Every submission is also visible in the Netlify dashboard under **Forms → `applications`**.
+
+**Other submissions:**
+
+- The Founders Circle nomination form still lands in the **Formspree account** (currently on a paid plan, ~100 submissions/month, project "ANIWA"). Access will be transferred separately.
+- Registration notifications from the invite-code flow are stored in Netlify Blobs (Section 6), separate from the above.
 
 ---
 

@@ -42,13 +42,12 @@ export function ApplyPage() {
       if (typeof v === 'string') body.set(k, v);
     });
     try {
-      // Formspree form "applications" — submissions email the account owner.
-      const r = await fetch('https://formspree.io/f/xnjkrkzw', {
+      // Netlify Forms "applications" — the hidden static form in index.html
+      // registers it; posting the url-encoded body (incl. form-name) to the
+      // site root files the submission under that form.
+      const r = await fetch('/', {
         method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          accept: 'application/json',
-        },
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
       });
       if (r.ok) setSent(true);

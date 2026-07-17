@@ -333,13 +333,14 @@ img {
 
   /* Lift the header (four elements text), cards, and Mind + Body + Planet */
   .elements-panel__header {
-    transform: translateY(60px);
+    transform: translateY(260px);
   }
   .elements-panel__dock {
-    transform: translateY(24px);
+    transform: translateY(74px);
   }
+  /* Rise into the space freed by the tighter Air–Earth diamond */
   .elements-expect {
-    transform: translateY(-220px);
+    transform: translateY(-140px);
   }
   /* Nudge the "Our topics for 2026" pill up above the title */
   .elements-panel__pill {
@@ -354,8 +355,8 @@ img {
   max-height: none;
   object-fit: contain;
   object-position: top center;
-  /* Four Elements watercolor — desktop 2816×6028 */
-  aspect-ratio: 2816 / 6028;
+  /* Four Elements watercolor — desktop 3072×5504 */
+  aspect-ratio: 3072 / 5504;
   filter: none;
   opacity: 1;
 }
@@ -401,15 +402,42 @@ img {
   pointer-events: none;
 }
 
+/* Desktop: lift all Elemental Focus content (header, cards, Mind+Body+Planet)
+   up 100px over the fixed background art. */
+@media (min-width: 721px) {
+  .elements-panel__stack {
+    transform: translateY(-100px);
+  }
+}
+
 .elements-panel__stack .elements-panel__dock {
   pointer-events: auto;
+}
+
+/* Stickers sit on top of the bg image (same box), not in the text stack.
+   Hover-only interaction — hidden entirely on mobile. */
+@media (max-width: 720px) {
+  .elements-panel__scene {
+    display: none;
+  }
+}
+
+.elements-panel__scene {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  padding: 0;
 }
 
 .elements-expect {
   position: relative;
   z-index: 2;
   max-width: 880px;
-  margin: clamp(260px, 11vw, 140px) auto 0;
+  margin: clamp(80px, 8vw, 140px) auto 0;
   padding: 0 clamp(28px, 5vw, 48px) clamp(28px, 4vw, 40px);
   text-align: center;
   pointer-events: none;
@@ -662,8 +690,8 @@ img {
 .element-slot--air {
   grid-column: 2;
   grid-row: 1;
-  /* Pull toward the middle for even diamond spacing */
-  transform: translateY(clamp(36px, 5vw, 56px));
+  /* Pull Air down to tighten Air–Earth spacing */
+  transform: translateY(clamp(150px, 18vw, 210px));
 }
 .element-slot--water {
   grid-column: 1;
@@ -678,7 +706,8 @@ img {
 .element-slot--earth {
   grid-column: 2;
   grid-row: 3;
-  transform: translateY(clamp(-36px, -5vw, -56px));
+  /* Mirror Air’s pull, then nudge down by the diamond column-gap */
+  transform: translateY(calc(clamp(-150px, -18vw, -210px) + clamp(18px, 3vw, 32px)));
 }
 
 /* Air + water: same card size; icons slightly smaller */
@@ -1075,7 +1104,9 @@ img {
 
   .elements-panel__bg {
     position: relative;
-    width: 100%;
+    width: calc(100% + 80px);
+    margin-left: -40px;
+    margin-right: -40px;
     height: auto;
   }
 
@@ -1086,8 +1117,8 @@ img {
     max-height: none;
     object-fit: contain;
     object-position: top center;
-    /* Mobile four-elements art: 2048×8256 */
-    aspect-ratio: 2048 / 8256;
+    /* Mobile four-elements art: 1984×8000 */
+    aspect-ratio: 1984 / 8000;
   }
 
   .elements-panel__geometry {
@@ -1106,7 +1137,7 @@ img {
   }
 
   .elements-panel__pill {
-    display: none;
+    display: inline-flex;
   }
 
   .elements-panel__title-desk {
@@ -1140,8 +1171,8 @@ img {
     width: min(38vw, 152px);
     max-width: 152px;
     aspect-ratio: auto;
-    /* Was 4/5 tall; +20px for more title room */
-    height: calc(min(38vw, 152px) * 5 / 4 + 20px);
+    /* Was 4/5 tall; +20px for title room, +36px extra height */
+    height: calc(min(38vw, 152px) * 5 / 4 + 56px);
   }
 
   .element-slot--air {
@@ -1225,18 +1256,12 @@ img {
     aspect-ratio: auto;
   }
 
-  /* Compact “What to expect” under the diamond */
+  /* Compact “What to expect” under the diamond — no blue bloom on mobile */
   .elements-expect {
     margin: 48px auto 0;
     padding: 28px 36px 36px;
     max-width: 34rem;
-    background: radial-gradient(
-      ellipse 85% 75% at 50% 45%,
-      rgba(39, 39, 56, 0.82) 0%,
-      rgba(39, 39, 56, 0.55) 42%,
-      rgba(39, 39, 56, 0.2) 68%,
-      transparent 82%
-    );
+    background: none;
   }
 
   .elements-expect__eyebrow {
@@ -2707,5 +2732,118 @@ img {
   .lazy-section--purpose {
     content-visibility: visible;
     contain-intrinsic-size: none;
+  }
+}
+
+/* ============================================================
+   EXPERIENCES — layered campsite scene with hover-reveal glow
+   (sits inside the Elemental Focus panel, no separate header)
+   ============================================================ */
+
+/* Full overlay matching the bg image box. Sticker layers share the same
+   aspect as the bg (~2000×3583 ≈ 3072×5504), so objects land on the campsite. */
+.exp-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.exp-scene__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Identical full-frame art layers, stacked to reform the campsite scene.
+   All share the same box — no per-image sizing offsets. */
+.exp-scene__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Soft cosmic nebula glow — kept gentle so it doesn’t wash the scene. */
+.exp-scene__glow {
+  position: absolute;
+  z-index: 1;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(0.92);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(42% 42% at 50% 45%, rgba(90, 110, 180, 0.35) 0%, rgba(90, 110, 180, 0) 70%),
+    radial-gradient(55% 55% at 50% 52%, rgba(58, 110, 165, 0.45) 0%, rgba(27, 42, 107, 0.35) 45%, rgba(10, 17, 40, 0) 78%);
+  filter: blur(22px);
+  transition:
+    opacity 280ms ease,
+    transform 280ms ease;
+}
+
+.exp-scene__glow.is-on {
+  opacity: 0.42;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Transparent hover targets over each object. */
+.exp-scene__hotspot {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.exp-scene__hotspot:focus-visible {
+  outline: 2px solid var(--aniwa-gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Label sits near its object, fades + slides up on hover. */
+.exp-scene__label {
+  position: absolute;
+  transform: translate(-50%, calc(-100% + 8px + 12px));
+  margin-top: calc(-0.4rem + 12px);
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-sans);
+  font-size: clamp(0.6rem, 1.1vw, 0.74rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aniwa-bone);
+  text-shadow: 0 1px 14px rgba(10, 17, 40, 0.9);
+  opacity: 0;
+  transition:
+    opacity 240ms ease,
+    transform 240ms ease;
+}
+
+.exp-scene__label.is-on {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% + 12px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp-scene__glow,
+  .exp-scene__label {
+    transition-duration: 0.01ms;
   }
 }

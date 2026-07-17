@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
+import { ExperienceScene } from '../experiences/ExperienceScene';
 import { ElementCards } from './ElementCards';
 
 const ELEMENTS_BG_DESKTOP = '/assets/img/bg_elements.webp';
-const ELEMENTS_BG_MOBILE =
-  'https://res.cloudinary.com/dpd7ju6vn/image/upload/f_webp,q_auto:good/v1784008247/four_elements_mobile_ikoctf.webp';
+const ELEMENTS_BG_MOBILE = '/assets/img/mobile_elements.webp';
 
 /** Wait until the section bg has loaded and backdrop-filter has had a chance
  *  to composite, then fade the cards in so glass never flashes clear. */
@@ -84,14 +84,17 @@ export function Days() {
               src={ELEMENTS_BG_DESKTOP}
               alt=""
               className="elements-panel__bg-img"
-              width={2816}
-              height={6028}
+              width={3072}
+              height={5504}
               loading="lazy"
               decoding="async"
               aria-hidden="true"
             />
           </picture>
         </div>
+
+        {/* Stickers overlay the campsite band of the bg — not in the text/cards stack */}
+        <ExperienceScene className="elements-panel__scene" />
 
         <div className="elements-panel__stack">
           <div className="elements-panel__header">
@@ -110,7 +113,7 @@ export function Days() {
             </h3>
             <p className="bd elements-expect__body">
               Panels, practices, and private sessions designed to cultivate mind-share and presence in alignment with our
-              full selves — on a private meadow tucked among the countryside for Sonoma County, California.
+              full selves — on a private meadow tucked among the countryside of Sonoma County, California.
             </p>
             <p className="bd elements-expect__body">
               Arrive knowing some names and leave with a shared mission.

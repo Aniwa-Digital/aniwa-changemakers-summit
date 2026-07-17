@@ -268,7 +268,6 @@ export function Prophecy() {
             <p
               className="bd"
               style={{
-                fontFamily: 'var(--font-display)',
                 color: 'var(--on-light-body)',
                 fontSize: '0.98rem',
                 lineHeight: 'var(--leading-body)',

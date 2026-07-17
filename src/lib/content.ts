@@ -49,13 +49,14 @@ export const fellowshipLeft: FellowshipMember[] = [
     'Founder & Managing Partner, Pulse Fund',
     'tenzin-seldon.webp',
     'Tenzin Seldon is the Founder & Managing Partner of Pulse Fund, a venture capital fund investing in scalable climate companies across energy transition, infrastructure, food and agriculture, and mobility. A Stanford graduate and Rhodes Scholar, she has led investments and holds board seats in companies including Twelve, BlocPower, and Mast Reforestation, and advises Stanford’s Institute for Human-Centered AI. She previously served with the United Nations Environment Programme, overseeing disaster-risk-reduction policy across Asia.',
+    { linkedin: 'https://www.linkedin.com/in/tenzinseldon/' },
   ),
   member(
     'De Kai',
     'AI pioneer · HKUST & Berkeley',
     'de-kai.webp',
     'De Kai is Professor of Computer Science and Engineering at HKUST and Distinguished Research Scholar at Berkeley’s International Computer Science Institute. A pioneer of the machine-learning foundations behind systems like Google Translate, he was named among the founding Fellows of the Association for Computational Linguistics and served on Google’s inaugural AI ethics council. His book Raising AI reframes humanity’s relationship with the intelligences we are bringing into the world.',
-    '50% 16%',
+    { objectPosition: '50% 16%', linkedin: 'https://www.linkedin.com/in/dekai/' },
   ),
   member(
     'Oona Chaplin',
@@ -75,7 +76,7 @@ export const fellowshipLeft: FellowshipMember[] = [
     'Vedanta teacher · Padma Shri',
     'jonas-masetti.webp',
     'Jonas Masetti — known to his students as Vishvanatha — is a Brazilian teacher of Vedanta and Sanskrit and the founder of Instituto Vishva Vidya near Rio de Janeiro. A mechanical engineer who left financial markets for the traditional study of the Vedas in the lineage of Swami Dayananda Saraswati, he has brought Vedic knowledge to hundreds of thousands across Brazil and the West. In 2025 the Government of India conferred on him the Padma Shri, one of its highest civilian honors.',
-    '50% 20%',
+    { objectPosition: '50% 20%', linkedin: 'https://www.linkedin.com/in/jonas-masetti/' },
   ),
   member(
     'Will Cady',
@@ -394,6 +395,7 @@ const ringMembers: RingMember[] = [
     name: 'Oona Chaplin',
     role: 'Actor. Avatar. Game of Thrones',
     img: '/assets/people/oona-chaplin.webp',
+    instagram: 'https://www.instagram.com/oonacc/',
     bio: 'Oona Chaplin, granddaughter of the legendary Charlie Chaplin, is an acclaimed actress whose career spans some of the most influential film and television productions of the past decade, including Game of Thrones, Black Mirror, and, most recently, the Avatar franchise. As the fiery new antagonist Varang in Avatar, she has captivated audiences worldwide in a story that powerfully explores the struggle between Indigenous peoples and the colonial, extractive forces that threaten both culture and the natural world. Beyond her work on screen, Oona is an artist, a cultural bridge-builder, a land steward, and a mother. A longtime ally and advocate of the Huya Aniwa Foundation, she has stood alongside the movement for years, lending her voice and support to the protection of Indigenous wisdom, cultural resilience, and the living Earth.',
   },
   {
@@ -407,6 +409,7 @@ const ringMembers: RingMember[] = [
     name: 'Angela Katragadda',
     role: 'Sacred Stewardship Leader',
     img: '/assets/people/angela-katragadda.webp',
+    linkedin: 'https://www.linkedin.com/in/angela-katragadda-025860363/',
     bio: 'Angela Katragadda is a regenerative designer for healthier homes, herbalist, philanthropist, and mother. She spent 15 years working in healthcare as a pediatric intensive care nurse at University of California, Los Angeles and San Francisco. During that time she became deeply aware of how environmental factors impact health, especially for children and vulnerable populations. Struggling with her own chronic health issues, she began to explore the intersection of wellness, sustainable design, and plant medicine. In 2020, Angela founded Heritage Modern Design, an eco-conscious interior design company. In her practice she considers the impact of material choices on both human well-being and Mother Earth in all of her projects. Angela is passionate about fostering native species to support pollinators and healing burn scars and the ecosystem in Los Angeles — interests that align with Aniwa’s mission of land stewardship. Angela is a trustee of the Huya Aniwa Foundation and assists in fundraising efforts to support their mission.',
   },
   {
@@ -420,6 +423,7 @@ const ringMembers: RingMember[] = [
     name: 'Dr Jennifer Winingder',
     role: 'Embodied Wisdom & Healing',
     img: '/assets/people/jennifer-winingder.webp',
+    linkedin: 'https://www.linkedin.com/in/jennifer-winingder-83a52b30/',
     bio: 'Dr. Jennifer Winingder is a lifelong spiritual seeker, student and practitioner of embodied wisdom and philosophy. Her background in ministry, chaplaincy, teaching, and counseling focused on pastoral and spiritual care in multiple settings. Her passion for social justice, equity for all, and advocating for human rights — combined with her spiritual skills and experience — led her to leave institutional and organized religion that has been a colonizing force historically and globally, and that has disconnected us from our embodied nature and intuition. Jennifer’s path led her to become a student of Indigenous philosophy, wisdom, and practices, and to learn somatic healing practices that help people develop a deeply intuitive and loving relationship with their bodies, heal deeply held trauma, and experience the fullness, joy, and wonder of being alive on this beautiful planet. She now leads healing and wellness retreats in Western North Carolina that engage somatic techniques communities have practiced since before time began — including breathwork, meditation, sound healing, movement, energy work such as Reiki, tai chi, and ERT (emotional release therapy), as well as plant medicine, counseling, immersive time in nature, and group processing. Her two doctorates are in trauma-informed pastoral counseling from Emory University and multifaith spiritual direction. Her certificates include Reiki I and II, Sound Healing, rebirthing breathwork, and yoga 200YTT, and she will be certified in ERT in October 2026. She is developing a nature and retreat center in Western North Carolina in partnership with Buffalo Creek nonprofit — a partnership of Indian American and Indigenous tribal members from the global south — hosting the first Sundance in the Southeast in over 200 years in August 2026 following Lakota traditions, as well as regular inipi (sweat lodge), hanblecheyapi (vision quest), and plant medicine ceremonies led by Indigenous leaders.',
   },
   {
@@ -463,6 +467,7 @@ const ringMembers: RingMember[] = [
     role: 'Rights of Nature · Indigenous Sovereignty',
     img: '/assets/people/bita-zahedi-majd.webp',
     linkedin: 'https://www.linkedin.com/in/bita-zahedi-majd-3a4b46192/',
+    website: 'https://www.alunaalliance.org/',
     bio: 'Bita Zahedi Majd is a Rights of Nature advocate, Indigenous sovereignty director, biodiversity conservation strategist, and lifelong student of the living world. With a background spanning environmental policy, anthropological studies, conservationism, and legal advocacy, she has spent nearly two decades as a personal student of Indigenous leaders, wisdom keepers, and plant medicine teachers across North and South America, India, and Africa. She currently serves as Executive Director and Founder of Aluna Alliance, Ventures & Partnerships Consultant with the Sierra Club, and Ambassador to the International Space Federation — roles that extend her work as a Chief Impact Officer grounded in both academic rigor and embodied commitment. Fiercely dedicated to the protection of Earth’s sacred elements — its waters, forests, soils, wildlife, plant medicines, and First Nation peoples — she brings planetary stewardship to every scale of her practice.',
   },
   {
