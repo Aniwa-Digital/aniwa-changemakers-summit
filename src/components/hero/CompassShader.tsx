@@ -1,7 +1,5 @@
-// Hero WebGL2 shader: 18 layered rainbow arcs sweep in a circle and reveal the
-// cream compass line-art, then fade out leaving the compass, which spins with
-// scroll (window.scrollY on purpose — upright at page top). Ported from the
-// handoff's CompassShader.jsx.
+// Hero WebGL2 shader: fluorescent rainbow arcs soft-blend into the cream hero
+// inside the compass rose. Line-art is rendered separately via CompassOverlay.
 import { useEffect, useRef } from 'react';
 import { dprCap, observeVisibility } from '../../lib/render-budget';
 
@@ -20,12 +18,12 @@ uniform float iRotate;       // scroll-driven compass rotation (radians)
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
     vec2  r  = iResolution.xy;
-    float t  = iTime * 2.0;      // 2x: rainbow swirl sweeps + fades out twice as fast
+    float t  = iTime * 2.0;
     vec4  o  = vec4(0.0);
 
     vec2 p = fragCoord - r * 0.5;
 
-    // 18 layered arcs sweeping in a circle
+    // 18 layered arcs sweeping in a circle (production fluorescent formula)
     for (float i, a; i++ < 18.0; )
     {
         a = (i * i) / 320.0 - length(p) / r.y;
@@ -37,17 +35,16 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
         a = atan(p.y, p.x) + a + i * i;
         float sm = smoothstep(edge0, edge1, cos(a));
 
-        o += 0.022 / denom * sm * (1.2 + sin(a + i + vec4(0.0, 2.0, 4.0, 0.0)));
+        o += 0.022 / denom * sm * (1.15 + sin(a + i + 2.5 + vec4(0.0, 2.094, 4.188, 0.0)));
     }
 
     o = tanh(o);
 
-    // ---- reveal the compass with the circular motion ----
+    // ---- compass line-art (scroll-spun about hub) ----
     vec2 uvc = (fragCoord - 0.5 * r) / r.y;
-    float compassH = 0.972;                    // compass height in y-normalized units
-    float shiftY = 0.07 * compassH;            // hub on the canvas centre
+    float compassH = 0.972;
+    float shiftY = 0.07 * compassH;
 
-    // scroll-driven spin about the compass's TRUE centre (hub at tex y=0.57)
     vec2 rc = uvc - vec2(0.0, shiftY);
     const float COMPASS_CY = 0.57;
     vec2 pivot = vec2(0.0, (0.5 - COMPASS_CY) * compassH);
@@ -57,7 +54,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     rc = pivot + d2;
     vec2 tex;
     tex.x = rc.x / (compassH * iCompassAspect) + 0.5;
-    tex.y = 0.5 - rc.y / compassH;             // flip Y
+    tex.y = 0.5 - rc.y / compassH;
     float ca = 0.0;
     if (tex.x > 0.0 && tex.x < 1.0 && tex.y > 0.0 && tex.y < 1.0) {
         ca = texture(iCompass, tex).a;
@@ -65,19 +62,25 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
     float lum = dot(o.rgb, vec3(0.3333));
     float reveal = smoothstep(0.03, 0.42, lum);
-    vec3 cream = vec3(0.957, 0.945, 0.855);
 
-    float swirlFade = 1.0 - smoothstep(2.0, 4.0, t);   // backdrop 1 -> 0
-    float settle    = smoothstep(1.5, 4.0, t);         // compass locks fully in
-    float compassLit = mix(reveal, 1.0, settle);
+    // Arcs inside the outer compass ring — soft edge, no second outer halo.
+    float roseR = compassH * 0.32;
+    float orbMask = 1.0 - smoothstep(roseR * 0.80, roseR * 1.06, length(uvc));
 
-    float op = 0.25;                             // compass opacity
-    vec3 earth = vec3(0.114, 0.090, 0.071);      // warm umber base (#1D1712)
-    vec3 col = earth + o.rgb * 0.40 * swirlFade;
-    col += cream * ca * (0.07 + 0.85 * compassLit) * op;
-    col += o.rgb * ca * reveal * 1.35 * op * swirlFade;
+    vec3 cream = vec3(0.957, 0.945, 0.922);      // #F4F1EB
+    vec3 col = cream * (1.0 - orbMask * 0.10);
 
-    fragColor = vec4(col, 1.0);
+    // Fluorescent arcs on cream (line-art comes from CompassOverlay SVG).
+    float arcLum = dot(o.rgb, vec3(0.299, 0.587, 0.114));
+    vec3 arcsSat = mix(vec3(arcLum), o.rgb, 2.05);
+    arcsSat = clamp(arcsSat * 1.20, 0.0, 1.5);
+
+    vec3 arcs = clamp(arcsSat, 0.0, 1.0) * orbMask;
+    col = 1.0 - (1.0 - col) * (1.0 - arcs * 0.95);
+    col = mix(col, col * mix(vec3(1.0), clamp(arcsSat, 0.0, 1.0), 0.48), orbMask * lum * 0.48);
+    col += arcsSat * orbMask * reveal * 0.16;
+
+    fragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
 
 void main(){
@@ -211,7 +214,6 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
 
     const start = performance.now();
 
-    // Pause the render loop while the hero is scrolled out of view.
     let visible = true;
     const stopVisibility = observeVisibility(canvas, (v) => {
       if (v === visible) return;
@@ -235,8 +237,6 @@ export default function CompassShader({ compassSrc = '/assets/compass/compass.sv
       gl.bindTexture(gl.TEXTURE_2D, tex);
       gl.uniform1i(uCompass, 0);
       gl.uniform1f(uCompassAspect, compassAspect);
-      // Rotation from scrollY (NOT rect.top) so the canvas's CSS top offset
-      // never seeds a crooked initial angle.
       const sy = window.scrollY || window.pageYOffset || 0;
       gl.uniform1f(uRotate, Math.max(0, sy) * SPIN_RATE);
 

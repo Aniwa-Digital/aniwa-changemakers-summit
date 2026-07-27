@@ -1,8 +1,9 @@
 // CosmicScene — three.js starfield + nebula light-beam + atmosphere glow + bloom.
-// Rendered OPAQUE black and composited via mix-blend-mode:screen on the wrapper
-// div (in Prophecy.tsx) so only light adds over the patagonia photo behind it.
-// Beam timing: hidden until the prophecy pin releases, fades in over ~90px,
-// camera fly + nebula spin run while visible, eases out ~240px later.
+// Rendered OPAQUE black and composited via mix-blend-mode:screen on its wrapper
+// div (the [data-cine-cosmic] layer in Prophecy) so only light adds over the
+// dark field behind it. The wrapper's opacity (driven by scroll-choreography's
+// prophecy pin) fades the cosmos in; the camera holds a fixed, gently-floating
+// viewpoint while the starfield/nebula drift on their own clock.
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { dprCap, observeVisibility, starBudget } from '../../lib/render-budget';
@@ -29,7 +30,7 @@ export default function CosmicScene() {
     const camera = new THREE.PerspectiveCamera(75, W / H, 0.1, 2000);
     camera.position.set(0, 20, 100);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, dprCap()));
     renderer.setClearColor(0x000000, 1); // opaque black; screen-blended by the wrapper
@@ -40,7 +41,7 @@ export default function CosmicScene() {
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), 0.85, 0.4, 0.82));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), 0.6, 0.35, 0.85));
 
     // ---- Starfield (3 rotating layers) ----
     const stars: THREE.Points[] = [];
@@ -100,7 +101,7 @@ export default function CosmicScene() {
     }
 
     // ---- Nebula (the "light beam" when edge-on) ----
-    const nebGeo = new THREE.PlaneGeometry(8000, 4000, 100, 100);
+    const nebGeo = new THREE.PlaneGeometry(8000, 4000, 48, 48);
     const nebMat = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -143,13 +144,16 @@ export default function CosmicScene() {
       blending: THREE.AdditiveBlending,
       transparent: true,
     });
-    const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(600, 32, 32), atmMat);
+    const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(600, 20, 20), atmMat);
     scene.add(atmosphere);
 
-    const section = mount.closest('section');
-    const smooth = { z: 100, y: 20 };
+    // The reveal (a gentle fly-in + nebula spin-up) is mapped to scroll through
+    // the prophecy pin, so the whole animation must be scrolled through — it
+    // plays start-to-finish before the next section can be reached. Park far out.
+    const smooth = { z: 260, y: 10 };
+    const host = document.getElementById('prophecy');
 
-    // The prophecy pin is 300vh; once it has scrolled past, stop rendering.
+    // Pin height is set via --prophecy-pin-height; once scrolled past, stop rendering.
     let visible = true;
     const stopVisibility = observeVisibility(mount, (v) => {
       if (v === visible) return;
@@ -167,22 +171,22 @@ export default function CosmicScene() {
       nebMat.uniforms.time.value = t * 0.5;
       atmMat.uniforms.time.value = t;
 
-      // Beam appears AFTER the prophecy pin releases, fades in fast, holds, and
-      // eases out before the next section. The camera fly runs concurrently.
-      const rSec = section ? section.getBoundingClientRect() : { top: 0 };
-      const scrolled = -rSec.top;
-      const oh = section ? (section as HTMLElement).offsetHeight : 1;
-      const pin = Math.max(oh - window.innerHeight, 1);
-      const appear = pin + 0.25 * window.innerHeight;
-      const flyEnd = appear + 260;
-      let op = (scrolled - appear) / 90;
-      const fadeOut = 1 - (scrolled - flyEnd) / 240;
-      op = Math.max(0, Math.min(1, Math.min(op, fadeOut)));
-      renderer.domElement.style.opacity = String(op);
-      nebula.rotation.z = Math.max(0, scrolled - appear) * 0.01;
-      const pr = Math.max(0, Math.min(1, (scrolled - appear) / Math.max(flyEnd - appear, 1)));
-      const targetZ = 300 + pr * -1000;
-      const targetY = 20 + pr * 30;
+      // Scroll-driven reveal: map the fly-in to progress through the prophecy
+      // pin so it plays fully as you scroll and can't be skipped. The intro
+      // window sits after the cosmos fades in and runs almost to the end of
+      // the pin so the motion fills the whole scroll (no dead scroll after it
+      // lands) before the section unpins into the next block.
+      let pp = 0;
+      if (host) {
+        const total = host.offsetHeight - window.innerHeight;
+        const passed = -host.getBoundingClientRect().top;
+        pp = Math.max(0, Math.min(1, passed / Math.max(total, 1)));
+      }
+      const intro = reduce ? 1 : Math.max(0, Math.min(1, (pp - 0.64) / 0.34));
+      const e = intro * intro * (4.5 - 2 * intro);
+      nebula.rotation.z = e * 2.2 + t * 0.05;
+      const targetZ = 260 - e * 340;
+      const targetY = 10 + e * 30;
       smooth.z += (targetZ - smooth.z) * 0.06;
       smooth.y += (targetY - smooth.y) * 0.06;
       const fx = reduce ? 0 : Math.sin(t * 0.1) * 2;

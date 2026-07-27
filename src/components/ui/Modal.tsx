@@ -10,7 +10,7 @@ interface ModalProps {
   children: ReactNode;
 }
 
-/* Shared modal shell: fixed blurred scrim, bone card at house radius.
+/* Shared modal shell: glass panel (12px radius) over a blurred scrim.
    Click-outside, ×, and Escape all close; the inner card stops propagation. */
 export function Modal({ open, onClose, zIndex = 80, maxWidth = 540, padding = '44px', label, children }: ModalProps) {
   useEffect(() => {
@@ -26,49 +26,19 @@ export function Modal({ open, onClose, zIndex = 80, maxWidth = 540, padding = '4
 
   return (
     <div
+      className="modal-scrim"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={label}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex,
-        background: 'rgba(19,17,37,0.7)',
-        backdropFilter: 'blur(3px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 24,
-      }}
+      style={{ zIndex }}
     >
       <div
+        className="modal-panel"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          position: 'relative',
-          width: '100%',
-          maxWidth,
-          background: '#FAF6EC',
-          borderRadius: 'var(--radius-house)',
-          padding,
-          boxShadow: '0 40px 110px rgba(0,0,0,0.55)',
-        }}
+        style={{ maxWidth, padding }}
       >
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          style={{
-            position: 'absolute',
-            top: 12,
-            right: 18,
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'rgba(46,40,32,0.5)',
-            fontSize: '1.6rem',
-            lineHeight: 1,
-          }}
-        >
+        <button type="button" onClick={onClose} aria-label="Close" className="modal-close">
           ×
         </button>
         {children}

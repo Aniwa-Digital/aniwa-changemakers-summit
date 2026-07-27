@@ -12,7 +12,7 @@ interface HeroStrokeTextProps {
 
 const DASH = 8000;
 
-export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 3.6 }: HeroStrokeTextProps) {
+export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 2.2 }: HeroStrokeTextProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const maskRef = useRef<SVGRadialGradientElement>(null);
   const animRef = useRef<SVGTextElement>(null);
@@ -56,7 +56,7 @@ export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 3.6 }: Hero
 
   const baseText = { x: 600, y: 120, textAnchor: 'middle', dominantBaseline: 'middle' } as const;
   const baseStyle = {
-    fontFamily: "'Cormorant Garamond', serif",
+    fontFamily: "'Averia Serif Libre', serif",
     fontWeight: 700,
     fontSize,
     letterSpacing: '-0.01em',
@@ -85,15 +85,18 @@ export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 3.6 }: Hero
     >
       <defs>
         <linearGradient id={gid} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
-          <stop offset="0%" stopColor="#eab308" />
-          <stop offset="25%" stopColor="#ef4444" />
-          <stop offset="50%" stopColor="#3b82f6" />
-          <stop offset="75%" stopColor="#06b6d4" />
-          <stop offset="100%" stopColor="#8b5cf6" />
+          <stop offset="0%" stopColor="#ffb703" />
+          <stop offset="10%" stopColor="#ff7a18" />
+          <stop offset="24%" stopColor="#ff3d5a" />
+          <stop offset="40%" stopColor="#b44bff" />
+          <stop offset="56%" stopColor="#3b82f6" />
+          <stop offset="72%" stopColor="#00d4ff" />
+          <stop offset="88%" stopColor="#22c55e" />
+          <stop offset="100%" stopColor="#ffb703" />
         </linearGradient>
         <filter id={fid} x="-40%" y="-120%" width="180%" height="340%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b1" />
-          <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="b2" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b1" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="26" result="b2" />
           <feMerge>
             <feMergeNode in="b2" />
             <feMergeNode in="b1" />
@@ -113,19 +116,19 @@ export function HeroStrokeText({ text, fontSize = 150, drawSeconds = 3.6 }: Hero
         {...baseText}
         fill={`url(#${gid})`}
         stroke={`url(#${gid})`}
-        strokeWidth={6}
+        strokeWidth={8}
         filter={`url(#${fid})`}
         mask={`url(#${mid})`}
-        style={{ ...baseStyle, opacity: hovered ? 1 : 0, transition: 'opacity .5s ease' }}
+        style={{ ...baseStyle, opacity: hovered ? 1 : 0, transition: 'opacity .5s ease', strokeLinecap: 'round', strokeLinejoin: 'round' }}
       >
         {text}
       </text>
-      {/* solid white fill */}
-      <text {...baseText} fill="#fff" style={baseStyle}>
+      {/* solid ink fill */}
+      <text {...baseText} fill="var(--ink-on-light)" style={baseStyle}>
         {text}
       </text>
-      {/* white stroke that draws in on load */}
-      <text {...baseText} ref={animRef} fill="transparent" stroke="rgba(255,255,255,0.85)" strokeWidth={3} style={baseStyle}>
+      {/* stroke that draws in on load */}
+      <text {...baseText} ref={animRef} fill="transparent" stroke="rgba(46, 40, 32, 0.45)" strokeWidth={3} style={baseStyle}>
         {text}
       </text>
     </svg>

@@ -10,15 +10,37 @@ export interface FellowshipMember {
   objectPosition: string;
   /** Short bio shown in the click-to-open popup. */
   bio: string;
+  linkedin?: string;
+  website?: string;
+  instagram?: string;
 }
 
-const member = (name: string, role: string, img: string, bio: string, objectPosition = '50% 18%'): FellowshipMember => ({
-  name,
-  role,
-  img: `/assets/people/${img}`,
-  objectPosition,
-  bio,
-});
+type MemberOpts = {
+  objectPosition?: string;
+  linkedin?: string;
+  website?: string;
+  instagram?: string;
+};
+
+const member = (
+  name: string,
+  role: string,
+  img: string,
+  bio: string,
+  opts: string | MemberOpts = '50% 18%',
+): FellowshipMember => {
+  const options = typeof opts === 'string' ? { objectPosition: opts } : opts;
+  return {
+    name,
+    role,
+    img: `/assets/people/${img}`,
+    objectPosition: options.objectPosition ?? '50% 18%',
+    bio,
+    linkedin: options.linkedin,
+    website: options.website,
+    instagram: options.instagram,
+  };
+};
 
 /* Left strand — the changemakers, in leadership's order. */
 export const fellowshipLeft: FellowshipMember[] = [
@@ -27,19 +49,20 @@ export const fellowshipLeft: FellowshipMember[] = [
     'Founder & Managing Partner, Pulse Fund',
     'tenzin-seldon.webp',
     'Tenzin Seldon is the Founder & Managing Partner of Pulse Fund, a venture capital fund investing in scalable climate companies across energy transition, infrastructure, food and agriculture, and mobility. A Stanford graduate and Rhodes Scholar, she has led investments and holds board seats in companies including Twelve, BlocPower, and Mast Reforestation, and advises Stanford’s Institute for Human-Centered AI. She previously served with the United Nations Environment Programme, overseeing disaster-risk-reduction policy across Asia.',
+    { linkedin: 'https://www.linkedin.com/in/tenzinseldon/' },
   ),
   member(
     'De Kai',
     'AI pioneer · HKUST & Berkeley',
     'de-kai.webp',
     'De Kai is Professor of Computer Science and Engineering at HKUST and Distinguished Research Scholar at Berkeley’s International Computer Science Institute. A pioneer of the machine-learning foundations behind systems like Google Translate, he was named among the founding Fellows of the Association for Computational Linguistics and served on Google’s inaugural AI ethics council. His book Raising AI reframes humanity’s relationship with the intelligences we are bringing into the world.',
-    '50% 16%',
+    { objectPosition: '50% 16%', linkedin: 'https://www.linkedin.com/in/dekai/' },
   ),
   member(
     'Oona Chaplin',
-    'Host · actor, Avatar: Fire and Ash',
+    'Actor. Avatar. Game of Thrones',
     'oona-chaplin.webp',
-    'Oona Chaplin, granddaughter of the legendary Charlie Chaplin, is an acclaimed actress whose career spans Game of Thrones, Black Mirror, and, most recently, the Avatar franchise — where, as Varang, she inhabits a story that powerfully explores the struggle between Indigenous peoples and colonial, extractive forces. Beyond the screen, Oona is an artist, cultural bridge-builder, land steward, and mother, and a longtime ally of the Huya Aniwa Foundation in the protection of Indigenous wisdom and the living Earth.',
+    'Oona Chaplin, granddaughter of the legendary Charlie Chaplin, is an acclaimed actress whose career spans some of the most influential film and television productions of the past decade, including Game of Thrones, Black Mirror, and, most recently, the Avatar franchise. As the fiery new antagonist Varang in Avatar, she has captivated audiences worldwide in a story that powerfully explores the struggle between Indigenous peoples and the colonial, extractive forces that threaten both culture and the natural world. Beyond her work on screen, Oona is an artist, a cultural bridge-builder, a land steward, and a mother. A longtime ally and advocate of the Huya Aniwa Foundation, she has stood alongside the movement for years, lending her voice and support to the protection of Indigenous wisdom, cultural resilience, and the living Earth.',
   ),
   member(
     'Jane Woodward',
@@ -53,39 +76,42 @@ export const fellowshipLeft: FellowshipMember[] = [
     'Vedanta teacher · Padma Shri',
     'jonas-masetti.webp',
     'Jonas Masetti — known to his students as Vishvanatha — is a Brazilian teacher of Vedanta and Sanskrit and the founder of Instituto Vishva Vidya near Rio de Janeiro. A mechanical engineer who left financial markets for the traditional study of the Vedas in the lineage of Swami Dayananda Saraswati, he has brought Vedic knowledge to hundreds of thousands across Brazil and the West. In 2025 the Government of India conferred on him the Padma Shri, one of its highest civilian honors.',
-    '50% 20%',
+    { objectPosition: '50% 20%', linkedin: 'https://www.linkedin.com/in/jonas-masetti/' },
   ),
   member(
     'Will Cady',
     'Reddit · author, Which Way Is North',
     'will-cady.webp',
-    'Will Cady is a multimedia artist, cultural strategist, and founder of HEAL MVMNT, an initiative positioning Healing, Environments, Art, and Language as vital counterparts to STEM. An early leader at Reddit, he helped grow the platform into a billion-dollar business through deep insight into culture and creativity. His book Which Way Is North: A Creative Compass for Makers, Marketers, and Mystics was named a must-read by Inc Magazine and selected for The Next Big Idea Book Club.',
-    '50% 14%',
+    'Will Cady is a multimedia artist, cultural strategist, and founder of HEAL MVMNT, an initiative positioning Healing, Environments, Art, and Language as vital counterparts to STEM. An early leader at Reddit Inc., he helped grow the platform into a billion-dollar business by applying deep insights into culture and creativity. His music has reached over 3 million streams and earned a regional Emmy award. Cady’s book, Which Way Is North: A Creative Compass for Makers, Marketers, and Mystics (distro Simon & Schuster), was named a must-read by Inc Magazine and selected for The Next Big Idea Book Club for its prescience as a human handbook for creativity in a world going AI.',
+    { objectPosition: '50% 14%', linkedin: 'https://www.linkedin.com/in/willcady', website: 'https://willcady.com' },
   ),
   member(
     'Deven Raut',
     'Kaiteki.AI · ex-Google Stadia',
     'deven-raut.webp',
-    'Deven Raut is a polymath entrepreneur with deep experience building mission-critical technologies that power the modern internet. He co-founded CiiNOW, which evolved into Google Stadia, led the creation of Prisma SASE at Palo Alto Networks, and headed Network Security at Google. He is currently building Kaiteki.AI, reimagining digital consumption in healthier, more human-centered ways — work that reflects a lifelong devotion to soul, mind, and body wellness for all species.',
-    '50% 14%',
+    'Deven Raut is a polymath entrepreneur with deep experience building and leading mission-critical technologies that power the modern internet. He co-founded CiiNOW, which evolved into Google Stadia, led the creation of Prisma SASE at Palo Alto Networks, and headed Network Security at Google. He is currently building Kaiteki.AI, a startup focused on reimagining digital consumption in healthier, more human-centered ways. In parallel, Deven created DeveniTea Chai, a 21-component adaptogenic sugar- and dairy-free chai, and is developing the KamDev line of healthier alternative products. His work reflects a lifelong devotion to soul, mind, and body wellness for all species.',
+    { objectPosition: '50% 14%', linkedin: 'https://www.linkedin.com/in/devenraut/' },
   ),
   member(
     'Denise Roberson',
     'Chief Purpose Officer, Omnicom',
     'denise-roberson.webp',
     'Denise Roberson serves as Chief Purpose Officer at Omnicom’s TBWA\\Chiat\\Day — the first role of its kind at the agency — helping C-suites and boards build the business case for purpose and embed it across their organizations. She is also the founder of Conspiracy of Love, a purpose-led B Corp consultancy, a marketing professor in Pepperdine’s Presidents & Key Executives MBA, and a doctoral researcher studying next-generation purpose and sustainability models.',
+    { linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
   ),
   member(
     'Ren Menon',
     'Co-Founder & CEO, OrthoFX',
     'ren-menon.webp',
-    'Ren Menon is the Co-founder and CEO of OrthoFX, an orthodontic technology company advancing clear-aligner treatment through innovations in material science, digital workflows, and patient experience. He previously held senior leadership roles at Align Technology, contributing to global product innovation for Invisalign. The holder of several patents spanning orthodontics and consumer healthtech, Ren combines advanced materials, AI-driven workflows, and scalable care models to make healthcare more accessible.',
+    'Ren Menon is the Co-founder and CEO of OrthoFX (orthofx.com), an orthodontic technology company focused on advancing clear aligner treatment through innovations in material science, digital workflows, and patient experience. Prior to founding OrthoFX, he held senior leadership roles at Align Technology, where he contributed to global product innovation and commercialization initiatives for Invisalign. A visionary leader in orthodontics and healthcare technology, Ren is known for challenging conventional thinking and pushing the industry toward more patient-friendly, technology-enabled care models. He holds several patents spanning orthodontics, healthcare technologies, and consumer healthtech, including saliva-based diagnostic and monitoring concepts. His work combines advanced materials, software, AI-driven workflows, and scalable care delivery models to improve treatment predictability, patient engagement, and healthcare accessibility.',
+    { linkedin: 'https://www.linkedin.com/in/renmenon/', website: 'https://orthofx.com' },
   ),
   member(
     'Ruslan Gafarov',
     'Founder & CEO, SF Innovation Hub',
     'ruslan-gafarov.webp',
-    'Ruslan Gafarov is the founder and CEO of the San Francisco Innovation Hub. An entrepreneur with more than 15 years of experience and the author of three books on organizational culture, he has been building entrepreneurial communities in Silicon Valley since 2016 — connecting founders across borders and cultures around conscious leadership and long-term community.',
+    'Ruslan Gafarov is the founder and CEO of San Francisco Innovation Hub (SFIH). An entrepreneur with 15+ years of experience and the author of three books on organizational culture, he has been building entrepreneurial communities in Silicon Valley since 2016.',
+    { linkedin: 'https://www.linkedin.com/in/malikone/' },
   ),
 ];
 
@@ -95,70 +121,88 @@ export const fellowshipRight: FellowshipMember[] = [
     'Kumu Ramsay Taum',
     'Hoʻoponopono lineage carrier',
     'kumu-ramsay-taum.webp',
-    'Mentored and trained by respected kūpuna (elders), Kumu Ramsay Taum is a practitioner and instructor of Native Hawaiian practices including Hoʻoponopono (stress release and mediation), lomi haha (body alignment), and Kaihewalu Lua (Hawaiian battle art). Honored by the University of Hawaiʻi as a Star of Oceania, he is recognized internationally for transformational leadership integrating Native Hawaiian cultural values and place-based principles into contemporary business.',
-    '50% 14%',
+    'Mentored and trained by respected kūpuna (elders), Ramsay is a practitioner and instructor of several Native Hawaiian practices: Hoʻoponopono (stress release and mediation), lomi haha (body alignment), and Kaihewalu Lua (Hawaiian combat/battle art). In 2009, Kumu Taum was recognized and honored by the University of Hawaiʻi as a Star of Oceania — an honor presented every three years to extraordinary individuals of Oceania for their work and service-related contributions to raising greater awareness of Oceania and its people. Recognized locally, nationally, and internationally for transformational leadership in sustainability and cultural and place-based values integration into contemporary business models, Ramsay advocates team building, strategic partnerships, community brilliance, and creative thinking. He is a recognized cultural resource, sought-after keynote speaker, lecturer, trainer, and facilitator — especially effective working with Hawaiʻi’s industries where he integrates Native Hawaiian cultural values and principles into contemporary business.',
+    {
+      objectPosition: '50% 14%',
+      linkedin: 'https://www.linkedin.com/in/ramsaytaum',
+      instagram: 'https://www.instagram.com/ramsaytaum',
+      website: 'https://www.ramsaytaum.com/',
+    },
   ),
   member(
     'Mona Polacca',
     'Council of 13 Indigenous Grandmothers',
     'mona-polacca.webp',
-    'Mona Polacca — Hopi, Tewa, and Havasupai — is an internationally recognized Indigenous leader, spiritual elder, educator, and water protector from Arizona. A founding member of the International Council of Thirteen Indigenous Grandmothers, she has represented Indigenous communities at the United Nations and global forums on water protection, climate action, and Indigenous sovereignty, elevating traditional ecological knowledge as an answer to the world’s most pressing environmental challenges.',
-    '50% 16%',
+    'Mona Polacca — Hopi, Tewa, and Havasupai — is an internationally recognized Indigenous leader, spiritual elder, educator, policy advocate, and water protector from Arizona with more than three decades of experience advancing Indigenous rights, environmental justice, and community wellbeing. From an early age, she has dedicated her life to social justice and the revitalization of Indigenous cultures, traditions, and knowledge systems. An author in the social sciences and a respected voice in Indigenous leadership, Mona has served in tribal governance, including as Treasurer for her tribe, and has held leadership roles in numerous initiatives focused on Indigenous self-determination and community development. A founding member of the International Council of Thirteen Indigenous Grandmothers, Mona has gained international recognition as a spiritual elder, wisdom keeper, and advocate for Indigenous Peoples. She has represented Indigenous communities at the United Nations and other global forums, contributing to discussions on water protection, climate action, human rights, and Indigenous sovereignty. Through her leadership in Indigenous water ethics and environmental stewardship, Mona has helped elevate traditional ecological knowledge and Indigenous-led solutions to some of the world’s most pressing environmental challenges.',
+    {
+      objectPosition: '50% 16%',
+      linkedin: 'https://www.linkedin.com/in/mona-polacca-31417b16/',
+      website: 'https://www.huyaaniwa.org/team/mona-polacca',
+    },
   ),
   member(
     'Matsini Yawanawá',
     'Chief of Mutum Village · Yawanawá',
     'matsini-yawanawa.webp',
-    'Matsini Yawanawá, chief and spiritual leader of Mutum village in Acre, Brazil, descends from an unbroken lineage of Pajés (master shamans) and trained under the legendary Pajé Tata, who helped restore Yawanawá traditions after years of suppression. He welcomes students to his village year-round and shares his wisdom abroad alongside his wife Manxyvake and their children — carrying the ancestral prayers and songs of his people to help guide the world through these times of transformation.',
-    '50% 42%',
+    'Matsini Yawanawá, chief and spiritual leader of Mutum village, descends from an unbroken lineage of Pajés (master shamans) and trained under the legendary Pajé Tata, who helped restore Yawanawá traditions after years of suppression. The Yawanawá, native to Acre, Brazil, have long safeguarded their land and spiritual heritage despite near extinction following early contact with outsiders. Matsini works year-round welcoming students to his village while also sharing his wisdom abroad. He is joined by his wife, Manxyvake Yawanawá, and their children Kuru and Kenesay, all gifted musicians and spiritual practitioners. Together, they carry the ancestral prayers and teachings of their people, aiming to build global community and support sustainable projects in their village.',
+    { objectPosition: '50% 42%', website: 'https://digital.aniwa.co/courses/rape-ceremony-with-matsini' },
   ),
   member(
     'Chenoa Egawa',
     'Coast Salish · Lummi & S’Klallam Nations',
     'chenoa-egawa.webp',
-    'Chenoa Egawa is Coast Salish of the Lummi and S’Klallam Nations of Washington State — a ceremonial leader and healer, singer and composer of traditional medicine songs, storyteller, children’s book author, and environmental activist. Multicultural and multilingual, she bridges understanding across cultures, guiding us back into harmony with Nature, the Seasons, and the Elements that give us life, and carrying Indigenous wisdom to the world at a moment when it is needed most.',
-    '50% 20%',
+    'Chenoa Egawa is Coast Salish of the Lummi and S’Klallam Nations of Washington State. She is a ceremonial leader and healer; singer and composer of traditional medicine songs; storyteller and published children’s book author and illustrator; lifelong student and Master Teacher of Qigong; environmental activist and speaker; and nature photographer who enjoys witnessing sacred moments in time through her lens. Through her work, she is dedicated to bringing healing to our Mother Earth, and to people of all cultures, backgrounds, and origins through the recognition of our shared experiences as human beings. One of her principal teachings today is the importance of preserving, protecting, and sharing the wisdom and ways of life she has learned from her ancestors, elders, and teachers that benefit the health, well-being, and protection of all life on our Mother Earth. Being multicultural and multilingual, Chenoa bridges understanding across cultures, guiding us back into harmony with Nature, the Seasons, and the Elements that give us life. She serves as a voice to bring Indigenous wisdom and perspectives to the world at a time when these teachings are particularly poignant reminders of our shared responsibility to live with respect and care for ourselves, one another, our planet, and future generations.',
+    {
+      objectPosition: '50% 20%',
+      instagram: 'https://www.instagram.com/chenoa.egawa',
+      website: 'https://chenoaegawa.com/',
+    },
   ),
   member(
     'Mamo Cencio',
     'Kogi Mamo · Sierra Nevada de Santa Marta',
     'mamo-cencio.webp',
-    'Mamo Cencio is a Kogi Mamo — doctor of ancestral medicine, botanist, and teacher of medicinal plants with extensive knowledge of the native species of the Sierra Nevada de Santa Marta. He travels constantly to distant villages across Kogi territory, serving as doctor, priest, counselor, and spiritual leader to his people. A musician of the Tayrona instruments and keeper of the Kogi Nation’s ancestral songs, he is authorized in the Jatuquá, a sacred method of divination by water.',
+    'Mamo Cencio is a Kogi Mamo who is a botanist with an extensive knowledge of the native species of the Sierra. He is also a teacher of medicinal plants for the Kogis. As a doctor of Ancestral Medicine he is constantly traveling to distant villages in Kogi territory to take care of his people. He offers his services as a doctor, priest, counselor, and spiritual leader for a large group of people living across a wide area of Kogi territory in the Sierra Nevada of Santa Marta. He is also a musician who plays different Tayrona musical instruments and teaches his people the ancestral songs of the Kogi Nation. He is authorized to use the Jatuquá, a sacred method of divination by water.',
     '50% 22%',
   ),
   member(
-    'Nana Amalia Tum Xinico',
+    'Nan Amalia Tum Xinico',
     'Maya Kaqchikel practitioner',
     'nana-amalia.webp',
-    'Nana Amalia is a gifted healer, naturopath, and renowned spiritual leader and teacher — a member of the commission of sacred sites in Guatemala (COLUSAG), founder of the elder council Iq’B’alam, and a voice in the Maya women’s associations MOLOJ and KAKLA. She works alongside her husband Tata Mario on healing, purification, and spiritual balancing ceremonies, Maya astrology readings, and other traditional practices.',
+    'Nan Amalia is a gifted healer, naturopath, and renowned spiritual leader and teacher; member of the commission of the sacred sites in Guatemala — COLUSAG; founder of the elder council Iq’B’alm; member of the council of elders and political association of Maya women MOLOJ; and spiritual assessor of the association of women KAKLA. Nan Amalia works alongside her husband Tat Mario on healing, purification, and spiritual balancing ceremonies, Maya astrology readings, and other traditional practices and ceremonies.',
     '50% 16%',
   ),
   member(
-    'Tata Mario Ovalle',
+    'Tat Mario Ovalle',
     'Maya K’iché spiritual guide',
     'tata-mario.webp',
-    'Tata Mario is a renowned spiritual leader, naturopath, painter, and traditional musician — he plays the marimba, drums, caracol, and flute. Founder of the council of Ajq’ijab’ (spiritual guides) Iq’B’alam and advisor to the Indigenous Townhall of Santa Lucía Utatlán, he teaches on medicinal plants, Maya cosmology, history, and Indigenous rights. He works alongside his wife Nana Amalia on healing, purification, and spiritual balancing ceremonies.',
+    'Tat Mario is a renowned spiritual leader, naturopath, painter, and talented traditional musician — he plays the marimba, drums, caracol, and flute. Founder of the council of Ajq’ijab’ (spiritual guides) Iq’ B’alam and accessor of the Indigenous Townhall of Santa Lucía Utatlán, Sololá, he gives conferences about medicinal plants, Maya cosmology and history, and the identity and rights of Indigenous people. He is also a primary school teacher. Tata Mario works alongside his wife Nana Amalia on healing, purification, and spiritual balancing ceremonies, Maya astrology readings, and other traditional rituals.',
     '50% 30%',
   ),
   member(
     'Joseph David Osage',
     'Cheyenne · Keeper of the Blue Sky Bundle',
     'joseph-david-osage.webp',
-    'Born in western Oklahoma and raised in the Red Moon community, Joseph David is full-blood Tsitsistsas (Cheyenne) and has lived the traditional Cheyenne life from birth. Seated as ceremonial chief and one of sixteen sacred arrow priests, he was appointed holder of the Blue Sky Bundle — the second-highest position in the Cheyenne tribe — making him the keeper of blue skies, in charge of the weather and rain prayers.',
+    'Arrow priest and holder of the Blue Sky Bundle of the Cheyenne. Born in western Oklahoma, Joseph David is full-blood Tsitsistas (Cheyenne). He was raised in the community known as Red Moon, Hammon, Oklahoma. Joseph David has lived the traditional Cheyenne life from birth, hearing the stories of many aspects of his people’s travels through time and across the continent. He has participated in the sacrificial rites that give him great responsibility to his people. He was seated as ceremonial chief as well as earning the position of one of sixteen sacred arrow priests and, more recently, was appointed as the holder of the Blue Sky Bundle — the second-highest position in the Cheyenne tribe — making him the keeper of blue skies, the one in charge of the weather and rain prayers.',
     '50% 28%',
   ),
   member(
     'Vivien Vilela',
     'Founder & CEO, Aniwa',
     'vivien-vilela.webp',
-    'Vivien Vilela has spent over 14 years pioneering ethical relations with Indigenous peoples across the Americas. Born and raised in Brazil, she founded Aniwa, an international platform that shares Indigenous wisdom and amplifies Indigenous voices, and the Huya Aniwa Foundation and Institute, dedicated to preserving sacred land in alliance with native collectives. She has taken a sacred oath in the Wixárika tradition to serve as a Marakame — one who can heal, sing, and dream.',
+    'Vivien Vilela has over 14 years of experience pioneering ethical relations with Indigenous peoples across the Americas. She has played a crucial role in supporting the preservation of Indigenous cultures and global grassroots efforts to protect and restore wild spaces. Born and raised in Brazil, Vivien has dedicated her life to her spiritual studies under the mentorship of some of the most respected Indigenous elders from South, Central, and North America. Through this work, Vivien founded Aniwa, an international platform that shares Indigenous wisdom and amplifies the voices of Indigenous leaders through an online education portal, an annual gathering, and in-person retreats. Alongside her husband, she has taken a sacred oath and commitment in the Wixárika tradition to continue to learn and serve her life as a Marakame — one that can heal, sing, and dream. This led her to open various spiritual commitments with sacred places around Mexico under the guidance of world-renowned Marakame Don Eustolio Rivera De La Cruz. Driven by her profound reverence for Indigenous culture and medicine, Vivien’s vision expanded to create the Huya Aniwa Foundation and Institute, dedicated to her continued efforts to preserve sacred land and live in alliance with native collectives.',
+    { linkedin: 'https://www.linkedin.com/in/vivienvilela/', website: 'https://www.aniwa.co' },
   ),
   member(
-    'Oscar Matzuwa',
+    'Matzuwa Oscar',
     'Yoreme · Huya Aniwa Foundation',
     'matzuwa-oscar.webp',
-    'Oscar Matzuwa comes from the Yoreme people, deer nation of Sinaloa, Mexico. A pilgrim of the Wirikuta desert since 2005, he has taken the sacred oath of a Mara’akame (spiritual leader) in the Wixárika tradition, and carries the fire to run sweat lodges. An anthropologist specialized in traditional medicine and a traditional singer and musician, he established the Huya Aniwa Institute to implement sustainable land stewardship and sacred-medicine conservation.',
-    '50% 14%',
+    'Matzuwa Oscar comes from the Yoreme people, deer nation of Sinaloa, Mexico. He has been a pilgrim of the Wirikuta desert since 2005, learning within the Wixárika tradition, and has taken the sacred oath as a Mara’akame, or spiritual leader. Matzuwa has undergone various initiations and vision quests which also granted him the fire to run sweat lodges. Matzuwa is an anthropologist specialized in traditional medicine, and a traditional singer and musician. His passion for culture exchange took him around the world, where he shared and learned from different Indigenous communities. Inspired by his experiences, he established the Huya Aniwa Institute, dedicated to implementing sustainable land stewardship and sacred medicine conservation practices. Through the institute, Matzuwa continues his mission to honor and protect the Earth’s natural heritage while nurturing cultural diversity and traditional knowledge.',
+    {
+      objectPosition: '50% 14%',
+      website: 'https://www.huyaaniwa.org/team/oscar',
+      instagram: 'https://www.instagram.com/matzuwaoscar/',
+    },
   ),
 ];
 
@@ -214,10 +258,9 @@ export interface Stat {
 }
 
 export const stats: Stat[] = [
-  { value: '14+', label: 'Years of partnership', detail: 'With Indigenous communities across the Americas and the Pacific.' },
-  { value: '$6M+', label: 'Distributed', detail: 'For Indigenous causes, land protection and cultural preservation.' },
-  { value: '40+', label: 'Elders', detail: 'Representing 6 regions across the Americas and the Pacific' },
-  { value: '$2.5B', label: 'Realized', detail: 'From energy initiatives by MAP Energy — acquired by Global Infrastructure Partners, 2020.' },
+  { value: '14+', label: 'Years of partnership', detail: 'Cultivating trusted relationships with Indigenous communities worldwide.' },
+  { value: '$6M+', label: 'Distributed', detail: 'Supporting Indigenous-led initiatives, land protection and cultural preservation.' },
+  { value: '50+', label: 'Elders', detail: 'An alliance with some of the world’s most respected Indigenous leaders.' },
   { value: '32 ', label: 'International productions', detail: '13 Olympic Games, 6 Super Bowls, 3 FIFA World Cups, 3 Rugby World Cups · 30 countries.' },
 ];
 
@@ -225,35 +268,73 @@ export interface PartnerLogo {
   name: string;
   src: string;
   large: boolean; // Disney+, Netflix, PepsiCo, NatGeo, Block, Stanford render at 68px
+  /** Optional override when a logo needs a custom display size. */
+  height?: number;
+  maxWidth?: number;
 }
 
 export const partnerLogos: PartnerLogo[] = [
   { name: 'Google', src: '/assets/logos/google.webp', large: false },
-  { name: 'Apple', src: '/assets/logos/apple.webp', large: false },
-  { name: 'Disney+', src: '/assets/logos/disney.webp', large: true },
+  { name: 'Apple', src: '/assets/logos/apple.webp', large: false, height: 50, maxWidth: 120 },
+  { name: 'Disney+', src: '/assets/logos/disney.webp', large: true, height: 88, maxWidth: 220 },
   { name: 'Netflix', src: '/assets/logos/netflix.webp', large: true },
   { name: 'Adobe', src: '/assets/logos/adobe.webp', large: false },
+  { name: 'Palo Alto Networks', src: '/assets/logos/palo-alto-networks.webp', large: true },
+  { name: 'Pachamama Alliance', src: '/assets/logos/pachamama-alliance.webp', large: true },
+  { name: 'Pulse Fund', src: '/assets/logos/pulse-fund.png', large: true, height: 52, maxWidth: 140 },
+  { name: 'National Geographic', src: '/assets/logos/natgeo.webp', large: true },
+  { name: 'Reddit', src: '/assets/logos/reddit.webp', large: false, height: 50, maxWidth: 130 },
+  { name: 'Block', src: '/assets/logos/block.webp', large: true },
+  { name: 'Stanford', src: '/assets/logos/stanford.webp', large: true },
   { name: 'Amazon', src: '/assets/logos/amazon.webp', large: false },
   { name: 'PepsiCo', src: '/assets/logos/pepsico.webp', large: true },
   { name: "McDonald's", src: '/assets/logos/mcdonalds.webp', large: false },
-  { name: 'National Geographic', src: '/assets/logos/natgeo.webp', large: true },
-  { name: 'Reddit', src: '/assets/logos/reddit.webp', large: false },
-  { name: 'Block', src: '/assets/logos/block.webp', large: true },
-  { name: 'Stanford', src: '/assets/logos/stanford.webp', large: true },
 ];
 
 /* ---- Four Elements — One Mission ---- */
+export type ElementId = 'air' | 'water' | 'fire' | 'earth';
+
 export interface ElementBox {
-  glyph: string;
+  id: ElementId;
   name: string;
   description: string;
+  longDescription: string;
+  img: string;
 }
 
 export const elements: ElementBox[] = [
-  { glyph: '◎', name: 'Air', description: 'Ancestral intelligence in the age of artificial intelligence.' },
-  { glyph: '▢', name: 'Earth', description: 'Personal wellness and the evolution of consciousness.' },
-  { glyph: '△', name: 'Fire', description: 'Regenerative economies and nature finance.' },
-  { glyph: '▽', name: 'Water', description: 'Indigenous spirituality and the planetary polycrisis.' },
+  {
+    id: 'air',
+    name: 'Air',
+    description: 'Ancestral intelligence in the age of artificial intelligence.',
+    longDescription:
+      'Explore how Indigenous knowledge systems — refined over millennia — can guide the development and deployment of artificial intelligence. Sessions examine ancestral intelligence as a living counterpart to machine intelligence, asking how we might weave both into a shared path forward.',
+    img: '/assets/elements/air.webp',
+  },
+  {
+    id: 'water',
+    name: 'Water',
+    description: 'Indigenous spirituality & the planetary polycrisis.',
+    longDescription:
+      'Listen to the spiritual teachings of Original Peoples as they respond to climate collapse, biodiversity loss, and the converging crises of our time. This element holds ceremony, prayer, and the sacred relationship between humanity and Water as a source of planetary perspective.',
+    img: '/assets/elements/water.webp',
+  },
+  {
+    id: 'fire',
+    name: 'Fire',
+    description: 'Regenerative economies & nature finance.',
+    longDescription:
+      'Catalyze capital toward regeneration. Discussions and workshops on nature finance, circular economies, and the economic architectures that can shift us from extraction to mutual benefit with the living world.',
+    img: '/assets/elements/fire.webp',
+  },
+  {
+    id: 'earth',
+    name: 'Earth',
+    description: 'Personal wellness & the evolution of consciousness.',
+    longDescription:
+      'Ground in practices that reconnect body, mind, and spirit. From ceremonial healing to contemplative inquiry, this track invites leaders to tend their inner landscape — the foundation from which planetary stewardship grows.',
+    img: '/assets/elements/earth.webp',
+  },
 ];
 
 /* ---- §07 Founders Circle: 14 members + 1 open seat on a single polar
@@ -264,6 +345,10 @@ export interface FounderSeat {
   role?: string;
   img?: string;
   linkedin?: string;
+  website?: string;
+  instagram?: string;
+  /** Short bio shown in the click-to-open popup when present. */
+  bio?: string;
   open?: boolean;
   left: number; // % within the ring square
   top: number; // %
@@ -271,22 +356,126 @@ export interface FounderSeat {
 
 const RING_RADIUS = 42;
 
-const ringMembers: Array<{ name?: string; role?: string; img?: string; linkedin?: string; open?: boolean }> = [
-  { name: 'Vivien Vilela', role: 'A decade between worlds', img: '/assets/people/vivien-vilela.webp', linkedin: 'https://www.linkedin.com/in/vivienvilela/' },
-  { name: 'Oscar Matzuwa', role: 'Medicine of the deer nation', img: '/assets/people/matzuwa-oscar.webp', linkedin: 'https://www.huyaaniwa.org/team/oscar' },
-  { name: 'Ruslan Gafarov', role: 'Long-term global community', img: '/assets/people/ruslan-gafarov.webp', linkedin: 'https://www.linkedin.com/in/malikone/' },
-  { name: 'Oona Chaplin', role: 'Stories that bridge worlds', img: '/assets/people/oona-chaplin.webp' },
-  { name: 'Mitch Kirsch', role: 'The world’s largest stages', img: '/assets/people/mitch-kirsch.webp', linkedin: 'https://www.linkedin.com/in/mitchkirsch/' },
-  { name: 'Angela Katragadda', role: 'Stewardship of the sacred', img: '/assets/people/angela-katragadda.webp' },
-  { name: 'Anton Stylyk', role: 'Bridges across industries', img: '/assets/people/anton-stylyk.webp', linkedin: 'https://www.linkedin.com/in/anton-stylyk-3ba109295' },
-  { name: 'Dr Jennifer Winingder', role: 'Embodied wisdom & healing', img: '/assets/people/jennifer-winingder.webp' },
-  { name: 'Heidi Ohms', role: 'Raised between two worlds', img: '/assets/people/heidi-ohms.webp' },
-  { name: 'Will Cady', role: 'A compass for creators', img: '/assets/people/will-cady.webp', linkedin: 'https://www.linkedin.com/in/willcady' },
-  { name: 'Deven Raut', role: 'AI for human flourishing', img: '/assets/people/deven-raut.webp', linkedin: 'https://www.linkedin.com/in/devenraut/' },
-  { name: 'Denise Roberson', role: 'Purpose at global scale', img: '/assets/people/denise-roberson.webp', linkedin: 'https://www.linkedin.com/in/deniseroberson/' },
-  { name: 'Ren Menon', role: 'Scale, in a single year', img: '/assets/people/ren-menon.webp', linkedin: 'https://www.linkedin.com/in/renmenon/' },
-  { name: 'Bita Zahedi Majd', role: 'A voice for the rights of Nature', img: '/assets/people/bita-zahedi-majd.webp', linkedin: 'https://www.linkedin.com/in/bita-zahedi-majd-3a4b46192' },
-  { open: true },
+type RingMember = {
+  name?: string;
+  role?: string;
+  img?: string;
+  linkedin?: string;
+  website?: string;
+  instagram?: string;
+  bio?: string;
+  open?: boolean;
+};
+
+const ringMembers: RingMember[] = [
+  {
+    name: 'Vivien Vilela',
+    role: 'Founder & CEO, Aniwa',
+    img: '/assets/people/vivien-vilela.webp',
+    linkedin: 'https://www.linkedin.com/in/vivienvilela/',
+    website: 'https://www.aniwa.co',
+    bio: 'Vivien Vilela has over 14 years of experience pioneering ethical relations with Indigenous peoples across the Americas. She has played a crucial role in supporting the preservation of Indigenous cultures and global grassroots efforts to protect and restore wild spaces. Born and raised in Brazil, Vivien has dedicated her life to her spiritual studies under the mentorship of some of the most respected Indigenous elders from South, Central, and North America. Through this work, Vivien founded Aniwa, an international platform that shares Indigenous wisdom and amplifies the voices of Indigenous leaders through an online education portal, an annual gathering, and in-person retreats. Alongside her husband, she has taken a sacred oath and commitment in the Wixárika tradition to continue to learn and serve her life as a Marakame — one that can heal, sing, and dream. This led her to open various spiritual commitments with sacred places around Mexico under the guidance of world-renowned Marakame Don Eustolio Rivera De La Cruz. Driven by her profound reverence for Indigenous culture and medicine, Vivien’s vision expanded to create the Huya Aniwa Foundation and Institute, dedicated to her continued efforts to preserve sacred land and live in alliance with native collectives.',
+  },
+  {
+    name: 'Matzuwa Oscar',
+    role: 'Yoreme · Huya Aniwa Foundation',
+    img: '/assets/people/matzuwa-oscar.webp',
+    website: 'https://www.huyaaniwa.org/team/oscar',
+    instagram: 'https://www.instagram.com/matzuwaoscar/',
+    bio: 'Matzuwa Oscar comes from the Yoreme people, deer nation of Sinaloa, Mexico. He has been a pilgrim of the Wirikuta desert since 2005, learning within the Wixárika tradition, and has taken the sacred oath as a Mara’akame, or spiritual leader. Matzuwa has undergone various initiations and vision quests which also granted him the fire to run sweat lodges. Matzuwa is an anthropologist specialized in traditional medicine, and a traditional singer and musician. His passion for culture exchange took him around the world, where he shared and learned from different Indigenous communities. Inspired by his experiences, he established the Huya Aniwa Institute, dedicated to implementing sustainable land stewardship and sacred medicine conservation practices. Through the institute, Matzuwa continues his mission to honor and protect the Earth’s natural heritage while nurturing cultural diversity and traditional knowledge.',
+  },
+  {
+    name: 'Ruslan Gafarov',
+    role: 'Founder & CEO, SF Innovation Hub',
+    img: '/assets/people/ruslan-gafarov.webp',
+    linkedin: 'https://www.linkedin.com/in/malikone/',
+    bio: 'Ruslan Gafarov is the founder and CEO of San Francisco Innovation Hub (SFIH). An entrepreneur with 15+ years of experience and the author of three books on organizational culture, he has been building entrepreneurial communities in Silicon Valley since 2016.',
+  },
+  {
+    name: 'Oona Chaplin',
+    role: 'Actor. Avatar. Game of Thrones',
+    img: '/assets/people/oona-chaplin.webp',
+    instagram: 'https://www.instagram.com/oonacc/',
+    bio: 'Oona Chaplin, granddaughter of the legendary Charlie Chaplin, is an acclaimed actress whose career spans some of the most influential film and television productions of the past decade, including Game of Thrones, Black Mirror, and, most recently, the Avatar franchise. As the fiery new antagonist Varang in Avatar, she has captivated audiences worldwide in a story that powerfully explores the struggle between Indigenous peoples and the colonial, extractive forces that threaten both culture and the natural world. Beyond her work on screen, Oona is an artist, a cultural bridge-builder, a land steward, and a mother. A longtime ally and advocate of the Huya Aniwa Foundation, she has stood alongside the movement for years, lending her voice and support to the protection of Indigenous wisdom, cultural resilience, and the living Earth.',
+  },
+  {
+    name: 'Mitch Kirsch',
+    role: 'Executive Producer, Live Events',
+    img: '/assets/people/mitch-kirsch.webp',
+    linkedin: 'https://www.linkedin.com/in/mitchkirsch/',
+    bio: 'Mitch Kirsch has 32 years of experience in the event industry, overseeing production of immersive activations, TV specials, festivals, and global events in 30 different countries on 5 continents, including 13 Olympic Games, 6 Super Bowls, 4 World Cups, and 3 Rugby World Cups. Mitch was Executive Producer of Vice & Intel’s Creators Project, an award-winning global event series fusing music, technology and art, producing free events for up to 20,000 participants in 5 countries. In 2013 Mitch produced Station to Station, a ground-breaking art & music initiative that took a custom train across the U.S. He directed Talent Operations for over a hundred major TV Music Specials for MTV Latin America, MTV Asia, VH1, CMT, MTV Africa, and MTV Europe. He is Executive Producer for the Summit Series, Global Talent Producer for World Cup 2026, and produced the Aniwa Gathering and Created by Sound. Most importantly, he has lent his experience and energy to numerous charitable organizations to raise funds and awareness for the Rainforest Foundation, Pediatric AIDS, PETA, Virgin Mobile’s RE*Generation, MTV Asia Aid, Covenant House, Fulfillment Fund, America: Tribute to Heroes, 9/11 Concert for NYC, and others.',
+  },
+  {
+    name: 'Angela Katragadda',
+    role: 'Sacred Stewardship Leader',
+    img: '/assets/people/angela-katragadda.webp',
+    linkedin: 'https://www.linkedin.com/in/angela-katragadda-025860363/',
+    bio: 'Angela Katragadda is a regenerative designer for healthier homes, herbalist, philanthropist, and mother. She spent 15 years working in healthcare as a pediatric intensive care nurse at University of California, Los Angeles and San Francisco. During that time she became deeply aware of how environmental factors impact health, especially for children and vulnerable populations. Struggling with her own chronic health issues, she began to explore the intersection of wellness, sustainable design, and plant medicine. In 2020, Angela founded Heritage Modern Design, an eco-conscious interior design company. In her practice she considers the impact of material choices on both human well-being and Mother Earth in all of her projects. Angela is passionate about fostering native species to support pollinators and healing burn scars and the ecosystem in Los Angeles — interests that align with Aniwa’s mission of land stewardship. Angela is a trustee of the Huya Aniwa Foundation and assists in fundraising efforts to support their mission.',
+  },
+  {
+    name: 'Anton Stylyk',
+    role: 'Cross-Industry Partnerships',
+    img: '/assets/people/anton-stylyk.webp',
+    linkedin: 'https://www.linkedin.com/in/anton-stylyk-3ba109295',
+    bio: 'Anton Stylyk is a serial entrepreneur, crypto investor, art appreciator, support player, and philanthropist. He brings to the room an entrepreneurial perspective, cross-industry thinking, strategic partnerships, and optimism.',
+  },
+  {
+    name: 'Dr Jennifer Winingder',
+    role: 'Embodied Wisdom & Healing',
+    img: '/assets/people/jennifer-winingder.webp',
+    linkedin: 'https://www.linkedin.com/in/jennifer-winingder-83a52b30/',
+    bio: 'Dr. Jennifer Winingder is a lifelong spiritual seeker, student and practitioner of embodied wisdom and philosophy. Her background in ministry, chaplaincy, teaching, and counseling focused on pastoral and spiritual care in multiple settings. Her passion for social justice, equity for all, and advocating for human rights — combined with her spiritual skills and experience — led her to leave institutional and organized religion that has been a colonizing force historically and globally, and that has disconnected us from our embodied nature and intuition. Jennifer’s path led her to become a student of Indigenous philosophy, wisdom, and practices, and to learn somatic healing practices that help people develop a deeply intuitive and loving relationship with their bodies, heal deeply held trauma, and experience the fullness, joy, and wonder of being alive on this beautiful planet. She now leads healing and wellness retreats in Western North Carolina that engage somatic techniques communities have practiced since before time began — including breathwork, meditation, sound healing, movement, energy work such as Reiki, tai chi, and ERT (emotional release therapy), as well as plant medicine, counseling, immersive time in nature, and group processing. Her two doctorates are in trauma-informed pastoral counseling from Emory University and multifaith spiritual direction. Her certificates include Reiki I and II, Sound Healing, rebirthing breathwork, and yoga 200YTT, and she will be certified in ERT in October 2026. She is developing a nature and retreat center in Western North Carolina in partnership with Buffalo Creek nonprofit — a partnership of Indian American and Indigenous tribal members from the global south — hosting the first Sundance in the Southeast in over 200 years in August 2026 following Lakota traditions, as well as regular inipi (sweat lodge), hanblecheyapi (vision quest), and plant medicine ceremonies led by Indigenous leaders.',
+  },
+  {
+    name: 'Heidi Ohms',
+    role: 'Cultural Bridge Builder',
+    img: '/assets/people/heidi-ohms.webp',
+    bio: 'Heidi Ohms grew up in Palo Alto, immersed from childhood in Stanford’s climate and energy world through her mother, a longtime climate educator and clean energy investor. She absorbed the questions and culture of climate innovation from an early age. She has spent her life seeking out integrative and unconventional forms of education, studying at Quest University in British Columbia and Naropa University, both committed to interdisciplinary, embodied, and contemplative approaches to learning. She has contributed to the Eden Project in the UK, the Rocky Mountain Institute, and The Foster, a museum housing Tony Foster’s watercolor wilderness journeys, where she developed curriculum on the lands, Indigenous peoples, and ecological threats at the heart of its collection. Heidi joins the Founders Circle bringing the perspective of someone shaped by both worlds — raised inside the climate innovation culture and formed by the slow, embodied work of traditional wisdom. She believes the healing our world needs cannot come from top-down innovation alone or bottom-up tradition alone, but only from the weaving of both at every scale. She is inspired to bridge scientific, traditional, embodied, and ancestral knowledge as a foundation for moving collectively toward a regenerative plane.',
+  },
+  {
+    name: 'Will Cady',
+    role: 'Reddit · author, Which Way Is North',
+    img: '/assets/people/will-cady.webp',
+    linkedin: 'https://www.linkedin.com/in/willcady',
+    website: 'https://willcady.com',
+    bio: 'Will Cady is a multimedia artist, cultural strategist, and founder of HEAL MVMNT, an initiative positioning Healing, Environments, Art, and Language as vital counterparts to STEM. An early leader at Reddit Inc., he helped grow the platform into a billion-dollar business by applying deep insights into culture and creativity. His music has reached over 3 million streams and earned a regional Emmy award. Cady’s book, Which Way Is North: A Creative Compass for Makers, Marketers, and Mystics (distro Simon & Schuster), was named a must-read by Inc Magazine and selected for The Next Big Idea Book Club for its prescience as a human handbook for creativity in a world going AI.',
+  },
+  {
+    name: 'Deven Raut',
+    role: 'Kaiteki.AI · ex-Google Stadia',
+    img: '/assets/people/deven-raut.webp',
+    linkedin: 'https://www.linkedin.com/in/devenraut/',
+    bio: 'Deven Raut is a polymath entrepreneur with deep experience building and leading mission-critical technologies that power the modern internet. He co-founded CiiNOW, which evolved into Google Stadia, led the creation of Prisma SASE at Palo Alto Networks, and headed Network Security at Google. He is currently building Kaiteki.AI, a startup focused on reimagining digital consumption in healthier, more human-centered ways. In parallel, Deven created DeveniTea Chai, a 21-component adaptogenic sugar- and dairy-free chai, and is developing the KamDev line of healthier alternative products. His work reflects a lifelong devotion to soul, mind, and body wellness for all species.',
+  },
+  {
+    name: 'Denise Roberson',
+    role: 'Chief Purpose Officer, Omnicom',
+    img: '/assets/people/denise-roberson.webp',
+    linkedin: 'https://www.linkedin.com/in/deniseroberson/',
+    bio: 'Denise Roberson serves as Chief Purpose Officer at Omnicom’s TBWA\\Chiat\\Day — the first role of its kind at the agency — helping C-suites and boards build the business case for purpose and embed it across their organizations. She is also the founder of Conspiracy of Love, a purpose-led B Corp consultancy, a marketing professor in Pepperdine’s Presidents & Key Executives MBA, and a doctoral researcher studying next-generation purpose and sustainability models.',
+  },
+  {
+    name: 'Ren Menon',
+    role: 'Co-Founder & CEO, OrthoFX',
+    img: '/assets/people/ren-menon.webp',
+    linkedin: 'https://www.linkedin.com/in/renmenon/',
+    website: 'https://orthofx.com',
+    bio: 'Ren Menon is the Co-founder and CEO of OrthoFX (orthofx.com), an orthodontic technology company focused on advancing clear aligner treatment through innovations in material science, digital workflows, and patient experience. Prior to founding OrthoFX, he held senior leadership roles at Align Technology, where he contributed to global product innovation and commercialization initiatives for Invisalign. A visionary leader in orthodontics and healthcare technology, Ren is known for challenging conventional thinking and pushing the industry toward more patient-friendly, technology-enabled care models. He holds several patents spanning orthodontics, healthcare technologies, and consumer healthtech, including saliva-based diagnostic and monitoring concepts. His work combines advanced materials, software, AI-driven workflows, and scalable care delivery models to improve treatment predictability, patient engagement, and healthcare accessibility.',
+  },
+  {
+    name: 'Bita Zahedi Majd',
+    role: 'Rights of Nature · Indigenous Sovereignty',
+    img: '/assets/people/bita-zahedi-majd.webp',
+    linkedin: 'https://www.linkedin.com/in/bita-zahedi-majd-3a4b46192/',
+    website: 'https://www.alunaalliance.org/',
+    bio: 'Bita Zahedi Majd is a Rights of Nature advocate, Indigenous sovereignty director, biodiversity conservation strategist, and lifelong student of the living world. With a background spanning environmental policy, anthropological studies, conservationism, and legal advocacy, she has spent nearly two decades as a personal student of Indigenous leaders, wisdom keepers, and plant medicine teachers across North and South America, India, and Africa. She currently serves as Executive Director and Founder of Aluna Alliance, Ventures & Partnerships Consultant with the Sierra Club, and Ambassador to the International Space Federation — roles that extend her work as a Chief Impact Officer grounded in both academic rigor and embodied commitment. Fiercely dedicated to the protection of Earth’s sacred elements — its waters, forests, soils, wildlife, plant medicines, and First Nation peoples — she brings planetary stewardship to every scale of her practice.',
+  },
+  {
+    name: 'Anka Amaru',
+    role: 'Regenerative Land Steward',
+    img: '/assets/people/anka.webp',
+    bio: 'Anka Amaru is a founding member of Ayllu Illa Wasi, a multi-generational, land-based heirloom culture center focused on reindigenizing, sustainability, and world bridging. Bringing over 20 years of experience working with Indigenous communities as well as a background in zero-point energy studies, he serves as host and bridge for the Aniwa Summit.',
+  },
 ];
 
 export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
@@ -302,16 +491,15 @@ export function placeFounders(radius: number = RING_RADIUS): FounderSeat[] {
 
 export const founders = placeFounders();
 
-/* ---- §06 Invitation: the six-step entry ceremony ---- */
+/* ---- §06 Invitation: the four-step entry path ---- */
 export interface Step {
   n: string;
   label: string;
 }
 
 export const steps: Step[] = [
-  { n: '01', label: 'Personal invitation or nomination' },
-  { n: '02', label: 'Application to attend or to speak' },
-  { n: '03', label: 'A private connection call' },
-  { n: '04', label: 'Confirmation & entry to the guest channel' },
-  { n: '05', label: 'Arrival of changemakers at the land' },
+  { n: '01', label: 'Receive invitation code' },
+  { n: '02', label: 'Apply to attend' },
+  { n: '03', label: 'Join the Changemakers community' },
+  { n: '04', label: 'Arrive on the land' },
 ];

@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
+import { BrandMark } from '../ui/BrandMark';
 
 /* Application — for those called to the Summit without an invite code.
    Submits to the Netlify Form "applications" (declared statically in
@@ -41,13 +42,12 @@ export function ApplyPage() {
       if (typeof v === 'string') body.set(k, v);
     });
     try {
-      // Formspree form "applications" — submissions email the account owner.
-      const r = await fetch('https://formspree.io/f/xnjkrkzw', {
+      // Netlify Forms "applications" — the hidden static form in index.html
+      // registers it; posting the url-encoded body (incl. form-name) to the
+      // site root files the submission under that form.
+      const r = await fetch('/', {
         method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-          accept: 'application/json',
-        },
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
       });
       if (r.ok) setSent(true);
@@ -61,8 +61,8 @@ export function ApplyPage() {
   return (
     <section style={{ minHeight: '100vh', background: '#3A3128', padding: '60px 24px 120px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
-        <a href="#" onClick={() => (window.location.hash = '')} style={{ textDecoration: 'none' }}>
-          <img src="/assets/aniwa-logo.webp" alt="Aniwa" width={40} height={30} style={{ height: 30, width: 'auto', filter: 'brightness(2.2)' }} />
+        <a href="#" onClick={() => (window.location.hash = '')} style={{ display: 'inline-block', textDecoration: 'none' }}>
+          <BrandMark logoHeight={30} />
         </a>
         <h1 className="disp" style={{ color: '#F4F1EB', fontSize: 'clamp(2.2rem, 5vw, 3.4rem)', margin: '26px 0 0', textTransform: 'uppercase' }}>
           A Call to Purpose
@@ -83,7 +83,7 @@ export function ApplyPage() {
               borderRadius: 'var(--radius-house)',
             }}
           >
-            <p className="myth" style={{ color: '#F4F1EB', fontSize: '1.4rem', margin: 0 }}>
+            <p className="myth" style={{ color: '#F4F1EB', fontSize: '1.4rem', margin: 0, fontStyle: 'normal' }}>
               Thank you — your application has been received.
             </p>
             <p className="bd" style={{ color: 'rgba(255,255,255,0.72)', fontSize: '1rem', margin: '14px 0 0' }}>

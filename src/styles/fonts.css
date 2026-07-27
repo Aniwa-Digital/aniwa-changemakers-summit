@@ -1,0 +1,57 @@
+/* Self-hosted brand fonts — Averia Serif Libre (display) + Nunito Sans (body). */
+
+@import '@fontsource/nunito-sans/latin-400.css';
+@import '@fontsource/nunito-sans/latin-500.css';
+@import '@fontsource/nunito-sans/latin-600.css';
+@import '@fontsource/nunito-sans/latin-700.css';
+
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('/assets/fonts/AveriaSerifLibre-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('/assets/fonts/AveriaSerifLibre-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('/assets/fonts/AveriaSerifLibre-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('/assets/fonts/AveriaSerifLibre-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('/assets/fonts/AveriaSerifLibre-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('/assets/fonts/AveriaSerifLibre-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Yucca';
+  src: url('/assets/fonts/Yucca.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

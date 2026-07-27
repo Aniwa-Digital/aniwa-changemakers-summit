@@ -1,5 +1,5 @@
 // FireSphere — bloom-lit procedural fire orb (three.js + UnrealBloomPass).
-// Rendered opaque and composited via mix-blend-mode:screen on the wrapper.
+// The composer outputs on black; screen-blend on .fire-orb drops the matte.
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { dprCap, observeVisibility } from '../../lib/render-budget';
@@ -147,7 +147,6 @@ export default function FireSphere({
       typeof window.matchMedia === 'function' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // The closing section is the last fold; don't render until it approaches.
     let visible = true;
     const stopVisibility = observeVisibility(mount, (v) => {
       if (v === visible) return;
