@@ -1,9 +1,11 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
+import { fnUrl } from '../../lib/functions';
 import { BrandMark } from '../ui/BrandMark';
 
 /* Application — for those called to the Summit without an invite code.
-   Submits to the Netlify Form "applications" (declared statically in
-   index.html) so the team is notified and can review in the dashboard. */
+   Posts to the Netlify function `apply`, which stores in Blobs
+   ("applications") and forwards to Netlify Forms ("applications") —
+   same Hostinger→Netlify pattern as registration. */
 
 const field: CSSProperties = {
   width: '100%',
@@ -37,21 +39,27 @@ export function ApplyPage() {
     setError('');
     setSending(true);
     const fd = new FormData(e.currentTarget);
-    const body = new URLSearchParams();
+    const payload: Record<string, string> = {};
     fd.forEach((v, k) => {
-      if (typeof v === 'string') body.set(k, v);
+      if (typeof v === 'string' && k !== 'form-name' && k !== 'bot-field') payload[k] = v.trim();
     });
     try {
-      // Netlify Forms "applications" — the hidden static form in index.html
-      // registers it; posting the url-encoded body (incl. form-name) to the
-      // site root files the submission under that form.
-      const r = await fetch('/', {
+      const r = await fetch(fnUrl('apply'), {
         method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
+        headers: { 'content-type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify(payload),
       });
       if (r.ok) setSent(true);
-      else setError('Something went wrong. Please try again.');
+      else {
+        let msg = 'Something went wrong. Please try again.';
+        try {
+          const data = (await r.json()) as { error?: string };
+          if (data.error) msg = data.error;
+        } catch {
+          /* keep default */
+        }
+        setError(msg);
+      }
     } catch {
       setError('Something went wrong. Please try again.');
     }
@@ -92,11 +100,6 @@ export function ApplyPage() {
           </div>
         ) : (
           <form onSubmit={submit} style={{ marginTop: 14 }}>
-            <input type="hidden" name="form-name" value="applications" />
-            <p hidden aria-hidden="true">
-              <input name="bot-field" tabIndex={-1} autoComplete="off" />
-            </p>
-
             <label style={labelStyle}>Name *</label>
             <input name="name" required style={field} autoComplete="name" />
 

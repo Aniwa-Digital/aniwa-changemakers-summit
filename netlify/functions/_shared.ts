@@ -35,8 +35,23 @@ export interface Registration {
   publicDirectory: boolean;
 }
 
+export interface Application {
+  id: string;
+  submittedAt: string;
+  name: string;
+  email: string;
+  linkedin?: string;
+  organization?: string;
+  title?: string;
+  about: string;
+  whyJoin: string;
+  contribution: string;
+  donationReady: string;
+}
+
 export const codesStore = () => getStore({ name: 'invite-codes', consistency: 'strong' });
 export const regsStore = () => getStore({ name: 'registrations', consistency: 'strong' });
+export const appsStore = () => getStore({ name: 'applications', consistency: 'strong' });
 
 export const normalizeCode = (raw: string): string => raw.trim().toUpperCase().replace(/\s+/g, '');
 
@@ -62,7 +77,7 @@ export function isAdmin(req: Request): boolean {
 
 /* CORS: the site is also served from Hostinger (different origin), so the
    functions must answer cross-origin requests. Endpoints are safe to open:
-   validate-code and register are public; codes requires x-admin-key. */
+   validate-code, register, and apply are public; codes requires x-admin-key. */
 export const CORS_HEADERS = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'POST, OPTIONS',

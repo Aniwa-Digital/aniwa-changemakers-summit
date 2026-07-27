@@ -37,7 +37,7 @@ The site is a single scrolling page with heavy visual choreography (a WebGL hero
 | Routing       | Hash router (`#/apply`, `#/codes`) — no server rewrites needed                  |
 | Tests         | Vitest (covers the pure logic: choreography math, roster pools, ring placement) |
 | Backend       | Netlify Functions + Netlify Blobs (invite codes & registration only)            |
-| Forms         | Formspree (applications + nominations)                                          |
+| Forms         | Netlify (applications + registrations) + Formspree (nominations)                 |
 | Hosting       | Hostinger (static files)                                                        |
 
 
@@ -116,16 +116,17 @@ There's **no propagation wait** for a Hostinger upload — once files are up and
 
 
 
-## 6. The backend: invite codes & registration
+## 6. The backend: invite codes, registration & applications
 
-This powers the `#/codes` admin page and the registration flow. It's ~220 lines of TypeScript in `aniwa-summit-app/netlify/functions/`:
+This powers the `#/codes` admin page, the registration flow, and the open `#/apply` form. TypeScript in `netlify/functions/`:
 
 - `validate-code.ts` — **public.** Checks whether an invite code is valid/unredeemed.
-- `register.ts` — **public.** Records a registration against a code.
+- `register.ts` — **public.** Records a registration against a code (Blobs `registrations` + Forms `registrations`).
+- `apply.ts` — **public.** Records an open application (Blobs `applications` + Forms `applications`).
 - `codes.ts` — **admin only.** Generates and lists invite codes. Protected by an admin key (see below).
 - `_shared.ts` — shared helpers, types, CORS config, and the admin-key check.
 
-Data is stored in two Netlify Blobs stores: `invite-codes` and `registrations`.
+Data is stored in three Netlify Blobs stores: `invite-codes`, `registrations`, and `applications`.
 
 ### The one secret: `ANIWA_ADMIN_KEY`
 
@@ -169,24 +170,25 @@ Connecting the domain changes nothing on Netlify and requires no code change.
 The two public forms post to different backends:
 
 
-| Form                       | Where it appears | Backend                                       |
-| -------------------------- | ---------------- | --------------------------------------------- |
-| Applications               | `#/apply` page   | **Netlify Forms** (form name `applications`)  |
-| Founders Circle nomination | open-seat modal  | Formspree "Founder Nomination" (`f/xpqgnvpw`) |
+| Form                       | Where it appears | Backend                                                              |
+| -------------------------- | ---------------- | -------------------------------------------------------------------- |
+| Applications               | `#/apply` page   | Netlify function `apply` → Blobs `applications` + Forms `applications` |
+| Founders Circle nomination | open-seat modal  | Formspree "Founder Nomination" (`f/xpqgnvpw`)                        |
 
 
-**Applications flow (Netlify → Zapier → Airtable + Brevo):**
+**Applications flow (Hostinger SPA → Netlify function → Blobs + Forms → Zapier):**
 
-- The `#/apply` form submits to the **Netlify Forms** `applications` form. It's registered by the hidden static `<form name="applications">` in `index.html` — leave that in place; it's what makes Netlify capture the AJAX submission.
-- A **Zapier** Zap triggers on each new Netlify Forms submission and automatically:
+- The `#/apply` form posts JSON to the Netlify function `apply` (absolute URL on `aniwa-changemakers-summit.netlify.app`). It cannot POST to `/` on the live Hostinger origin — that never reaches Netlify.
+- The function stores each submission in the Netlify Blobs store **`applications`**, then forwards a copy to the Netlify Form **`applications`** (registered by the hidden static `<form name="applications">` in `index.html` — leave that in place).
+- A **Zapier** Zap can trigger on each new Netlify Forms submission and automatically:
   1. Adds a row to an **Airtable** base, and
   2. Sends a notification **email via Brevo** to the designated recipient address configured in the Zap.
-- Every submission is also visible in the Netlify dashboard under **Forms → `applications`**.
+- Submissions are visible in Netlify under **Blobs → `applications`** and **Forms → `applications`**.
 
 **Other submissions:**
 
 - The Founders Circle nomination form still lands in the **Formspree account** (currently on a paid plan, ~100 submissions/month, project "ANIWA"). Access will be transferred separately.
-- Registration notifications from the invite-code flow are stored in Netlify Blobs (Section 6), separate from the above.
+- Invite-code registrations use Blobs `registrations` + Forms `registrations` via the `register` function (Section 6).
 
 ---
 
