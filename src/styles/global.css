@@ -1134,6 +1134,7 @@ img {
 
   .elements-panel__header {
     padding: 28px 28px 20px;
+    transform: translateY(-100px);
   }
 
   .elements-panel__pill {
@@ -1155,6 +1156,7 @@ img {
   .elements-panel__dock {
     padding: 14px 0 8px;
     max-width: none;
+    transform: translateY(-100px);
   }
 
   .elements-panel .elements-diamond {
@@ -1262,6 +1264,7 @@ img {
     padding: 28px 36px 36px;
     max-width: 34rem;
     background: none;
+    transform: translateY(100px);
   }
 
   .elements-expect__eyebrow {
