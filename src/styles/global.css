@@ -1599,7 +1599,7 @@ img {
     width: min(114vw, 700px);
     height: min(114vw, 700px);
     min-height: min(114vw, 700px);
-    margin: calc(4px - 80px) auto 56px;
+    margin: calc(4px - 80px) auto 0;
   }
   #closing .fire-orb {
     width: min(84%, 620px);
@@ -1840,8 +1840,13 @@ img {
 .closing-band#closing {
   position: relative;
   z-index: 2;
-  background: transparent;
+  background: #000;
+  /* flow-root contains the compass’s bottom margin so it can’t collapse
+     out of the band and leave a cream (bone) gap above the footer */
+  display: flow-root;
   overflow: hidden;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 /* Solid black field with a clean straight top edge — a crisp line between
@@ -1863,6 +1868,7 @@ img {
 @media (min-width: 768px) {
   #closing.closing-band,
   .closing-band#closing {
+    /* Allow compass bleed horizontally; flow-root still contains vertical margins */
     overflow: visible;
   }
 }
@@ -1910,7 +1916,8 @@ img {
   width: min(92vw, 760px);
   height: min(92vw, 760px);
   min-height: min(92vw, 760px);
-  margin: calc(clamp(8px, 1.5vh, 16px) - 80px) auto clamp(48px, 8vh, 88px);
+  /* No bottom margin — flush into the black footer (avoids cream gap) */
+  margin: calc(clamp(8px, 1.5vh, 16px) - 80px) auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1938,6 +1945,7 @@ img {
   z-index: 2;
   background: #000;
   text-align: center;
+  margin-top: 0;
   padding: 28px 24px calc(20px + env(safe-area-inset-bottom));
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   /* Prevent any child overflow from inventing page height past the credit line */
