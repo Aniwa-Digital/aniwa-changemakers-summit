@@ -1449,9 +1449,17 @@ img {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  #closing {
+  /* Full-bleed black closing + footer — no cream side gutters */
+  #reciprocity,
+  .purpose-continuum,
+  #closing,
+  .closing-footer {
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+  .closing-footer {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
   }
   nav.hero-nav {
     padding-left: 8px !important;
@@ -1957,9 +1965,6 @@ img {
   width: auto;
   max-width: min(340px, 78vw);
   object-fit: contain;
-  /* Invert (not flatten) so the black arc bands read as white concentric
-     arcs while the cream gaps invert to near-black and blend into the footer. */
-  filter: invert(1);
 }
 
 .closing-footer__lead {

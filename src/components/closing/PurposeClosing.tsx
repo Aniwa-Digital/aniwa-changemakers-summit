@@ -1,12 +1,11 @@
 import { Suspense, lazy } from 'react';
 import { Invitation } from '../invitation/Invitation';
-import { HUYA_ANIWA_HEADER_LOGO_SRC } from '../../lib/brand';
+import { ANIWA_WHITE_LOGO_SRC } from '../../lib/brand';
 
 const FireSphere = lazy(() => import('./FireSphere'));
 const CompassOverlay = lazy(() => import('../hero/CompassOverlay'));
 
-const PURPOSE_BG =
-  'https://res.cloudinary.com/dpd7ju6vn/image/upload/f_webp,q_auto:good/v1784012734/OC_06_2_lefxtp.webp';
+const PURPOSE_BG = '/assets/img/purpose-continuum.jpg';
 
 type PurposeClosingProps = {
   onInviteOpen: () => void;
@@ -21,8 +20,8 @@ export function PurposeClosing({ onInviteOpen }: PurposeClosingProps) {
           src={PURPOSE_BG}
           alt=""
           className="purpose-continuum__bg-img"
-          width={1920}
-          height={4411}
+              width={609}
+              height={1400}
           loading="lazy"
           decoding="async"
         />
@@ -61,8 +60,8 @@ export function PurposeClosing({ onInviteOpen }: PurposeClosingProps) {
         <p className="closing-footer__lead">Shaping our future with wisdom</p>
         <div className="closing-contact">
           <img
-            src={HUYA_ANIWA_HEADER_LOGO_SRC}
-            alt="Huya Aniwa Foundation"
+            src={ANIWA_WHITE_LOGO_SRC}
+            alt="Aniwa"
             className="closing-footer__logo"
           />
           <span className="eye closing-footer__meta">summit@huyaaniwa.org</span>
